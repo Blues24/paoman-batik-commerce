@@ -1,0 +1,7 @@
+# Apache
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+RewriteEngine On
+RewriteRule ^test-cli-route$ my_cli_target.php [L]
