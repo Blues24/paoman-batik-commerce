@@ -35,7 +35,7 @@ class Router {
       if (preg_match($regPattern, $uri, $matches)){
         array_shift($matches) // buang full match
 
-        [$class, $action] = $handler;
+        [$class, $action] = $handler; 
 
         require_once __DIR__ . "/../controllers/${class}.php";
         $controller = new $class();
