@@ -15,8 +15,12 @@ class Router {
     $this->routes[] = ['PUT', $path,$handler];
   }
 
+  public function delete(string $path, array $handler): void {
+     $this->routes[] = ['DELETE', $path, $handler];
+  }
+
   public function run(): void {
-    $method = $_SERVER['REQUEST METHOD'];
+    $method = $_SERVER['REQUEST_METHOD'];
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $uri = rtrim($uri, '/') ?: '/';
 
@@ -26,16 +30,17 @@ class Router {
       exit;
     }
 
+    
     foreach($this->routes as [$routeMethod, $routePath, $handler]){
       if ($routeMethod !== $method) continue;
-
+      
       $regPattern = preg_replace('#:([a-zA-Z_]+)#', '(\d+)', $routePath);
-      $regPattern = "#^{regPattern}$#";
+      $regPattern = "#^{$regPattern}$#";
 
       if (preg_match($regPattern, $uri, $matches)){
-        array_shift($matches) // buang full match
+        array_shift($matches); // buang full match
 
-        [$class, $action] = $handler; 
+        list($class, $action) = $handler;
 
         require_once __DIR__ . "/../controllers/${class}.php";
         $controller = new $class();
