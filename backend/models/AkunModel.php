@@ -32,7 +32,9 @@ class AkunModel {
         $stmt->execute([$email]);
         return (bool) $stmt->fetch();
     }
-
+    /**
+     * @param array<int,mixed> $data
+     */
     public function createWithPelanggan(array $data): int {
         $db = $this->db;
         $db->beginTransaction();
