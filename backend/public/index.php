@@ -19,6 +19,8 @@ session_start(); // menjalankan sesi dengan parameter yang sudah diset
 
 require_once __DIR__ . '/../core/Router.php';
 
+$router = new Router();
+
 // Auth endpoint API routes
 $router->post('/api/auth/register',  ['AuthController', 'register']);
 $router->post('/api/auth/login',     ['AuthController', 'login']);
