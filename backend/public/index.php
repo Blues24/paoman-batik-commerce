@@ -7,6 +7,15 @@ header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 header('Access-Control-ALlow-Headers: Content-Type');
 
+function verifyCsrf(): void {
+    $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+    if (!$token || !hash_equals($_SESSION['csrf_token'] ?? '', $token)) {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'CSRF token invalid']);
+        exit;
+    }
+}
+
 // Session Config (Cookies)
 session_set_cookie_params([
     'lifetime' => 0, // Cookie akan hilang jika user menutup website atau browser

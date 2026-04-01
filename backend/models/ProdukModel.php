@@ -19,7 +19,7 @@ class ProdukModel {
         }
         if (!empty($filters['search'])) {
             $where[]  = 'p.nama_produk LIKE ?';
-            $params[] = '%' . $filters['search'] . '%';
+            $params[] = '%' . substr(trim($filters['search']), 0, 100) . '%';
         }
 
         $sql  = 'SELECT p.produk_id, p.nama_produk, p.deskripsi, j.nama_jenis,

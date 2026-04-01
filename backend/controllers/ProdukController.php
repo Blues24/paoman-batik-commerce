@@ -36,6 +36,7 @@ class ProdukController {
     }
 
     public function store(): void {
+        verifyCsrf();
         $this->requireAdmin();
         $body  = $this->body();
         $model = new ProdukModel();
@@ -49,6 +50,7 @@ class ProdukController {
     }
 
     public function update(string $id): void {
+        verifyCsrf();
         $this->requireAdmin();
         $model = new ProdukModel();
         $model->update((int)$id, $this->body());
@@ -56,6 +58,7 @@ class ProdukController {
     }
 
     public function destroy(string $id): void {
+        verifyCsrf();
         $this->requireAdmin();
         $model = new ProdukModel();
         $model->softDelete((int)$id);
@@ -63,6 +66,7 @@ class ProdukController {
     }
 
     public function storeVarian(string $produkId): void {
+        verifyCsrf();
         $this->requireAdmin();
         $body  = $this->body();
         $model = new ProdukModel();
@@ -76,6 +80,7 @@ class ProdukController {
     }
 
     public function updateVarian(string $varianId): void {
+        verifyCsrf();
         $this->requireAdmin();
         $model = new ProdukModel();
         $model->updateVarian((int)$varianId, $this->body());
