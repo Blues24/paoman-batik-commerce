@@ -1,7 +1,10 @@
-name: API Tests
+name: API Tests v1
 
 on:
-    workflow_dispatch:
+  push:
+    branches:
+      - API-TEST
+  workflow_dispatch:
 
 jobs:
   test:
