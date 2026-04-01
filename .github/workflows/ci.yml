@@ -15,12 +15,12 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: ""
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes  
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: batik_test
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping"
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -51,6 +51,6 @@ jobs:
           DB_HOST: 127.0.0.1
           DB_NAME: batik_test
           DB_USER: root
-          DB_PASS: root
+          DB_PASS: ""       # ← fix, kosongkan
           DB_PORT: 3306
         run: vendor/bin/phpunit --testdox
