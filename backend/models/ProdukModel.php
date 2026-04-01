@@ -2,6 +2,9 @@
 
 require_once __DIR__ . '/../config/database.php';
 
+/**
+ * Model untuk menangani data produk dan varian.
+ */
 class ProdukModel {
     private PDO $db;
 
@@ -9,6 +12,9 @@ class ProdukModel {
         $this->db = Database::connect();
     }
 
+    /**
+     * Mendapatkan semua produk dengan filter.
+     */
     public function getAll(array $filters = []): array {
         $where  = ['p.status = "aktif"'];
         $params = [];
@@ -35,6 +41,9 @@ class ProdukModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Mencari produk berdasarkan ID.
+     */
     public function findById(int $id): array|false {
         $stmt = $this->db->prepare(
             'SELECT p.*, j.nama_jenis FROM produk p
@@ -45,6 +54,9 @@ class ProdukModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Mendapatkan varian produk.
+     */
     public function getVarian(int $produkId): array {
         $stmt = $this->db->prepare(
             'SELECT * FROM detail_batik WHERE produk_id = ? ORDER BY ukuran, warna'
@@ -53,6 +65,9 @@ class ProdukModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Mendapatkan ringkasan rating produk.
+     */
     public function getRatingSummary(int $produkId): array|false {
         $stmt = $this->db->prepare(
             'SELECT ROUND(AVG(rating),1) AS avg_rating, COUNT(*) AS total_ulasan
@@ -62,6 +77,9 @@ class ProdukModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Membuat produk baru.
+     */
     public function create(array $data): int {
         $stmt = $this->db->prepare(
             'INSERT INTO produk (jenis_id, nama_produk, deskripsi, status) VALUES (?, ?, ?, ?)'
@@ -70,6 +88,9 @@ class ProdukModel {
         return (int) $this->db->lastInsertId();
     }
 
+    /**
+     * Mengupdate produk.
+     */
     public function update(int $id, array $data): void {
         $stmt = $this->db->prepare(
             'UPDATE produk SET jenis_id=?, nama_produk=?, deskripsi=?, status=? WHERE produk_id=?'
@@ -77,11 +98,17 @@ class ProdukModel {
         $stmt->execute([$data['jenis_id'], $data['nama_produk'], $data['deskripsi'] ?? null, $data['status'] ?? 'aktif', $id]);
     }
 
+    /**
+     * Menonaktifkan produk (soft delete).
+     */
     public function softDelete(int $id): void {
         $stmt = $this->db->prepare('UPDATE produk SET status="nonaktif" WHERE produk_id=?');
         $stmt->execute([$id]);
     }
 
+    /**
+     * Membuat varian produk baru.
+     */
     public function createVarian(int $produkId, array $data): int {
         $stmt = $this->db->prepare(
             'INSERT INTO detail_batik (produk_id, ukuran, warna, bahan, harga, stok)
@@ -91,6 +118,9 @@ class ProdukModel {
         return (int) $this->db->lastInsertId();
     }
 
+    /**
+     * Mengupdate varian produk.
+     */
     public function updateVarian(int $varianId, array $data): void {
         $stmt = $this->db->prepare(
             'UPDATE detail_batik SET ukuran=?, warna=?, bahan=?, harga=?, stok=?
