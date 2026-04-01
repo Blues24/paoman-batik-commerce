@@ -22,6 +22,7 @@ class PesananController {
     }
 
     public function store(): void {
+        verifyCsrf();
         $pelangganId = $this->requirePelanggan();
         $body        = json_decode(file_get_contents('php://input'), true) ?? [];
         $model       = new PesananModel();
