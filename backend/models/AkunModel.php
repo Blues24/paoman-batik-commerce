@@ -2,6 +2,9 @@
 
 require_once __DIR__ . '/../config/database.php';
 
+/**
+ * Model untuk menangani data akun dan pelanggan.
+ */
 class AkunModel {
     private PDO $db;
 
@@ -9,6 +12,9 @@ class AkunModel {
         $this->db = Database::connect();
     }
 
+    /**
+     * Mencari akun berdasarkan username.
+     */
     public function findByUsername(string $username): array|false {
         $stmt = $this->db->prepare(
             'SELECT a.akun_id, a.password_hash, a.status_akun,
@@ -21,18 +27,25 @@ class AkunModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Mengecek apakah username sudah ada.
+     */
     public function usernameExists(string $username): bool {
         $stmt = $this->db->prepare('SELECT akun_id FROM akun WHERE username = ?');
         $stmt->execute([$username]);
         return (bool) $stmt->fetch();
     }
 
+    /**
+     * Mengecek apakah email sudah ada.
+     */
     public function emailExists(string $email): bool {
         $stmt = $this->db->prepare('SELECT pelanggan_id FROM pelanggan WHERE email = ?');
         $stmt->execute([$email]);
         return (bool) $stmt->fetch();
     }
     /**
+     * Membuat akun baru dengan data pelanggan.
      * @param array<int,mixed> $data
      */
     public function createWithPelanggan(array $data): int {
@@ -58,6 +71,9 @@ class AkunModel {
         }
     }
 
+    /**
+     * Mencari admin berdasarkan username.
+     */
     public function findAdminByUsername(string $username): array|false {
         $stmt = $this->db->prepare(
             'SELECT admin_id, password, role FROM admin WHERE username = ?'

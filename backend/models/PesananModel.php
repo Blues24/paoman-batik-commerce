@@ -2,6 +2,9 @@
 
 require_once __DIR__ . '/../config/database.php';
 
+/**
+ * Model untuk menangani data pesanan.
+ */
 class PesananModel {
     private PDO $db;
 
@@ -9,6 +12,9 @@ class PesananModel {
         $this->db = Database::connect();
     }
 
+    /**
+     * Mencari varian berdasarkan ID.
+     */
     public function findVarianById(int $id): array|false {
         $stmt = $this->db->prepare(
             'SELECT detail_batik_id, harga, stok FROM detail_batik WHERE detail_batik_id = ?'
@@ -17,6 +23,9 @@ class PesananModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Membuat pesanan baru.
+     */
     public function create(int $pelangganId, float $totalHarga): int {
         $stmt = $this->db->prepare(
             'INSERT INTO pesanan (pelanggan_id, total_harga) VALUES (?, ?)'
@@ -25,6 +34,9 @@ class PesananModel {
         return (int) $this->db->lastInsertId();
     }
 
+    /**
+     * Menambahkan item ke pesanan.
+     */
     public function addItem(int $pesananId, array $item): void {
         $stmt = $this->db->prepare(
             'INSERT INTO detail_pesanan (pesanan_id, detail_batik_id, jumlah, harga_saat_pesan)
@@ -33,6 +45,9 @@ class PesananModel {
         $stmt->execute([$pesananId, $item['detail_batik_id'], $item['jumlah'], $item['harga_saat_pesan']]);
     }
 
+    /**
+     * Mengurangi stok varian.
+     */
     public function kurangiStok(int $varianId, int $jumlah): void {
         $stmt = $this->db->prepare(
             'UPDATE detail_batik SET stok = stok - ? WHERE detail_batik_id = ?'
@@ -40,6 +55,9 @@ class PesananModel {
         $stmt->execute([$jumlah, $varianId]);
     }
 
+    /**
+     * Mendapatkan pesanan berdasarkan pelanggan.
+     */
     public function getByPelanggan(int $pelangganId): array {
         $stmt = $this->db->prepare(
             'SELECT pesanan_id, tanggal_pesanan, status_pesanan, total_harga
@@ -49,6 +67,9 @@ class PesananModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Mencari pesanan berdasarkan ID dan pelanggan.
+     */
     public function findById(int $pesananId, int $pelangganId): array|false {
         $stmt = $this->db->prepare(
             'SELECT * FROM pesanan WHERE pesanan_id = ? AND pelanggan_id = ?'
@@ -57,6 +78,9 @@ class PesananModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Mendapatkan item-item dalam pesanan.
+     */
     public function getItems(int $pesananId): array {
         $stmt = $this->db->prepare(
             'SELECT dp.detail_id, dp.jumlah, dp.harga_saat_pesan, dp.subtotal,
@@ -70,11 +94,17 @@ class PesananModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Mengupdate status pesanan.
+     */
     public function updateStatus(int $pesananId, string $status): void {
         $stmt = $this->db->prepare('UPDATE pesanan SET status_pesanan=? WHERE pesanan_id=?');
         $stmt->execute([$status, $pesananId]);
     }
 
+    /**
+     * Mendapatkan semua pesanan (admin).
+     */
     public function getAll(?string $status = null): array {
         $sql    = 'SELECT p.pesanan_id, p.tanggal_pesanan, p.status_pesanan,
                           p.total_harga, pl.nama AS nama_pelanggan
@@ -91,7 +121,18 @@ class PesananModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Memulai transaksi database.
+     */
     public function beginTransaction(): void { $this->db->beginTransaction(); }
+
+    /**
+     * Commit transaksi.
+     */
     public function commit(): void           { $this->db->commit(); }
+
+    /**
+     * Rollback transaksi.
+     */
     public function rollBack(): void         { $this->db->rollBack(); }
 }
