@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Daftar - Mulia Batik</title>
+    <link rel="stylesheet" href="../css/auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+</head>
+<body class="auth-body">
+
+    <div class="container">
+        <header class="header-text">
+            <h1>Selamat Datang</h1>
+            <p>Silahkan masukkan data anda</p>
+        </header>
+
+        <div class="auth-card">
+            <div class="tab-header">
+                <div class="tab active" onclick="openTab(event, 'login')">Masuk</div>
+                <div class="tab" onclick="openTab(event, 'register')">Daftar</div>
+            </div>
+
+            <div id="login" class="tab-content active">
+                <form>
+                    <div class="input-group">
+                        <label>Username atau Email<span class="required">*</span></label>
+                        <input type="text" placeholder="Username atau Email" required>
+                    </div>
+                    <div class="input-group">
+                        <div class="label-flex">
+                            <label>Password<span class="required">*</span></label>
+                            <a href="#" class="forgot-link">Lupa Password</a>
+                        </div>
+                        <div class="password-box">
+                            <input type="password" placeholder="Password" required>
+                            <span class="eye-icon">👁️</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">Masuk</button>
+                </form>
+            </div>
+
+            <div id="register" class="tab-content">
+                <form>
+                    <div class="input-group">
+                        <label>Nama Lengkap<span class="required">*</span></label>
+                        <input type="text" placeholder="Nama Lengkap" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Email<span class="required">*</span></label>
+                        <input type="email" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Password<span class="required">*</span></label>
+                        <input type="password" placeholder="Buat Password" required>
+                    </div>
+                    <button type="submit" class="btn-submit">Daftar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
