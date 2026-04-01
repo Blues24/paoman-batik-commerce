@@ -2,6 +2,9 @@
 
 require_once __DIR__ . '/../config/database.php';
 
+/**
+ * Model untuk menangani data ulasan.
+ */
 class UlasanModel {
     private PDO $db;
 
@@ -9,6 +12,9 @@ class UlasanModel {
         $this->db = Database::connect();
     }
 
+    /**
+     * Verifikasi apakah pelanggan sudah membeli produk.
+     */
     public function verifikasiPembelian(int $pesananId, int $pelangganId, int $produkId): bool {
         $stmt = $this->db->prepare(
             'SELECT p.pesanan_id FROM pesanan p
@@ -22,6 +28,9 @@ class UlasanModel {
         return (bool) $stmt->fetch();
     }
 
+    /**
+     * Membuat ulasan baru.
+     */
     public function create(array $data): int {
         $stmt = $this->db->prepare(
             'INSERT INTO ulasan (produk_id, pelanggan_id, pesanan_id, rating, komentar)
@@ -31,6 +40,9 @@ class UlasanModel {
         return (int) $this->db->lastInsertId();
     }
 
+    /**
+     * Mendapatkan ulasan berdasarkan produk.
+     */
     public function getByProduk(int $produkId): array {
         $stmt = $this->db->prepare(
             'SELECT u.ulasan_id, u.rating, u.komentar, u.tanggal_ulasan,
@@ -44,6 +56,9 @@ class UlasanModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Mengupdate status ulasan.
+     */
     public function updateStatus(int $ulasanId, string $status): void {
         $stmt = $this->db->prepare('UPDATE ulasan SET status=? WHERE ulasan_id=?');
         $stmt->execute([$status, $ulasanId]);

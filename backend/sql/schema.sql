@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS batik_store CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE batik_store;
 
+-- Tabel admin untuk login admin
 CREATE TABLE admin (
     admin_id    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username    VARCHAR(50)  NOT NULL UNIQUE,
@@ -9,6 +10,7 @@ CREATE TABLE admin (
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
+-- Tabel akun untuk login pengguna
 CREATE TABLE akun (
     akun_id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username        VARCHAR(50)  NOT NULL UNIQUE,
@@ -17,6 +19,7 @@ CREATE TABLE akun (
     tanggal_daftar  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
+-- Tabel pelanggan yang terkait dengan akun
 CREATE TABLE pelanggan (
     pelanggan_id    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     akun_id         INT UNSIGNED NOT NULL UNIQUE,
@@ -28,12 +31,14 @@ CREATE TABLE pelanggan (
         ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
+-- Tabel jenis produk batik
 CREATE TABLE jenis_produk (
     jenis_id    INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nama_jenis  VARCHAR(100) NOT NULL,
     keterangan  TEXT
 ) ENGINE=InnoDB;
 
+-- Tabel produk batik
 CREATE TABLE produk (
     produk_id   INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     jenis_id    INT UNSIGNED NOT NULL,
@@ -45,6 +50,7 @@ CREATE TABLE produk (
         ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
+-- Tabel detail batik (varian produk)
 CREATE TABLE detail_batik (
     detail_batik_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     produk_id       INT UNSIGNED NOT NULL,
@@ -57,6 +63,7 @@ CREATE TABLE detail_batik (
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+-- Tabel pesanan
 CREATE TABLE pesanan (
     pesanan_id      INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     pelanggan_id    INT UNSIGNED NOT NULL,
@@ -67,6 +74,7 @@ CREATE TABLE pesanan (
         ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
+-- Tabel detail pesanan
 CREATE TABLE detail_pesanan (
     detail_id        INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     pesanan_id       INT UNSIGNED NOT NULL,
@@ -80,6 +88,7 @@ CREATE TABLE detail_pesanan (
         ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
+-- Tabel ulasan produk
 CREATE TABLE ulasan (
     ulasan_id      INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     produk_id      INT UNSIGNED NOT NULL,

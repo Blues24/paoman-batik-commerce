@@ -2,29 +2,47 @@
 
 require_once __DIR__ . '/../models/ProdukModel.php';
 
+/**
+ * Controller untuk mengelola produk dan varian.
+ */
 class ProdukController {
 
+    /**
+     * Mengirim response JSON.
+     */
     private function respond(bool $success, mixed $data, string $msg, int $code = 200): void {
         http_response_code($code);
         echo json_encode(['success' => $success, 'message' => $msg, 'data' => $data]);
         exit;
     }
 
+    /**
+     * Memastikan user adalah admin.
+     */
     private function requireAdmin(): void {
         if (empty($_SESSION['admin_id']))
             $this->respond(false, null, 'Unauthorized: bukan admin', 401);
     }
 
+    /**
+     * Mendapatkan data dari body request.
+     */
     private function body(): array {
         return json_decode(file_get_contents('php://input'), true) ?? [];
     }
 
+    /**
+     * Mendapatkan semua produk.
+     */
     public function index(): void {
         $model = new ProdukModel();
         $data  = $model->getAll($_GET);
         $this->respond(true, $data, '', 200);
     }
 
+    /**
+     * Mendapatkan detail produk berdasarkan ID.
+     */
     public function show(string $id): void {
         $model  = new ProdukModel();
         $produk = $model->findById((int)$id);
@@ -35,6 +53,9 @@ class ProdukController {
         $this->respond(true, $produk, '', 200);
     }
 
+    /**
+     * Menambahkan produk baru (admin only).
+     */
     public function store(): void {
         verifyCsrf();
         $this->requireAdmin();
@@ -49,6 +70,9 @@ class ProdukController {
         $this->respond(true, ['produk_id' => $id], 'Produk berhasil ditambahkan', 201);
     }
 
+    /**
+     * Mengupdate produk (admin only).
+     */
     public function update(string $id): void {
         verifyCsrf();
         $this->requireAdmin();
@@ -57,6 +81,9 @@ class ProdukController {
         $this->respond(true, null, 'Produk berhasil diupdate');
     }
 
+    /**
+     * Menonaktifkan produk (admin only).
+     */
     public function destroy(string $id): void {
         verifyCsrf();
         $this->requireAdmin();
@@ -65,6 +92,9 @@ class ProdukController {
         $this->respond(true, null, 'Produk dinonaktifkan');
     }
 
+    /**
+     * Menambahkan varian produk (admin only).
+     */
     public function storeVarian(string $produkId): void {
         verifyCsrf();
         $this->requireAdmin();
@@ -79,6 +109,9 @@ class ProdukController {
         $this->respond(true, ['detail_batik_id' => $id], 'Varian berhasil ditambahkan', 201);
     }
 
+    /**
+     * Mengupdate varian produk (admin only).
+     */
     public function updateVarian(string $varianId): void {
         verifyCsrf();
         $this->requireAdmin();

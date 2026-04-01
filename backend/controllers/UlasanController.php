@@ -2,25 +2,40 @@
 
 require_once __DIR__ . '/../models/UlasanModel.php';
 
+/**
+ * Controller untuk mengelola ulasan produk.
+ */
 class UlasanController {
 
+    /**
+     * Mengirim response JSON.
+     */
     private function respond(bool $success, mixed $data, string $msg, int $code = 200): void {
         http_response_code($code);
         echo json_encode(['success' => $success, 'message' => $msg, 'data' => $data]);
         exit;
     }
 
+    /**
+     * Memastikan user adalah pelanggan yang login.
+     */
     private function requirePelanggan(): int {
         if (empty($_SESSION['pelanggan_id']))
             $this->respond(false, null, 'Unauthorized: login dulu', 401);
         return (int) $_SESSION['pelanggan_id'];
     }
 
+    /**
+     * Memastikan user adalah admin.
+     */
     private function requireAdmin(): void {
         if (empty($_SESSION['admin_id']))
             $this->respond(false, null, 'Unauthorized: bukan admin', 401);
     }
 
+    /**
+     * Menambahkan ulasan baru.
+     */
     public function store(): void {
         verifyCsrf();
         $pelangganId = $this->requirePelanggan();
@@ -52,11 +67,17 @@ class UlasanController {
         }
     }
 
+    /**
+     * Mendapatkan ulasan berdasarkan produk.
+     */
     public function byProduk(string $produkId): void {
         $model = new UlasanModel();
         $this->respond(true, $model->getByProduk((int)$produkId), '', 200);
     }
 
+    /**
+     * Mengupdate status ulasan (admin only).
+     */
     public function moderate(string $id): void {
         $this->requireAdmin();
         $body   = json_decode(file_get_contents('php://input'), true) ?? [];

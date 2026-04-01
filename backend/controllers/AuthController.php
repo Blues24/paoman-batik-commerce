@@ -2,18 +2,31 @@
 
 require_once __DIR__ . '/../models/AkunModel.php';
 
+/**
+ * Controller untuk autentikasi pengguna dan admin.
+ * Menangani registrasi, login, logout dengan rate limiting.
+ */
 class AuthController {
 
+    /**
+     * Mengirim response JSON standar.
+     */
     private function respond(bool $success, mixed $data, string $msg, int $code): void {
         http_response_code($code);
         echo json_encode(['success' => $success, 'message' => $msg, 'data' => $data]);
         exit;
     }
 
+    /**
+     * Mendapatkan data JSON dari body request.
+     */
     private function body(): array {
         return json_decode(file_get_contents('php://input'), true) ?? [];
     }
 
+    /**
+     * Mengecek rate limit untuk mencegah brute force.
+     */
     private function checkRateLimit(string $key, int $maxAttempts = 5, int $cooldown = 300): void {
     $attempts  = $_SESSION[$key]['count'] ?? 0;
     $blockedAt = $_SESSION[$key]['blocked_at'] ?? null;
@@ -34,14 +47,24 @@ class AuthController {
         $this->respond(false, null, "Terlalu banyak percobaan. Coba lagi dalam 5 menit.", 429);
     }
     }
-    
+
+    /**
+     * Mencatat percobaan gagal.
+     */
     private function failAttempt(string $key): void {
         $_SESSION[$key]['count'] = ($_SESSION[$key]['count'] ?? 0) + 1;
     }
-    
+
+    /**
+     * Menghapus catatan percobaan.
+     */
     private function clearAttempt(string $key): void {
         unset($_SESSION[$key]);
     }
+
+    /**
+     * Mendaftarkan pengguna baru.
+     */
     public function register(): void {
         $body  = $this->body();
         $model = new AkunModel();
@@ -67,6 +90,9 @@ class AuthController {
         }
     }
 
+    /**
+     * Login pengguna biasa.
+     */
     public function login(): void {
         $body  = $this->body();
         $model = new AkunModel();
@@ -97,6 +123,9 @@ class AuthController {
         ], 'Login Berhasil yey', 200);
     }
 
+    /**
+     * Login admin.
+     */
     public function loginAdmin(): void {
         $body  = $this->body();
         $model = new AkunModel();
@@ -125,6 +154,9 @@ class AuthController {
             ], 'Login admin berhasil yey!', 200);
     }
 
+    /**
+     * Logout pengguna.
+     */
     public function logout(): void {
         session_destroy();
         $this->respond(true, null, 'Logout berhasil', 200);

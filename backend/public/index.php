@@ -1,12 +1,15 @@
 <?php
 
-// Header Global
+// Header Global untuk CORS dan JSON
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: http://localhost:3000');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 header('Access-Control-ALlow-Headers: Content-Type');
 
+/**
+ * Verifikasi CSRF token.
+ */
 function verifyCsrf(): void {
     $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
     if (!$token || !hash_equals($_SESSION['csrf_token'] ?? '', $token)) {
