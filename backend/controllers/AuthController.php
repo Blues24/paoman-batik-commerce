@@ -14,6 +14,34 @@ class AuthController {
         return json_decode(file_get_contents('php://input'), true) ?? [];
     }
 
+    private function checkRateLimit(string $key, int $maxAttempts = 5, int $cooldown = 300): void {
+    $attempts  = $_SESSION[$key]['count'] ?? 0;
+    $blockedAt = $_SESSION[$key]['blocked_at'] ?? null;
+
+    if ($blockedAt !== null) {
+        $elapsed = time() - $blockedAt;
+        if ($elapsed < $cooldown) {
+            $sisaDetik = $cooldown - $elapsed;
+            $sisaMenit = ceil($sisaDetik / 60);
+            $this->respond(false, null, "Terlalu banyak percobaan. Coba lagi dalam {$sisaMenit} menit.", 429);
+        }
+        // cooldown selesai, reset
+        unset($_SESSION[$key]);
+    }
+
+    if ($attempts >= $maxAttempts) {
+        $_SESSION[$key]['blocked_at'] = time();
+        $this->respond(false, null, "Terlalu banyak percobaan. Coba lagi dalam 5 menit.", 429);
+    }
+    }
+    
+    private function failAttempt(string $key): void {
+        $_SESSION[$key]['count'] = ($_SESSION[$key]['count'] ?? 0) + 1;
+    }
+    
+    private function clearAttempt(string $key): void {
+        unset($_SESSION[$key]);
+    }
     public function register(): void {
         $body  = $this->body();
         $model = new AkunModel();
@@ -34,13 +62,17 @@ class AuthController {
             $model->createWithPelanggan($body);
             $this->respond(true, null, 'Registrasi berhasil', 201);
         } catch (Exception $e) {
-            $this->respond(false, null, 'Registrasi gagal: ' . $e->getMessage(), 500);
+            error_log('[Register Error] ' . $e->getMessage());
+            $this->respond(false, null, 'Registrasi gagal, coba lagi nanti', 500);
         }
     }
 
     public function login(): void {
         $body  = $this->body();
         $model = new AkunModel();
+        $key = 'login_attempt_' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+
+        $this->checkRateLimit($key);
 
         if (empty($body['username']) || empty($body['password']))
             $this->respond(false, null, 'Username dan password wajib diisi', 422);
@@ -48,20 +80,29 @@ class AuthController {
         $user = $model->findByUsername($body['username']);
 
         if (!$user || !password_verify($body['password'], $user['password_hash']))
+            $this->failAttempt($key);
             $this->respond(false, null, 'Username atau password salah', 401);
+
         if ($user['status_akun'] !== 'aktif')
             $this->respond(false, null, 'Akun tidak aktif', 403);
-
+        
+        $this->clearAttempt($key);
         session_regenerate_id(true);
         $_SESSION['akun_id']      = $user['akun_id'];
         $_SESSION['pelanggan_id'] = $user['pelanggan_id'];
-
-        $this->respond(true, ['nama' => $user['nama']], 'Login berhasil', 200);
+        $_SESSION['csrf_token']   = bin2hex(random_bytes(32));
+        $this->respond(true, [
+            'nama'  => $user['nama'],
+            'csrf_token' => $_SESSION['csrf_token']
+        ], 'Login Berhasil yey', 200);
     }
 
     public function loginAdmin(): void {
         $body  = $this->body();
         $model = new AkunModel();
+        $key   = 'admin_attempt_' . ($_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN');
+
+        $this->checkRateLimit($key);
 
         if (empty($body['username']) || empty($body['password']))
             $this->respond(false, null, 'Username dan password wajib diisi', 422);
@@ -69,13 +110,19 @@ class AuthController {
         $admin = $model->findAdminByUsername($body['username']);
 
         if (!$admin || !password_verify($body['password'], $admin['password']))
-            $this->respond(false, null, 'Kredensial admin salah', 401);
+            $this->failAttempt($key);
+            $this->respond(false, null, 'username atau password admin salah', 401);
 
+        $this->clearAttempt($key);
         session_regenerate_id(true);
-        $_SESSION['admin_id'] = $admin['admin_id'];
-        $_SESSION['role']     = $admin['role'];
+        $_SESSION['admin_id']       = $admin['admin_id'];
+        $_SESSION['role']           = $admin['role'];
+        $_SESSION['csrf_token']     = bin2hex(random_bytes(32));
 
-        $this->respond(true, ['role' => $admin['role']], 'Login admin berhasil', 200);
+        $this->respond(true, [
+            'role' => $admin['role'],
+            'csrf_token' => $_SESSION['csrf_token']
+            ], 'Login admin berhasil yey!', 200);
     }
 
     public function logout(): void {
