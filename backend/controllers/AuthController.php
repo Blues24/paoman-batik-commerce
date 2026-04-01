@@ -14,21 +14,34 @@ class AuthController {
         return json_decode(file_get_contents('php://input'), true) ?? [];
     }
 
-    private function checkRateLimit(string $key, int $maxAttempts = 5): void {
-        $attempts = $_SESSION[$key] ?? 0;
-        if ($attempts >= $maxAttempts) {
-            $this->respond(false, null, 'Terlalu banyak percobaan, tunggu lima menit lagi', 429);
+    private function checkRateLimit(string $key, int $maxAttempts = 5, int $cooldown = 300): void {
+    $attempts  = $_SESSION[$key]['count'] ?? 0;
+    $blockedAt = $_SESSION[$key]['blocked_at'] ?? null;
+
+    if ($blockedAt !== null) {
+        $elapsed = time() - $blockedAt;
+        if ($elapsed < $cooldown) {
+            $sisaDetik = $cooldown - $elapsed;
+            $sisaMenit = ceil($sisaDetik / 60);
+            $this->respond(false, null, "Terlalu banyak percobaan. Coba lagi dalam {$sisaMenit} menit.", 429);
         }
-    }
-
-    private function failAttempt(string $key): void {
-        $_SESSION[$key] = ($_SESSION[$key] ?? 0) + 1;
-    }
-
-    private function clearAttempt(string $key): void {
+        // cooldown selesai, reset
         unset($_SESSION[$key]);
     }
 
+    if ($attempts >= $maxAttempts) {
+        $_SESSION[$key]['blocked_at'] = time();
+        $this->respond(false, null, "Terlalu banyak percobaan. Coba lagi dalam 5 menit.", 429);
+    }
+    }
+    
+    private function failAttempt(string $key): void {
+        $_SESSION[$key]['count'] = ($_SESSION[$key]['count'] ?? 0) + 1;
+    }
+    
+    private function clearAttempt(string $key): void {
+        unset($_SESSION[$key]);
+    }
     public function register(): void {
         $body  = $this->body();
         $model = new AkunModel();
