@@ -109,7 +109,7 @@ CREATE TABLE ulasan (
 
 -- Seed awal
 INSERT INTO admin (username, password, role) VALUES
-('superadmin', '$2y$12$GANTI_DENGAN_HASH_BCRYPT', 'superadmin');
+('admin', '$2a$12$A4I/fvPMAZJsh6abkVvo8.fCnLcl6bNohGo1q1OXEioSZpdFKaMvC', 'superadmin');
 
 INSERT INTO jenis_produk (nama_jenis, keterangan) VALUES
 ('Batik Tulis', 'Dibuat manual menggunakan canting'),
