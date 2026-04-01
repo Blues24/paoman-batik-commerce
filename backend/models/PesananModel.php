@@ -1,0 +1,97 @@
+<?php
+
+require_once __DIR__ . '/../config/database.php';
+
+class PesananModel {
+    private PDO $db;
+
+    public function __construct() {
+        $this->db = Database::connect();
+    }
+
+    public function findVarianById(int $id): array|false {
+        $stmt = $this->db->prepare(
+            'SELECT detail_batik_id, harga, stok FROM detail_batik WHERE detail_batik_id = ?'
+        );
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function create(int $pelangganId, float $totalHarga): int {
+        $stmt = $this->db->prepare(
+            'INSERT INTO pesanan (pelanggan_id, total_harga) VALUES (?, ?)'
+        );
+        $stmt->execute([$pelangganId, $totalHarga]);
+        return (int) $this->db->lastInsertId();
+    }
+
+    public function addItem(int $pesananId, array $item): void {
+        $stmt = $this->db->prepare(
+            'INSERT INTO detail_pesanan (pesanan_id, detail_batik_id, jumlah, harga_saat_pesan)
+             VALUES (?, ?, ?, ?)'
+        );
+        $stmt->execute([$pesananId, $item['detail_batik_id'], $item['jumlah'], $item['harga_saat_pesan']]);
+    }
+
+    public function kurangiStok(int $varianId, int $jumlah): void {
+        $stmt = $this->db->prepare(
+            'UPDATE detail_batik SET stok = stok - ? WHERE detail_batik_id = ?'
+        );
+        $stmt->execute([$jumlah, $varianId]);
+    }
+
+    public function getByPelanggan(int $pelangganId): array {
+        $stmt = $this->db->prepare(
+            'SELECT pesanan_id, tanggal_pesanan, status_pesanan, total_harga
+             FROM pesanan WHERE pelanggan_id = ? ORDER BY tanggal_pesanan DESC'
+        );
+        $stmt->execute([$pelangganId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function findById(int $pesananId, int $pelangganId): array|false {
+        $stmt = $this->db->prepare(
+            'SELECT * FROM pesanan WHERE pesanan_id = ? AND pelanggan_id = ?'
+        );
+        $stmt->execute([$pesananId, $pelangganId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getItems(int $pesananId): array {
+        $stmt = $this->db->prepare(
+            'SELECT dp.detail_id, dp.jumlah, dp.harga_saat_pesan, dp.subtotal,
+                    db.ukuran, db.warna, db.bahan, pr.nama_produk
+             FROM detail_pesanan dp
+             JOIN detail_batik db ON db.detail_batik_id = dp.detail_batik_id
+             JOIN produk pr ON pr.produk_id = db.produk_id
+             WHERE dp.pesanan_id = ?'
+        );
+        $stmt->execute([$pesananId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateStatus(int $pesananId, string $status): void {
+        $stmt = $this->db->prepare('UPDATE pesanan SET status_pesanan=? WHERE pesanan_id=?');
+        $stmt->execute([$status, $pesananId]);
+    }
+
+    public function getAll(?string $status = null): array {
+        $sql    = 'SELECT p.pesanan_id, p.tanggal_pesanan, p.status_pesanan,
+                          p.total_harga, pl.nama AS nama_pelanggan
+                   FROM pesanan p
+                   JOIN pelanggan pl ON pl.pelanggan_id = p.pelanggan_id';
+        $params = [];
+        if ($status) {
+            $sql     .= ' WHERE p.status_pesanan = ?';
+            $params[] = $status;
+        }
+        $sql .= ' ORDER BY p.tanggal_pesanan DESC';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function beginTransaction(): void { $this->db->beginTransaction(); }
+    public function commit(): void           { $this->db->commit(); }
+    public function rollBack(): void         { $this->db->rollBack(); }
+}
