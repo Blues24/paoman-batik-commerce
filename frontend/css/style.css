@@ -1,0 +1,399 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Ubuntu:wght@300;400;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif, "Caveat", "Ubuntu";
+}
+h1{
+    font-size: 40px;
+    font-family: "Ubuntu", sans-serif;
+    color: #ffffff;
+    margin-top: 20px;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Sesuaikan dengan tinggi navbar Anda */
+}
+
+.red-text {
+    color: red;
+    font-weight: bold;
+}
+
+.white-text {
+    color: white;
+    font-weight: bold;
+}
+
+p{
+    color:#ffffff;
+    font-size:17px;
+}
+
+body{
+    background:#f5f5f5;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Agar navbar berada di lapisan paling atas */
+    background-color: #ffffff; /* Pastikan ada warna latar agar konten di bawahnya tidak terlihat menumpuk */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Opsional: memberi bayangan halus */
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 40px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+    /* Alternatif Fixed */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box; /* Agar padding tidak merusak lebar 100% */
+    z-index: 1000;
+}
+
+.logo{
+    font-size:35px;
+    font-family: "Caveat", cursive;
+    color:#c79a00;
+    font-weight:bold;
+}
+
+.menu{
+    list-style:none;
+    font-size:30px;
+    font-weight:thick;
+    display:flex;
+    gap:30px;
+    align-items:center;
+}
+
+.menu a{
+    text-decoration:none;
+    color:#333;
+    font-size:16px;
+}
+
+.menu a:hover{
+    color:#c79a00;
+}
+
+.auth{
+    display:flex;
+    gap:10px;
+}
+
+.btn-login{
+    padding:7px 18px;
+    border:2px solid red;
+    border-radius:8px;
+    text-decoration:none;
+    color:black;
+    font-weight:bold;
+}
+
+.btn-login:hover{
+    background:red;
+    color:white;
+}
+
+.btn-daftar{
+    padding:7px 18px;
+    background:red;
+    border-radius:8px;
+    text-decoration:none;
+    color:white;
+    font-weight:bold;
+}
+
+.btn-daftar:hover{
+    background:#c40000;
+}
+
+/* Hero Section */
+
+.hero{
+display:flex;
+flex-direction:column;
+padding:100px 8%;
+background:url("../img/batik-bg1.jpg");
+background-size:cover;
+background-position:center;
+position:relative;
+color:white;
+}
+
+/* overlay gelap seperti mockup */
+.hero::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.65);
+z-index:1;
+}
+
+/* text hero */
+.hero-text{
+position:relative;
+z-index:2;
+max-width:650px;
+margin-bottom:40px;
+color:black;
+}
+
+.hero-text h1{
+font-size:48px;
+line-height:1.3;
+margin-bottom:10px;
+}
+
+
+
+/* gambar hero */
+
+.hero-img {
+    position: relative;
+    width: 100%; /* Menggunakan 100% agar fleksibel mengikuti layar */
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0; /* Memberi ruang napas atas bawah */
+}
+
+.hero-img img {
+    width: 95%; /* Membuat gambar lebih lebar ke samping (hampir mentok layar) */
+    max-width: 1200px; /* Tingkatkan batas maksimalnya, misal ke 1200px atau lebih */
+    height: 500px; /* Memberikan tinggi spesifik agar lebih "lebar" ke bawah */
+    object-fit: cover; /* KRUSIAL: Agar gambar tidak terlihat gepeng saat ditarik */
+    border-radius: 8px; /* Opsional: sedikit lengkungan agar terlihat modern */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+
+/* PRODUK */
+
+.produk{
+display:flex;
+flex-direction:column;
+padding:100px 8%;
+background:url("../img/batik-bg1.jpg");
+background-size:cover;
+background-position:center;
+text-align: center;
+position:relative;
+color:white;
+}
+
+.produk h2{
+    font-size: 45px;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: bold;
+    margin-bottom: 50px
+}
+
+.produk-grid{
+margin-top:40px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:25px;
+}
+
+.card{
+align-items: center;
+background:white;
+color:black;
+padding:15px;
+border-radius:10px;
+width:200px;
+height:250px;
+}
+
+
+.card p{
+margin-top:10px;
+color: black;
+font-family: "Ubuntu", sans-serif;
+}
+
+.card img{
+width:75%;
+border-radius:5px;
+}
+
+.lihat{
+margin-top:30px;
+padding:10px 20px;
+background:red;
+color:white;
+border:none;
+border-radius:5px;
+width:fit-content;
+margin-left:auto;
+margin-right:auto;
+}
+
+/* LAYANAN */
+.layanan {
+    display: flex;
+    flex-direction: column;
+    padding: 100px 8%;
+    background: url("../img/batik-bg1.jpg");
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: white;
+    align-items: center;
+    text-align: justify;
+}
+
+/* Overlay agar teks mudah dibaca */
+.layanan::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Lebih gelap sedikit sesuai gambar */
+    z-index: 1;
+}
+
+.layanan h2, .layanan-grid {
+    position: relative;
+    z-index: 2;
+}
+
+.layanan h2 {
+    font-size: 45px;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: bold;
+    margin-bottom: 50px
+}
+
+.layanan-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.layanan-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.layanan-box h3 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.layanan-box p {
+    color: #efefef;
+    line-height: 1.6;
+    margin-bottom: 30px; /* Jarak antara teks dan gambar */
+    min-height: 100px; /* Menjaga agar tinggi teks sejajar jika panjang berbeda */
+}
+
+.layanan-box img {
+    width: 100%;
+    max-width: 350px;
+    height: 220px; /* Mengatur tinggi tetap agar sejajar */
+    object-fit: cover; /* Gambar tidak penyok */
+    border-radius: 4px; /* Sesuai gambar, tidak terlalu bulat */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease;
+}
+
+.layanan-box img:hover {
+    transform: scale(1.05); /* Efek zoom saat kursor di atas gambar */
+}
+
+
+/* TENTANG */
+.tentang {
+    padding: 100px 8%;
+    text-align: center;
+    /* Menggunakan background yang sama dengan section lain agar konsisten */
+    background:url("../img/batik-bg1.jpg");
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+.tentang h2 {
+    font-size: 45px;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: bold;
+    margin-bottom: 50px;
+}
+
+.tentang-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr; /* Kolom kanan sedikit lebih lebar untuk teks */
+    gap: 50px;
+    align-items: flex-start; /* Agar konten mulai dari atas */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tentang-maps {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px; /* Agar sudut peta tumpul sesuai desain */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.tentang-maps iframe {
+    width: 100%; /* Memastikan peta memenuhi kolom kiri */
+    min-height: 450px; /* Tinggi peta */
+    border: none;
+}
+
+/* Styling untuk Konten Kanan */
+.tentang-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: justify; /* Membuat teks rata kiri-kanan sesuai gambar */
+}
+
+.tentang-content img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.tentang-content p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #e0e0e0;
+}
+
+/* FOOTER */
+
+footer{
+background:#eee;
+color:black;
+padding:40px 8%;
+}
+
+.footer-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:30px;
+}
