@@ -1,3 +1,5 @@
+const CART_KEY = "batikPaomanCart";
+
 const produkBatik = [
     { id: 1, nama: "Kain Batik Motif Tangga Istana", kategori: "kain", harga: 50000, tag: "BEST SELLER" },
     { id: 2, nama: "Kain Batik Motif Godong Asem", kategori: "kain", harga: 50000, tag: "NEW ARRIVAL" },
@@ -29,6 +31,10 @@ const categoryFilters = Array.from(document.querySelectorAll(".category-filter")
 const pageButtons = Array.from(document.querySelectorAll(".page-number"));
 const prevPageButton = document.getElementById("prevPage");
 const nextPageButton = document.getElementById("nextPage");
+const cartCount = document.getElementById("cartCount");
+const cartConfirmOverlay = document.getElementById("cartConfirmOverlay");
+const cartConfirmMessage = document.getElementById("cartConfirmMessage");
+const continueShoppingBtn = document.getElementById("continueShoppingBtn");
 
 function formatRupiah(angka) {
     return `Rp.${angka.toLocaleString("id-ID")}`;
@@ -40,6 +46,32 @@ function formatRingkas(angka) {
     }
 
     return `Rp ${Math.round(angka / 1000)}rb`;
+}
+
+function getCartItems() {
+    try {
+        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    } catch {
+        return [];
+    }
+}
+
+function saveCartItems(items) {
+    localStorage.setItem(CART_KEY, JSON.stringify(items));
+}
+
+function updateCartCount() {
+    const totalItems = getCartItems().reduce((sum, item) => sum + item.qty, 0);
+    cartCount.textContent = totalItems;
+}
+
+function showCartConfirmation(productName) {
+    cartConfirmMessage.textContent = `${productName} sudah masuk ke keranjang. Mau lanjut belanja atau buka keranjang sekarang?`;
+    cartConfirmOverlay.classList.remove("d-none");
+}
+
+function hideCartConfirmation() {
+    cartConfirmOverlay.classList.add("d-none");
 }
 
 function getSelectedCategories() {
@@ -101,7 +133,7 @@ function renderProduk() {
                     <h3 class="product-title">${item.nama}</h3>
                     <div class="product-footer">
                         <span class="product-price">${formatRupiah(item.harga)}</span>
-                        <button class="cart-button" type="button" onclick="tambahKeKeranjang('${item.nama}')">
+                        <button class="cart-button" type="button" onclick="tambahKeKeranjang(${item.id})">
                             <i class="bi bi-cart"></i>
                         </button>
                     </div>
@@ -154,8 +186,31 @@ function syncSemuaProduk(triggeredInput) {
     }
 }
 
-function tambahKeKeranjang(namaProduk) {
-    alert(`${namaProduk} berhasil ditambahkan ke keranjang!`);
+function tambahKeKeranjang(productId) {
+    const selectedProduct = produkBatik.find((product) => product.id === productId);
+
+    if (!selectedProduct) {
+        return;
+    }
+
+    const cartItems = getCartItems();
+    const existingItem = cartItems.find((item) => item.id === productId);
+
+    if (existingItem) {
+        existingItem.qty += 1;
+    } else {
+        cartItems.push({
+            id: selectedProduct.id,
+            nama: selectedProduct.nama,
+            kategori: selectedProduct.kategori,
+            harga: selectedProduct.harga,
+            qty: 1
+        });
+    }
+
+    saveCartItems(cartItems);
+    updateCartCount();
+    showCartConfirmation(selectedProduct.nama);
 }
 
 searchInput.addEventListener("input", applyFilters);
@@ -203,7 +258,22 @@ nextPageButton.addEventListener("click", () => {
     renderProduk();
 });
 
+continueShoppingBtn.addEventListener("click", hideCartConfirmation);
+
+cartConfirmOverlay.addEventListener("click", (event) => {
+    if (event.target === cartConfirmOverlay) {
+        hideCartConfirmation();
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !cartConfirmOverlay.classList.contains("d-none")) {
+        hideCartConfirmation();
+    }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
     priceValue.textContent = formatRingkas(Number(priceRange.value));
+    updateCartCount();
     renderProduk();
 });

@@ -14,6 +14,7 @@
             <div class="navbar-nav nav-menu">
                 <a class="nav-link active" href="pembelian.html">Produk</a>
                 <a class="nav-link" href="pemesanan.html">Pemesanan</a>
+                <a class="nav-link" href="konsultasi.html">Konsultasi</a>
                 <a class="nav-link" href="kontak.html">Kontak</a>
             </div>
 
@@ -22,13 +23,21 @@
                 <input id="searchProduk" type="search" placeholder="Cari produk...">
             </form>
 
-            <div class="user-pill">
-                <div class="user-meta">
-                    <strong>Nama</strong>
-                    <span>User</span>
-                </div>
-                <div class="user-icon">
-                    <i class="bi bi-person"></i>
+            <div class="nav-actions">
+                <a class="cart-pill" href="pemesanan.html" aria-label="Buka keranjang dan pemesanan">
+                    <i class="bi bi-cart3"></i>
+                    <span>Keranjang</span>
+                    <strong id="cartCount">0</strong>
+                </a>
+
+                <div class="user-pill">
+                    <div class="user-meta">
+                        <strong>Nama</strong>
+                        <span>User</span>
+                    </div>
+                    <div class="user-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -76,10 +85,10 @@
                     <section class="info-card">
                         <h3>Ingin Batik Sesuai yang Anda Butuhkan?</h3>
                         <p>Konsultasikan kebutuhan batik Anda untuk seragam atau acara khusus dan lainnya.</p>
-                        <button type="button" class="btn-consult">
+                        <a href="konsultasi.html" class="btn-consult">
                             <i class="bi bi-chat-left-text"></i>
                             Klik Disini
-                        </button>
+                        </a>
                     </section>
                 </aside>
 
@@ -143,6 +152,20 @@
             </section>
         </div>
     </footer>
+
+    <div id="cartConfirmOverlay" class="cart-confirm-overlay d-none">
+        <div class="cart-confirm-box" role="dialog" aria-modal="true" aria-labelledby="cartConfirmTitle">
+            <div class="cart-confirm-icon">
+                <i class="bi bi-check2-circle"></i>
+            </div>
+            <h2 id="cartConfirmTitle">Produk Ditambahkan</h2>
+            <p id="cartConfirmMessage">Produk berhasil masuk ke keranjang.</p>
+            <div class="cart-confirm-actions">
+                <button id="continueShoppingBtn" type="button" class="confirm-btn secondary">Lanjut Belanja</button>
+                <a href="pemesanan.html" class="confirm-btn primary">Lihat Keranjang</a>
+            </div>
+        </div>
+    </div>
 
     <script src="../js/pembelian.js"></script>
 </body>
