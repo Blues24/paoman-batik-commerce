@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemesanan Batik</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom py-3">
+        <div class="container">
+            <div class="d-flex align-items-center gap-4">
+                <a class="nav-link" href="beranda.html">Beranda</a>
+                <a class="nav-link" href="pembelian.html">Produk</a>
+                <a class="nav-link active fw-bold bg-light px-3 py-1 rounded" href="pemesanan.html">Pemesanan</a>
+                <a class="nav-link" href="kontak.html">Kontak</a>
+            </div>
+            
+            <div class="flex-grow-1 mx-5">
+                <div class="input-group search-bar">
+                    <input type="text" class="form-control" placeholder="Cari produk...">
+                    <span class="input-group-text bg-white border-start-0">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center">
+                <span class="me-2 text-muted small text-end">Nama<br><b>User</b></span>
+                <i class="fa-regular fa-circle-user fs-3 text-secondary"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <div class="row g-5">
+            <div class="col-md-5">
+                <img src="https://via.placeholder.com/500x500" alt="Batik" class="img-fluid rounded-4 shadow-sm batik-img">
+            </div>
+
+            <div class="col-md-7">
+                <h2 class="fw-normal mb-1">Batik</h2>
+                <h1 class="fw-bold mb-5">Rp. 50.000-100.000</h1>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Ukuran</label>
+                        <select class="form-select border-secondary-subtle">
+                            <option selected>Value</option>
+                            <option value="S">Small</option>
+                            <option value="M">Medium</option>
+                            <option value="L">Large</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Laki-laki/Perempuan</label>
+                        <select class="form-select border-secondary-subtle">
+                            <option selected>Value</option>
+                            <option value="pria">Laki-laki</option>
+                            <option value="wanita">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Warna</label>
+                        <select class="form-select border-secondary-subtle">
+                            <option selected>Value</option>
+                            <option value="ungu">Ungu</option>
+                            <option value="biru">Biru</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Pilih Motif</label>
+                        <select class="form-select border-secondary-subtle">
+                            <option selected>Value</option>
+                            <option value="parang">Parang</option>
+                            <option value="megamendung">Mega Mendung</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Jenis Pakaian</label>
+                        <select class="form-select border-secondary-subtle">
+                            <option selected>Value</option>
+                            <option value="kemeja">Kemeja</option>
+                            <option value="tunik">Tunik</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Jumlah</label>
+                        <select class="form-select border-secondary-subtle">
+                            <option selected>Value</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Jenis Produk</label>
+                        <select class="form-select border-secondary-subtle">
+                            <option selected>Value</option>
+                            <option value="kain">Kain</option>
+                            <option value="pakaian">Pakaian Jadi</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-5 pt-3">
+                    <button class="btn btn-dark w-100 py-3 fs-5 fw-medium rounded-2 btn-pesan">
+                        Pesan sekarang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
