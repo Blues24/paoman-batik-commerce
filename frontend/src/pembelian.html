@@ -3,228 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batik Paoman - Katalog</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/pembelian.css">
-    <link rel="stylesheet" href="../css/common/footer.css">
+    <title>Batik Paoman - Katalog Produk</title>
+    <link href="../css/abaikan/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pembelian.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 <body>
-    <nav class="topbar">
-        <div class="topbar__inner">
-            <div class="topbar__links">
-                <a href="beranda.html">Beranda</a>
-                <a href="#" class="is-active">Produk</a>
-                <a href="pemesanan.html">Pemesanan</a>
-                <a href="kontak.html">Kontak</a>
+    <nav class="navbar navbar-expand-lg page-navbar">
+        <div class="container page-shell nav-shell">
+            <div class="navbar-nav nav-menu">
+                <a class="nav-link active" href="pembelian.html">Produk</a>
+                <a class="nav-link" href="pemesanan.html">Pemesanan</a>
+                <a class="nav-link" href="kontak.html">Kontak</a>
             </div>
 
-            <form class="searchbar" action="#">
-                <input type="text" placeholder="Cari produk..." data-search-input>
-                <button type="submit" aria-label="Cari produk">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M10.5 4a6.5 6.5 0 1 0 4.03 11.6l4.44 4.44 1.41-1.41-4.44-4.44A6.5 6.5 0 0 0 10.5 4Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z"/>
-                    </svg>
-                </button>
+            <form class="search-box" role="search">
+                <i class="bi bi-search"></i>
+                <input id="searchProduk" type="search" placeholder="Cari produk...">
             </form>
 
-            <div class="profile-chip">
-                <div class="profile-chip__text">
+            <div class="user-pill">
+                <div class="user-meta">
                     <strong>Nama</strong>
                     <span>User</span>
                 </div>
-                <div class="profile-chip__icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-3.33 0-6 1.79-6 4v1h12v-1c0-2.21-2.67-4-6-4Z"/>
-                    </svg>
+                <div class="user-icon">
+                    <i class="bi bi-person"></i>
                 </div>
             </div>
         </div>
     </nav>
 
-    <main class="page-shell">
-        <section class="hero-banner">
-            <div class="hero-banner__overlay"></div>
-            <div class="hero-banner__content">
-                <span class="hero-banner__eyebrow">BATIK PAOMAN</span>
-                <h1>Keanggunan Warisan Budaya Indonesia</h1>
-                <p>Batik yang diciptakan eksklusif dari pengrajin lokal pilihan dengan kualitas premium.</p>
+    <main class="page-main">
+        <section class="container page-shell hero-section">
+            <div class="hero-card">
+                <div class="hero-copy">
+                    <span class="hero-badge">BATIK PAOMAN</span>
+                    <h1>Keanggunan Warisan Budaya Indonesia</h1>
+                    <p>Batik yang diciptakan eksklusif dari pengrajin lokal pilihan dengan kualitas premium.</p>
+                </div>
             </div>
         </section>
 
-        <section class="catalog-layout">
-            <aside class="sidebar-card">
-                <div class="filter-group">
-                    <h2>
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M4 6h16v2H4Zm3 5h10v2H7Zm2 5h6v2H9Z"/>
-                        </svg>
-                        Kategori
-                    </h2>
-                    <label class="check-row">
-                        <input type="checkbox" checked data-category-filter value="all">
-                        <span>Semua Produk</span>
-                    </label>
-                    <label class="check-row">
-                        <input type="checkbox" data-category-filter value="kain batik">
-                        <span>Kain Batik</span>
-                    </label>
-                    <label class="check-row">
-                        <input type="checkbox" data-category-filter value="pakaian">
-                        <span>Pakaian</span>
-                    </label>
-                </div>
+        <section class="container page-shell catalog-section">
+            <div class="catalog-layout">
+                <aside class="catalog-sidebar">
+                    <section class="filter-card">
+                        <h2><i class="bi bi-funnel"></i> Kategori</h2>
+                        <label class="filter-option">
+                            <input class="category-filter" type="checkbox" value="semua" checked>
+                            <span>Semua Produk</span>
+                        </label>
+                        <label class="filter-option">
+                            <input class="category-filter" type="checkbox" value="kain" checked>
+                            <span>Kain Batik</span>
+                        </label>
+                        <label class="filter-option">
+                            <input class="category-filter" type="checkbox" value="pakaian" checked>
+                            <span>Pakaian</span>
+                        </label>
+                    </section>
 
-                <div class="filter-group">
-                    <h2>
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M12 3a2 2 0 0 1 2 2v1h4v2h-1v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V8H6V6h4V5a2 2 0 0 1 2-2Zm0 2v1h0V5ZM9 8v9h6V8Z"/>
-                        </svg>
-                        Rentang Harga
-                    </h2>
-                    <input type="range" min="50000" max="5000000" value="5000000" step="50000" data-price-range>
-                    <div class="price-range">
-                        <span>Rp 50rb</span>
-                        <span data-price-value>Rp 5jt</span>
+                    <section class="filter-card">
+                        <h2><i class="bi bi-cash-stack"></i> Rentang Harga</h2>
+                        <input id="priceRange" class="form-range" type="range" min="50000" max="500000" step="50000" value="500000">
+                        <div class="price-range-label">
+                            <span>Rp 50rb</span>
+                            <span id="priceValue">Rp 500rb</span>
+                        </div>
+                    </section>
+
+                    <section class="info-card">
+                        <h3>Ingin Batik Sesuai yang Anda Butuhkan?</h3>
+                        <p>Konsultasikan kebutuhan batik Anda untuk seragam atau acara khusus dan lainnya.</p>
+                        <button type="button" class="btn-consult">
+                            <i class="bi bi-chat-left-text"></i>
+                            Klik Disini
+                        </button>
+                    </section>
+                </aside>
+
+                <section class="catalog-content">
+                    <div class="catalog-header">
+                        <h2>Katalog Produk Batik</h2>
                     </div>
-                </div>
 
-                <div class="consultation-card">
-                    <h3>Ingin Batik Sesuai yang Anda Butuhkan?</h3>
-                    <p>Konsultasikan kebutuhan batik Anda untuk seragam atau acara khusus dan lainnya.</p>
-                    <a href="#" class="consultation-card__button">Klik Disini</a>
-                </div>
-            </aside>
+                    <div id="emptyState" class="empty-state d-none">
+                        Produk belum ditemukan dengan filter saat ini.
+                    </div>
 
-            <section class="catalog-main">
-                <header class="section-heading">
-                    <h2>Katalog Produk Batik</h2>
-                </header>
+                    <div id="productGrid" class="product-grid"></div>
 
-                <div class="product-grid">
-                    <article class="product-card" data-category="kain batik" data-price="50000" data-name="Kain Batik Motif Tangga Istana">
-                        <div class="product-card__media motif-1">
-                            <span class="badge">Best Seller</span>
-                            <button type="button" class="icon-circle icon-circle--light" aria-label="Simpan produk">
-                                <svg viewBox="0 0 24 24">
-                                    <path d="M12.1 20.3 11 19.3C5.4 14.2 2 11.1 2 7.3A4.8 4.8 0 0 1 6.8 2.5c1.9 0 3.6.9 4.7 2.2 1.1-1.3 2.8-2.2 4.7-2.2A4.8 4.8 0 0 1 21 7.3c0 3.8-3.4 6.9-9 12l-1 .9Z"/>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="product-card__body">
-                            <p class="product-card__category">Kain Batik</p>
-                            <h3>Kain Batik Motif Tangga Istana</h3>
-                            <div class="product-card__footer">
-                                <strong>Rp. 50.000</strong>
-                                <button type="button" class="icon-circle" aria-label="Tambah ke keranjang">
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M7 18a2 2 0 1 0 2 2 2 2 0 0 0-2-2Zm10 0a2 2 0 1 0 2 2 2 2 0 0 0-2-2ZM7.2 14h9.9a2 2 0 0 0 1.9-1.4L21 7H8.3l-.4-2H4v2h2.2l1.6 8.1A2 2 0 0 0 9.7 17H19v-2H9.7Z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="product-card" data-category="kain batik" data-price="50000" data-name="Kain Batik Motif Godong Asem">
-                        <div class="product-card__media motif-2">
-                            <span class="badge">New Arrival</span>
-                        </div>
-                        <div class="product-card__body">
-                            <p class="product-card__category">Kain Batik</p>
-                            <h3>Kain Batik Motif Godong Asem</h3>
-                            <div class="product-card__footer">
-                                <strong>Rp. 50.000</strong>
-                                <button type="button" class="icon-circle" aria-label="Tambah ke keranjang">
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M7 18a2 2 0 1 0 2 2 2 2 0 0 0-2-2Zm10 0a2 2 0 1 0 2 2 2 2 0 0 0-2-2ZM7.2 14h9.9a2 2 0 0 0 1.9-1.4L21 7H8.3l-.4-2H4v2h2.2l1.6 8.1A2 2 0 0 0 9.7 17H19v-2H9.7Z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="product-card" data-category="pakaian" data-price="100000" data-name="Baju Motif Batik Kentangan">
-                        <div class="product-card__media motif-3"></div>
-                        <div class="product-card__body">
-                            <p class="product-card__category">Pakaian</p>
-                            <h3>Baju Motif Batik Kentangan</h3>
-                            <div class="product-card__footer">
-                                <strong>Rp. 100.000</strong>
-                                <button type="button" class="icon-circle" aria-label="Tambah ke keranjang">
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M7 18a2 2 0 1 0 2 2 2 2 0 0 0-2-2Zm10 0a2 2 0 1 0 2 2 2 2 0 0 0-2-2ZM7.2 14h9.9a2 2 0 0 0 1.9-1.4L21 7H8.3l-.4-2H4v2h2.2l1.6 8.1A2 2 0 0 0 9.7 17H19v-2H9.7Z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="product-card" data-category="kain batik" data-price="65000" data-name="Kain Batik Motif Mangga Bambu">
-                        <div class="product-card__media motif-4"></div>
-                        <div class="product-card__body">
-                            <p class="product-card__category">Kain Batik</p>
-                            <h3>Kain Batik Motif Mangga Bambu</h3>
-                            <div class="product-card__footer">
-                                <strong>Rp. 65.000</strong>
-                                <button type="button" class="icon-circle" aria-label="Tambah ke keranjang">
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M7 18a2 2 0 1 0 2 2 2 2 0 0 0-2-2Zm10 0a2 2 0 1 0 2 2 2 2 0 0 0-2-2ZM7.2 14h9.9a2 2 0 0 0 1.9-1.4L21 7H8.3l-.4-2H4v2h2.2l1.6 8.1A2 2 0 0 0 9.7 17H19v-2H9.7Z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="product-card" data-category="kain batik" data-price="65000" data-name="Kain Batik Kembang Gunda">
-                        <div class="product-card__media motif-5"></div>
-                        <div class="product-card__body">
-                            <p class="product-card__category">Kain Batik</p>
-                            <h3>Kain Batik Kembang Gunda</h3>
-                            <div class="product-card__footer">
-                                <strong>Rp. 65.000</strong>
-                                <button type="button" class="icon-circle" aria-label="Tambah ke keranjang">
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M7 18a2 2 0 1 0 2 2 2 2 0 0 0-2-2Zm10 0a2 2 0 1 0 2 2 2 2 0 0 0-2-2ZM7.2 14h9.9a2 2 0 0 0 1.9-1.4L21 7H8.3l-.4-2H4v2h2.2l1.6 8.1A2 2 0 0 0 9.7 17H19v-2H9.7Z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="product-card" data-category="pakaian" data-price="100000" data-name="Kemeja Motif Batik Kembang Gunda">
-                        <div class="product-card__media motif-6"></div>
-                        <div class="product-card__body">
-                            <p class="product-card__category">Pakaian</p>
-                            <h3>Kemeja Motif Batik Kembang Gunda</h3>
-                            <div class="product-card__footer">
-                                <strong>Rp. 100.000</strong>
-                                <button type="button" class="icon-circle" aria-label="Tambah ke keranjang">
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M7 18a2 2 0 1 0 2 2 2 2 0 0 0-2-2Zm10 0a2 2 0 1 0 2 2 2 2 0 0 0-2-2ZM7.2 14h9.9a2 2 0 0 0 1.9-1.4L21 7H8.3l-.4-2H4v2h2.2l1.6 8.1A2 2 0 0 0 9.7 17H19v-2H9.7Z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-
-                <div class="catalog-empty" data-empty-state>
-                    Produk yang kamu cari belum ada di katalog ini.
-                </div>
-
-                <nav class="pagination" aria-label="Navigasi halaman">
-                    <button type="button" aria-label="Halaman sebelumnya">&lsaquo;</button>
-                    <button type="button" class="is-current" aria-current="page">1</button>
-                    <button type="button">2</button>
-                    <button type="button">3</button>
-                    <button type="button" aria-label="Halaman berikutnya">&rsaquo;</button>
-                </nav>
-            </section>
+                    <nav id="catalogPagination" class="catalog-pagination" aria-label="Pagination katalog">
+                        <button id="prevPage" type="button" class="page-btn page-arrow" aria-label="Halaman sebelumnya">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <button type="button" class="page-btn active page-number" data-page="1">1</button>
+                        <button type="button" class="page-btn page-number" data-page="2">2</button>
+                        <button type="button" class="page-btn page-number" data-page="3">3</button>
+                        <button id="nextPage" type="button" class="page-btn page-arrow" aria-label="Halaman berikutnya">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </nav>
+                </section>
+            </div>
         </section>
     </main>
 
-    <div id="footer-root"></div>
+    <footer class="page-footer">
+        <div class="container page-shell footer-grid">
+            <section>
+                <h2 class="footer-brand">Batik Paoman</h2>
+                <p>Kami berkomitmen untuk memberdayakan pengrajin lokal dan melestarikan warisan budaya Indonesia melalui batik berkualitas tinggi.</p>
+                <div class="footer-social">
+                    <span><i class="bi bi-globe2"></i></span>
+                    <span><i class="bi bi-share"></i></span>
+                    <span><i class="bi bi-envelope"></i></span>
+                </div>
+            </section>
+
+            <section>
+                <h3>Navigasi</h3>
+                <a href="beranda.html">Beranda</a>
+                <a href="pemesanan.html">Pemesanan</a>
+                <a href="pembelian.html">Produk</a>
+                <a href="kontak.html">Kontak</a>
+            </section>
+
+            <section>
+                <h3>Hubungi Kami</h3>
+                <p>081911315662</p>
+                <p>Kebijakan Pengembalian</p>
+                <p>Syarat &amp; Ketentuan</p>
+            </section>
+
+            <section>
+                <h3>Toko Offline</h3>
+                <p>Jl. Siliwangi No.10, Paoman, Kec. Indramayu, Kabupaten Indramayu, Jawa Barat 45211</p>
+            </section>
+        </div>
+    </footer>
+
     <script src="../js/pembelian.js"></script>
 </body>
 </html>
