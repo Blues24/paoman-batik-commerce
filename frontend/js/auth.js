@@ -44,7 +44,7 @@ document.querySelector('#login form').addEventListener('submit', async (e) => {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
-            body: JSON.stringify({loginInput, password})
+            body: JSON.stringify({ identifier: loginInput, password})
         });
 
         const data = await res.json();

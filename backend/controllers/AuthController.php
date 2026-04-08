@@ -97,13 +97,15 @@ class AuthController {
         $body  = $this->body();
         $model = new AkunModel();
         $key = 'login_attempt_' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+        $identifier = $body['identifier'] ?? $body['username'] ?? '';
 
         $this->checkRateLimit($key);
 
-        if (empty($body['username']) || empty($body['password']))
-            $this->respond(false, null, 'Username dan password wajib diisi', 422);
 
-        $user = $model->findByUsername($body['username']);
+        if (empty($identifier) || empty($body['password']))
+            $this->respond(false, null, 'Username/Email dan password wajib diisi', 422);
+
+        $user = $model->findByIdentifier($identifier);
 
         if (!$user || !password_verify($body['password'], $user['password_hash']))
             $this->failAttempt($key);

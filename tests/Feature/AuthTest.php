@@ -66,7 +66,7 @@ class AuthTest extends TestCase {
             'email'    => 'hash@mail.com',
         ]);
 
-        $user = $model->findByUsername('hashtest');
+        $user = $model->findByIdentifier('hashtest');
         // password tidak boleh tersimpan plain text
         $this->assertNotEquals('rahasia123', $user['password_hash']);
         // tapi harus bisa diverifikasi
@@ -75,7 +75,26 @@ class AuthTest extends TestCase {
 
     public function test_login_user_tidak_ada(): void {
         $model = new AkunModel();
-        $user  = $model->findByUsername('tidakada');
+        $user  = $model->findByIdentifier('tidakada');
         $this->assertFalse($user);
     }
+
+    public function test_login_via_email(): void {
+    $model = new AkunModel();
+    $model->createWithPelanggan([
+        'username' => 'emailtest',
+        'password' => 'rahasia123',
+        'nama'     => 'Email Test',
+        'email'    => 'emailtest@mail.com',
+    ]);
+
+    // login pakai email
+    $user = $model->findByIdentifier('emailtest@mail.com');
+    $this->assertNotFalse($user);
+    $this->assertEquals('emailtest', $user['nama'] === 'Email Test' ? 'emailtest' : '');
+
+    // login pakai username
+    $user2 = $model->findByIdentifier('emailtest');
+    $this->assertNotFalse($user2);
+}
 }

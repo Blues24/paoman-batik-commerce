@@ -13,17 +13,17 @@ class AkunModel {
     }
 
     /**
-     * Mencari akun berdasarkan username.
+     * Mencari akun berdasarkan username atau email.
      */
-    public function findByUsername(string $username): array|false {
+    public function findByIdentifier(string $identifier): array|false {
         $stmt = $this->db->prepare(
-            'SELECT a.akun_id, a.password_hash, a.status_akun,
-                    p.pelanggan_id, p.nama
-             FROM akun a
-             JOIN pelanggan p ON p.akun_id = a.akun_id
-             WHERE a.username = ?'
-        );
-        $stmt->execute([$username]);
+        'SELECT a.akun_id, a.password_hash, a.status_akun,
+                p.pelanggan_id, p.nama
+         FROM akun a
+         JOIN pelanggan p ON p.akun_id = a.akun_id
+         WHERE a.username = ? OR p.email = ?'
+    );
+        $stmt->execute([$identifier, $identifier ]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
