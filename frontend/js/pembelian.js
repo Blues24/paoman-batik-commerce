@@ -1,9 +1,9 @@
 const CART_KEY = "batikPaomanCart";
 
 const produkBatik = [
-    { id: 1, nama: "Kain Batik Motif Tangga Istana", kategori: "kain", harga: 50000, tag: "BEST SELLER" },
-    { id: 2, nama: "Kain Batik Motif Godong Asem", kategori: "kain", harga: 50000, tag: "NEW ARRIVAL" },
-    { id: 3, nama: "Baju Motif Batik Kentangan", kategori: "pakaian", harga: 100000, tag: "" },
+    { id: 1, nama: "Kain Batik Motif Tangga Istana", kategori: "kain", harga: 50000, tag: "Produk Terlaris" },
+    { id: 2, nama: "Kain Batik Motif Godong Asem", kategori: "kain", harga: 50000, tag: "" },
+    { id: 3, nama: "Baju Motif Batik Kentangan", kategori: "pakaian", harga: 100000, tag: "Produk Baru" },
     { id: 4, nama: "Kain Batik Motif Mangga Bambu", kategori: "kain", harga: 65000, tag: "" },
     { id: 5, nama: "Kain Batik Kembang Gunda", kategori: "kain", harga: 65000, tag: "" },
     { id: 6, nama: "Kemeja Motif Batik Kembang Gunda", kategori: "pakaian", harga: 100000, tag: "" },
@@ -125,7 +125,7 @@ function renderProduk() {
                 <div class="product-media">
                     ${item.tag ? `<span class="product-badge">${item.tag}</span>` : ""}
                     <div class="product-image-placeholder" aria-label="Area gambar produk kosong">
-                        Tempat gambar produk
+
                     </div>
                 </div>
                 <div class="product-body">
