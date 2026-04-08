@@ -21,9 +21,9 @@ function createGlobalFooter() {
             <div class="footer-column">
                 <h3>NAVIGASI</h3>
                 <ul>
-                    <li><a href="index.html">Beranda</a></li>
+                    <li><a href="beranda.html">Beranda</a></li>
                     <li><a href="pemesanan.html">Pemesanan</a></li>
-                    <li><a href="#produk">Produk</a></li>
+                    <li><a href="produk.html">Produk</a></li>
                     <li><a href="kontak.html">Kontak</a></li>
                 </ul>
             </div>

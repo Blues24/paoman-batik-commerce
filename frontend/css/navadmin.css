@@ -1,0 +1,92 @@
+:root {
+    --bg-color: #E0E0E0;
+    --sidebar-color: #FFFFFF;
+    --primary-blue: #2B4DBB;
+    --text-main: #333;
+    --text-muted: #888;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    background: var(--sidebar-color);
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.sidebar-header {
+    padding: 2rem 1.5rem;
+    color: var(--primary-blue);
+}
+
+.nav-menu {
+    flex-grow: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #444;
+    gap: 15px;
+    transition: 0.3s;
+    border-bottom: 1px solid #eee;
+}
+
+.nav-item:hover, .nav-item.active {
+    background-color: var(--primary-blue);
+    color: white !important;
+}
+
+.sidebar-footer {
+    border-top: 1px solid #ccc;
+}
+
+/* Header & Top Bar */
+.main-content {
+    flex-grow: 1;
+    padding: 25px;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 1px solid #ccc;
+    padding-left: 15px;
+}
+
