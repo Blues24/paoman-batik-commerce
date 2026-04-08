@@ -3,6 +3,8 @@
 // Header Global untuk CORS dan JSON
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Access-Control-Allow-Origin: http://localhost:80');
+header('Access-Control-Allow-Origin: http://localhost:5500');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 header('Access-Control-ALlow-Headers: Content-Type');
