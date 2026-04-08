@@ -73,7 +73,7 @@ document.querySelector('#register form').addEventListener('submit', async (e) =>
     const email          = document.getElementById('#register-email').value.trim();
     const password  = document.getElementById('#register-pass').value;
 
-    if (!nama && !username && !email && !password){
+    if (!nama || !username || !email || !password){
         showError('Semua field wajib diisi...!');
         return;
     }
