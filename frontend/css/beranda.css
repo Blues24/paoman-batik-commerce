@@ -232,17 +232,6 @@ width:75%;
 border-radius:5px;
 }
 
-.lihat{
-margin-top:30px;
-padding:10px 20px;
-background:red;
-color:white;
-border:none;
-border-radius:5px;
-width:fit-content;
-margin-left:auto;
-margin-right:auto;
-}
 
 /* LAYANAN */
 .layanan {
@@ -660,21 +649,28 @@ margin-top: 15px;
     font-family: "Ubuntu", sans-serif;
 }
 
-/* TOMBOL LIHAT SEMUA */
+/* TOMBOL LIHAT SEMUA & KONSULTASI */
 .lihat {
-margin-top: 40px;
+    display: inline-block;    /* Tambahkan ini agar padding & margin berfungsi */
+    margin-top: 40px;
     padding: 12px 40px;
     background: #ff0000;
-    color: white;
+    color: white !important;  /* Memastikan teks tetap putih */
     border-radius: 25px;
-    text-decoration: none;
+    text-decoration: none;    /* Menghilangkan garis bawah link */
     font-weight: bold;
     transition: 0.3s;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    z-index: 5;               /* Pastikan di atas overlay */
+    position: relative;        /* Dibutuhkan agar z-index aktif */
 }
 
 .lihat:hover {
     background: #cc0000;
     transform: scale(1.05);
+    color: white;
 }
 
 /* LAYANAN */
@@ -817,16 +813,3 @@ margin-top: 40px;
     color: #e0e0e0;
 }
 
-/* FOOTER */
-
-footer{
-background:#eee;
-color:black;
-padding:40px 8%;
-}
-
-.footer-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:30px;
-}

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produk</title>
+    <link rel="stylesheet" href="../css/produk.css">
+    <link rel="stylesheet" href="../css/dasboardAdmin.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <section id="content-area">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Welcome Admin</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="dasboardAdmin.html" class="nav-item active" data-target="dashboard">
+                    <i data-lucide="layout-dashboard"></i> Dashboard
+                </a>
+                <a href="produk.html" class="nav-item" data-target="produk">
+                    <i data-lucide="package"></i> Produk
+                </a>
+                <a href="pesanan.html" class="nav-item" data-target="pesanan">
+                    <i data-lucide="clipboard-list"></i> List Pesanan
+                </a>
+                <a href="laporan.html" class="nav-item" data-target="laporan">
+                    <i data-lucide="bar-chart-3"></i> Laporan Penjualan
+                </a>
+                <a href="akun.html" class="nav-item" data-target="akun">
+                    <i data-lucide="user-cog"></i> Kelola Akun
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item logout">
+                    <i data-lucide="log-out"></i> Logout
+                </a>
+            </div>
+        </aside>
+    <div class="product-header">
+        <div class="header-info">
+            <h2>Daftar Produk</h2>
+            <p>Total 10 Produk yang Tersedia</p>
+        </div>
+        <button class="btn-primary">
+            <i data-lucide="plus"></i> Tambah Produk Baru
+        </button>
+    </div>
+
+    <div class="product-grid">
+        <div class="product-card">
+            <div class="image-container">
+                <span class="badge-status">TERSEDIA</span>
+                <img src="https://via.placeholder.com/200x150" alt="Batik">
+            </div>
+            <div class="product-info">
+                <h4>Tangga Istana</h4>
+                <p class="price">Rp N/A</p>
+                <div class="action-buttons">
+                    <button class="btn-icon"><i data-lucide="pencil"></i></button>
+                    <button class="btn-icon"><i data-lucide="trash-2"></i></button>
+                    <button class="btn-view"><i data-lucide="eye"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <div class="image-container">
+                <span class="badge-status">TERSEDIA</span>
+                <img src="https://via.placeholder.com/200x150" alt="Batik">
+            </div>
+            <div class="product-info">
+                <h4>Godong Asem</h4>
+                <p class="price">Rp N/A</p>
+                <div class="action-buttons">
+                    <button class="btn-icon"><i data-lucide="pencil"></i></button>
+                    <button class="btn-icon"><i data-lucide="trash-2"></i></button>
+                    <button class="btn-view"><i data-lucide="eye"></i></button>
+                </div>
+            </div>
+        </div>
+
+        </div>
+</section>
+
+    <script src="navigasiAdmin.js"></script>
+    <script>lucide.createIcons();</script>
+
+</body>
+</html>

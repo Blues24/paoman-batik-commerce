@@ -5,88 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dasboard</title>
     <link rel="stylesheet" href="../css/beranda.css">
+    <link rel="stylesheet" href="../css/footer.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        .page-footer {
-            background: #d8d8dc;
-            padding: 56px 0;
-            color: #1f2940;
-        }
-
-        .page-footer .page-shell {
-            max-width: 1080px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .page-footer .footer-grid {
-            display: grid;
-            grid-template-columns: 1.3fr 0.8fr 1fr 1fr;
-            gap: 34px;
-        }
-
-        .page-footer h2,
-        .page-footer h3 {
-            margin: 0 0 18px;
-            color: #1f2940;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-size: 1rem;
-            font-weight: 800;
-            font-family: "Ubuntu", sans-serif;
-        }
-
-        .page-footer .footer-brand {
-            color: #e53b2c;
-            font-size: 1.4rem;
-            text-transform: none;
-            letter-spacing: 0;
-        }
-
-        .page-footer p,
-        .page-footer a {
-            display: block;
-            margin: 0 0 12px;
-            color: #505969;
-            line-height: 1.7;
-            text-decoration: none;
-            font-size: 1rem;
-            font-family: "Ubuntu", sans-serif;
-        }
-
-        .page-footer .footer-social {
-            display: flex;
-            gap: 14px;
-            margin-top: 20px;
-        }
-
-        .page-footer .footer-social span {
-            display: grid;
-            place-items: center;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.65);
-            color: #536078;
-            font-size: 1rem;
-        }
-
-        @media (max-width: 991.98px) {
-            .page-footer .footer-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        @media (max-width: 767.98px) {
-            .page-footer .footer-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">   
 </head>
 <body>
 <!-- NAVBAR -->
@@ -168,9 +92,7 @@
         <p>Motif Mangga Bambu</p>
     </div>
         </div>
-        <a href="pembelian.html">
-    <button class="lihat">Lihat semua</button>
-</a>
+        <a href="pembelian.html" class="lihat">Lihat semua</a>
     </section>
 
 <section id="layanan" class="layanan">
@@ -206,11 +128,8 @@
         </div>
     </div>
 
-    <a href="konsultasi.html">
-        <button class="lihat">Konsultasi Kebutuhan</button>
-    </a>
+    <a href="konsultasi.html" class="lihat">Konsultasi Kebutuhan</a>
 </section>
-
 
 <section id="tentang-kami" class="tentang">
     <h2>Tentang Kami</h2>
@@ -235,41 +154,7 @@
         </div>
     </div>
 </section>
-
-<!--Footer-->
-<footer class="page-footer">
-        <div class="container page-shell footer-grid">
-            <section>
-                <h2 class="footer-brand">Batik Paoman</h2>
-                <p>Kami berkomitmen untuk memberdayakan pengrajin lokal dan melestarikan warisan budaya Indonesia melalui batik berkualitas tinggi.</p>
-                <div class="footer-social">
-                    <span><i class="bi bi-globe2"></i></span>
-                    <span><i class="bi bi-share"></i></span>
-                    <span><i class="bi bi-envelope"></i></span>
-                </div>
-            </section>
-
-            <section>
-                <h3>Navigasi</h3>
-                <a href="beranda.html">Beranda</a>
-                <a href="pemesanan.html">Pemesanan</a>
-                <a href="pembelian.html">Produk</a>
-                <a href="kontak.html">Kontak</a>
-            </section>
-
-            <section>
-                <h3>Hubungi Kami</h3>
-                <p>081911315662</p>
-                <p>Kebijakan Pengembalian</p>
-                <p>Syarat &amp; Ketentuan</p>
-            </section>
-
-            <section>
-                <h3>Toko Offline</h3>
-                <p>Jl. Siliwangi No.10, Paoman, Kec. Indramayu, Kabupaten Indramayu, Jawa Barat 45211</p>
-            </section>
-        </div>
-    </footer>
-
+<div id="footer-placeholder"></div>
+<script src="../js/footer.js"></script>
 </body>
 </html>

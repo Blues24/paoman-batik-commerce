@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../css/dasboardAdmin.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Welcome Admin</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="dasboardAdmin.html" class="nav-item active" data-target="dashboard">
+                    <i data-lucide="layout-dashboard"></i> Dashboard
+                </a>
+                <a href="produk.html" class="nav-item" data-target="produk">
+                    <i data-lucide="package"></i> Produk
+                </a>
+                <a href="pesanan.html" class="nav-item" data-target="pesanan">
+                    <i data-lucide="clipboard-list"></i> List Pesanan
+                </a>
+                <a href="laporan.html" class="nav-item" data-target="laporan">
+                    <i data-lucide="bar-chart-3"></i> Laporan Penjualan
+                </a>
+                <a href="akun.html" class="nav-item" data-target="akun">
+                    <i data-lucide="user-cog"></i> Kelola Akun
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item logout">
+                    <i data-lucide="log-out"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="user-profile">
+                    <div class="notif-icon"><i data-lucide="bell"></i></div>
+                    <div class="profile-info">
+                        <span class="name">Nama Admin</span>
+                        <div class="avatar"><i data-lucide="user"></i></div>
+                    </div>
+                </div>
+            </header>
+
+            <section id="content-area">
+                <div class="stats-grid">
+                    <div class="card stat-card">
+                        <i data-lucide="file-text" class="icon blue"></i>
+                        <p>Total Produk</p>
+                        <h3>10</h3>
+                    </div>
+                    <div class="card stat-card">
+                        <i data-lucide="box" class="icon purple"></i>
+                        <p>Produk Aktif</p>
+                        <h3>10</h3>
+                    </div>
+                    <div class="card stat-card">
+                        <i data-lucide="truck" class="icon orange"></i>
+                        <p>Total Pesanan</p>
+                        <h3>0</h3>
+                    </div>
+                    <div class="card stat-card">
+                        <i data-lucide="user-plus" class="icon green"></i>
+                        <p>Total User</p>
+                        <h3>0</h3>
+                    </div>
+                </div>
+
+                <div class="middle-grid">
+                    <div class="card chart-container">
+                        <div class="card-header">
+                            <h4>Laporan Penjualan</h4>
+                            <select><option>1 Bulan Terakhir</option></select>
+                        </div>
+                        <h2 class="blue-text">Rp N/A</h2>
+                        <div class="chart-placeholder">
+                            <div class="bar" style="height: 40%;"></div>
+                            <div class="bar active" style="height: 50%;"></div>
+                            <div class="bar" style="height: 30%;"></div>
+                            <div class="bar" style="height: 60%;"></div>
+                            <div class="bar" style="height: 45%;"></div>
+                            <div class="bar" style="height: 70%;"></div>
+                            <div class="bar" style="height: 55%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card history-container">
+                        <div class="card-header">
+                            <h4>Riwayat Pembelian</h4>
+                            <a href="#">Lihat semua</a>
+                        </div>
+                        <div class="history-list">
+                            <div class="history-item">
+                                <div class="avatar-sm"><i data-lucide="user"></i></div>
+                                <div class="details"><strong>N/A</strong><br><small>Order #ORD-2910</small></div>
+                                <div class="status success">Rp. N/A<br><span>SUKSES</span></div>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="card table-container">
+                    <h4>Stock</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>NAMA PRODUK</th>
+                                <th>KODE</th>
+                                <th>KATEGORI</th>
+                                <th>STOK TERSEDIA</th>
+                                <th>STATUS</th>
+                                <th>EDIT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="flex-td"><img src="https://via.placeholder.com/30" alt="icon"> Kembang Kapas</td>
+                                <td>BT-KK-26</td>
+                                <td>Batik</td>
+                                <td class="red-text">0</td>
+                                <td><span class="badge red">Stok Habis</span></td>
+                                <td><i data-lucide="more-vertical"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    
+
+    <script src="navigasiAdmin.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
