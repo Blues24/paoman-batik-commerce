@@ -26,7 +26,7 @@
                 <form>
                     <div class="input-group">
                         <label>Username atau Email<span class="required">*</span></label>
-                        <input type="text" placeholder="Username atau Email" required>
+                        <input type="text" id="login-input" placeholder="Username atau Email" required>
                     </div>
                     <div class="input-group">
                         <div class="label-flex">
@@ -34,7 +34,7 @@
                             <a href="#" class="forgot-link">Lupa Password</a>
                         </div>
                         <div class="password-box">
-                            <input type="password" placeholder="Password" required>
+                            <input type="password" id="login-pass" placeholder="Password" required>
                             <span class="eye-icon">👁️</span>
                         </div>
                     </div>
@@ -46,15 +46,19 @@
                 <form>
                     <div class="input-group">
                         <label>Nama Lengkap<span class="required">*</span></label>
-                        <input type="text" placeholder="Nama Lengkap" required>
+                        <input type="text" id="register-nama" placeholder="Nama Lengkap" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Username<span class="required">*</span></label>
+                        <input type="text"  id="register-username" placeholder="Username" required>
                     </div>
                     <div class="input-group">
                         <label>Email<span class="required">*</span></label>
-                        <input type="email" placeholder="Email" required>
+                        <input type="email" id="register-email" placeholder="Email" required>
                     </div>
                     <div class="input-group">
                         <label>Password<span class="required">*</span></label>
-                        <input type="password" placeholder="Buat Password" required>
+                        <input type="password" id="register-pass" placeholder="Buat Password" required>
                     </div>
                     <button type="submit" class="btn-submit">Daftar</button>
                 </form>
@@ -62,20 +66,6 @@
         </div>
     </div>
 
-    <script>
-        function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].classList.remove("active");
-            }
-            tablinks = document.getElementsByClassName("tab");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].classList.remove("active");
-            }
-            document.getElementById(tabName).classList.add("active");
-            evt.currentTarget.classList.add("active");
-        }
-    </script>
+    <script src="../js/auth.js"></script>
 </body>
 </html>
