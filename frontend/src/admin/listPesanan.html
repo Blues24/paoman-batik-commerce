@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Pesanan - Admin</title>
+    <link rel="stylesheet" href="../../css/navadmin.css">
+    <link rel="stylesheet" href="../../css/listPesanan.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Welcome Admin</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="dasboardAdmin.html" class="nav-item">
+                    <i data-lucide="layout-dashboard"></i> Dashboard
+                </a>
+                <a href="produk.html" class="nav-item">
+                    <i data-lucide="package"></i> Produk
+                </a>
+                <a href="listPesanan.html" class="nav-item active">
+                    <i data-lucide="clipboard-list"></i> List Pesanan
+                </a>
+                <a href="laporan.html" class="nav-item">
+                    <i data-lucide="bar-chart-3"></i> Laporan Penjualan
+                </a>
+                <a href="akun.html" class="nav-item">
+                    <i data-lucide="user-cog"></i> Kelola Akun
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item logout">
+                    <i data-lucide="log-out"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="title-section">
+                    <h1>Daftar Pesanan</h1>
+                    <div class="filter-pills">
+                        <button class="pill active">Semua Pesanan</button>
+                        <button class="pill">Diproses</button>
+                        <button class="pill">Dalam Pengiriman</button>
+                        <button class="pill">Selesai</button>
+                        <button class="pill">Dibatalkan</button>
+                    </div>
+                </div>
+                <div class="user-profile">
+                    <div class="notif-icon"><i data-lucide="bell"></i></div>
+                    <div class="profile-info">
+                        <div class="text-profile">
+                            <span class="name">Nama</span>
+                            <span class="role">Admin</span>
+                        </div>
+                        <div class="avatar"><i data-lucide="user-circle"></i></div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="action-row">
+                <p>Kelola dan pantau semua aktivitas pesanan masuk Anda secara real-time.</p>
+                <div class="btn-group">
+                    <button class="btn-secondary"><i data-lucide="download"></i> Ekspor CSV</button>
+                    <button class="btn-primary"><i data-lucide="plus"></i> Buat Pesanan</button>
+                </div>
+            </div>
+
+            <div class="card table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID PESANAN</th>
+                            <th>NAMA PELANGGAN</th>
+                            <th>TANGGAL</th>
+                            <th>TOTAL HARGA</th>
+                            <th>STATUS PEMBAYARAN</th>
+                            <th>STATUS PRODUK</th>
+                            <th>EDIT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="order-id">#ORD-2023001</td>
+                            <td class="customer"><div class="avatar-circle"></div> Budi Santoso</td>
+                            <td>28 Feb 2026</td>
+                            <td><strong>Rp 1.500.000</strong></td>
+                            <td><span class="badge lunas">● Lunas</span></td>
+                            <td><span class="status-box proses">Proses</span></td>
+                            <td><a href="#" class="btn-detail">DETAIL</a></td>
+                        </tr>
+                        <tr>
+                            <td class="order-id">#ORD-2023002</td>
+                            <td class="customer"><div class="avatar-circle"></div> Siti Aminah</td>
+                            <td>1 Mar 2026</td>
+                            <td><strong>Rp 750.000</strong></td>
+                            <td><span class="badge belum-bayar">● Belum Bayar</span></td>
+                            <td><span class="status-box proses">Proses</span></td>
+                            <td><a href="#" class="btn-detail">DETAIL</a></td>
+                        </tr>
+                        <tr>
+                            <td class="order-id">#ORD-2023003</td>
+                            <td class="customer"><div class="avatar-circle"></div> Andi Wijaya</td>
+                            <td>2 Mar 2026</td>
+                            <td><strong>Rp 2.100.000</strong></td>
+                            <td><span class="badge lunas">● Lunas</span></td>
+                            <td><span class="status-box siap">Siap Diambil</span></td>
+                            <td><a href="#" class="btn-detail">DETAIL</a></td>
+                        </tr>
+                        <tr>
+                            <td class="order-id">#ORD-2023004</td>
+                            <td class="customer"><div class="avatar-circle"></div> Rina Maria</td>
+                            <td>3 Mar 2026</td>
+                            <td><strong>Rp 450.000</strong></td>
+                            <td><span class="badge lunas">● Lunas</span></td>
+                            <td><span class="status-box selesai">Selesai</span></td>
+                            <td><a href="#" class="btn-detail">DETAIL</a></td>
+                        </tr>
+                        <tr>
+                            <td class="order-id">#ORD-2023005</td>
+                            <td class="customer"><div class="avatar-circle"></div> Anwar</td>
+                            <td>4 Mar 2026</td>
+                            <td><strong>Rp 1.200.000</strong></td>
+                            <td><span class="badge belum-bayar">● Belum Bayar</span></td>
+                            <td><span class="status-box proses">Proses</span></td>
+                            <td><a href="#" class="btn-detail">DETAIL</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <span>Menampilkan 1-5 dari 15 pesanan</span>
+                    <div class="page-numbers">
+                        <button class="btn-page"><i data-lucide="chevron-left"></i></button>
+                        <button class="page-num active">1</button>
+                        <button class="page-num">2</button>
+                        <button class="page-num">3</button>
+                        <span>...</span>
+                        <button class="page-num">4</button>
+                        <button class="btn-page"><i data-lucide="chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../../js/navigasiAdmin.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

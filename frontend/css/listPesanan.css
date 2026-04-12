@@ -1,0 +1,187 @@
+/* Layout & Background */
+.main-content {
+    padding: 25px;
+    background-color: #D1D5DB; /* Abu-abu mockup */
+    min-height: 100vh;
+}
+
+/* Header */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 15px 25px;
+    margin: -25px -25px 20px -25px;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.title-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.title-section h1 {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0;
+}
+
+/* Filter Pills */
+.filter-pills {
+    display: flex;
+    gap: 8px;
+}
+
+.pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid #E5E7EB;
+    background: white;
+    color: #6B7280;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.pill.active {
+    background: #2B4DBB;
+    color: white;
+    border-color: #2B4DBB;
+}
+
+/* User Profile */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 1px solid #E5E7EB;
+    padding-left: 15px;
+}
+
+.text-profile {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.text-profile .name { font-weight: 700; font-size: 13px; }
+.text-profile .role { font-size: 11px; color: #6B7280; }
+
+/* Action Row */
+.action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.action-row p {
+    color: #6B7280;
+    font-size: 14px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.btn-primary { background: #2B4DBB; color: white; border: none; }
+.btn-secondary { background: white; color: #374151; border: 1px solid #D1D5DB; }
+
+/* Table Styling */
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    text-align: left;
+    font-size: 11px;
+    color: #6B7280;
+    padding: 12px 15px;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+tbody td {
+    padding: 15px;
+    font-size: 13px;
+    color: #1F2937;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.order-id { color: #2B4DBB; font-weight: 700; }
+
+.customer { display: flex; align-items: center; gap: 10px; }
+.avatar-circle { width: 24px; height: 24px; background: #E5E7EB; border-radius: 50%; }
+
+/* Badges & Status Boxes */
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.badge.lunas { background: #ECFDF5; color: #10B981; }
+.badge.belum-bayar { background: #FEF2F2; color: #EF4444; }
+
+.status-box {
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status-box.proses { background: #FFFBEB; color: #D97706; }
+.status-box.siap { background: #EFF6FF; color: #2563EB; }
+.status-box.selesai { background: #F3F4F6; color: #4B5563; }
+
+.btn-detail { color: #2B4DBB; font-weight: 800; text-decoration: none; font-size: 11px; }
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    color: #9CA3AF;
+}
+
+.page-numbers { display: flex; gap: 5px; align-items: center; }
+.page-num, .btn-page {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #E5E7EB;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.page-num.active { background: #2B4DBB; color: white; border-color: #2B4DBB; }

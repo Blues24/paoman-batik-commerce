@@ -1,4 +1,65 @@
-/* Card Base */
+:root {
+    --bg-color: #E0E0E0;
+    --sidebar-color: #FFFFFF;
+    --primary-blue: #2B4DBB;
+    --text-main: #333;
+    --text-muted: #888;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    padding: 25px;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+/* User Profile */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 1px solid #E5E7EB;
+    padding-left: 15px;
+}
+
+.text-profile {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.text-profile .name { font-weight: 700; font-size: 13px; }
+.text-profile .role { font-size: 11px; color: #6B7280; }
+/* Cards & Grid */
 .card {
     background: white;
     border-radius: 12px;
@@ -6,7 +67,6 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* Stats Grid */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -23,7 +83,6 @@
     margin-bottom: 10px;
 }
 
-/* Middle Layout (Chart & History) */
 .middle-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
@@ -31,7 +90,7 @@
     margin-bottom: 25px;
 }
 
-/* Table Design */
+/* Table */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -60,7 +119,7 @@ td {
 .blue-text { color: var(--primary-blue); }
 .red-text { color: red; font-weight: bold; }
 
-/* Visual Chart Placeholder */
+/* Placeholder Bar Chart */
 .chart-placeholder {
     display: flex;
     align-items: flex-end;

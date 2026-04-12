@@ -3,31 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produk</title>
-    <link rel="stylesheet" href="../../css/produk.css">
+    <title>Daftar Produk - Admin</title>
     <link rel="stylesheet" href="../../css/navadmin.css">
+    <link rel="stylesheet" href="../../css/produk.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <section id="content-area">
+    <div class="container"> 
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2>Welcome Admin</h2>
             </div>
             <nav class="nav-menu">
-                <a href="dasboardAdmin.html" class="nav-item active" data-target="dashboard">
+                <a href="dasboardAdmin.html" class="nav-item">
                     <i data-lucide="layout-dashboard"></i> Dashboard
                 </a>
-                <a href="produk.html" class="nav-item" data-target="produk">
+                <a href="produk.html" class="nav-item active">
                     <i data-lucide="package"></i> Produk
                 </a>
-                <a href="pesanan.html" class="nav-item" data-target="pesanan">
+                <a href="listPesanan.html" class="nav-item">
                     <i data-lucide="clipboard-list"></i> List Pesanan
                 </a>
-                <a href="laporan.html" class="nav-item" data-target="laporan">
+                <a href="laporan.html" class="nav-item">
                     <i data-lucide="bar-chart-3"></i> Laporan Penjualan
                 </a>
-                <a href="akun.html" class="nav-item" data-target="akun">
+                <a href="akun.html" class="nav-item">
                     <i data-lucide="user-cog"></i> Kelola Akun
                 </a>
             </nav>
@@ -37,54 +37,69 @@
                 </a>
             </div>
         </aside>
-    <div class="product-header">
-        <div class="header-info">
-            <h2>Daftar Produk</h2>
-            <p>Total 10 Produk yang Tersedia</p>
-        </div>
-        <button class="btn-primary">
-            <i data-lucide="plus"></i> Tambah Produk Baru
-        </button>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="header-left">
+                    <h1>Daftar Produk</h1>
+                    <p>Total 10 Produk yang Tersedia</p>
+                </div>
+                
+                <div class="header-right">
+                    <button class="btn-primary">
+                        <i data-lucide="plus"></i> Tambah Produk Baru
+                    </button>
+
+                    <div class="user-profile">
+                        <div class="notif-icon"><i data-lucide="bell"></i></div>
+                        <div class="profile-info">
+                            <div class="text-profile">
+                                <span class="name">Nama</span>
+                                <span class="role">Admin</span>
+                            </div>
+                            <div class="avatar"><i data-lucide="user-circle"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="image-container">
+                        <span class="badge-status">TERSEDIA</span>
+                        <img src="../../assets/batik1.jpg" alt="Tangga Istana">
+                    </div>
+                    <div class="product-info">
+                        <h4>Tangga Istana</h4>
+                        <p class="price">Rp N/A</p>
+                        <div class="action-buttons">
+                            <button class="btn-icon outline"><i data-lucide="pencil"></i></button>
+                            <button class="btn-icon outline"><i data-lucide="trash-2"></i></button>
+                            <button class="btn-view"><i data-lucide="eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="image-container">
+                        <span class="badge-status">TERSEDIA</span>
+                        <img src="../../assets/batik2.jpg" alt="Godong Asem">
+                    </div>
+                    <div class="product-info">
+                        <h4>Godong Asem</h4>
+                        <p class="price">Rp N/A</p>
+                        <div class="action-buttons">
+                            <button class="btn-icon outline"><i data-lucide="pencil"></i></button>
+                            <button class="btn-icon outline"><i data-lucide="trash-2"></i></button>
+                            <button class="btn-view"><i data-lucide="eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+        </main>
     </div>
-
-    <div class="product-grid">
-        <div class="product-card">
-            <div class="image-container">
-                <span class="badge-status">TERSEDIA</span>
-                <img src="https://via.placeholder.com/200x150" alt="Batik">
-            </div>
-            <div class="product-info">
-                <h4>Tangga Istana</h4>
-                <p class="price">Rp N/A</p>
-                <div class="action-buttons">
-                    <button class="btn-icon"><i data-lucide="pencil"></i></button>
-                    <button class="btn-icon"><i data-lucide="trash-2"></i></button>
-                    <button class="btn-view"><i data-lucide="eye"></i></button>
-                </div>
-            </div>
-        </div>
-
-        <div class="product-card">
-            <div class="image-container">
-                <span class="badge-status">TERSEDIA</span>
-                <img src="https://via.placeholder.com/200x150" alt="Batik">
-            </div>
-            <div class="product-info">
-                <h4>Godong Asem</h4>
-                <p class="price">Rp N/A</p>
-                <div class="action-buttons">
-                    <button class="btn-icon"><i data-lucide="pencil"></i></button>
-                    <button class="btn-icon"><i data-lucide="trash-2"></i></button>
-                    <button class="btn-view"><i data-lucide="eye"></i></button>
-                </div>
-            </div>
-        </div>
-
-        </div>
-</section>
 
     <script src="../../js/navigasiAdmin.js"></script>
     <script>lucide.createIcons();</script>
-
 </body>
 </html>
