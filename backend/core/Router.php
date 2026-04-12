@@ -67,15 +67,6 @@ class Router {
         call_user_func_array([$controller, $action], $matches);
         return;
       }
-
-        list($class, $action) = $handler;
-
-        require_once __DIR__ . "/../controllers/${class}.php";
-        $controller = new $class();
-
-        call_user_func_array([$controller, $action], $matches);
-        return;
-      }
     }
 
     // Jika fungsi diatas tidak jalan akan mengeluarkan http code 404
