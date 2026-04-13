@@ -2,12 +2,17 @@
 
 // Header Global untuk CORS dan JSON
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: http://localhost:3000');
-header('Access-Control-Allow-Origin: http://localhost:80');
-header('Access-Control-Allow-Origin: http://localhost:5500');
+header('Access-Control-Allow-Origin: http://127.0.0.1:3000');
+header('Access-Control-Allow-Origin: http://127.0.0.1:80');
+header('Access-Control-Allow-Origin: http://127.0.0.1:5500');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-header('Access-Control-ALlow-Headers: Content-Type');
+header('Access-Control-ALlow-Headers: Content-Type, Authorization, X-Requested-With');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204); // No Content
+    exit;
+}
 
 /**
  * Verifikasi CSRF token.
@@ -25,8 +30,9 @@ function verifyCsrf(): void {
 session_set_cookie_params([
     'lifetime' => 0, // Cookie akan hilang jika user menutup website atau browser
     'path'     => '/',
+    'secure' => false,
     'httponly' => true,
-    'samesite' => 'Strict',
+    'samesite' => 'Lax',
 ]);
 
 session_start(); // menjalankan sesi dengan parameter yang sudah diset

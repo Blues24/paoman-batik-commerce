@@ -30,4 +30,4 @@ echo "🌐 Backend jalan di http://localhost:8000"
 echo "🛑 Tekan Ctrl+C untuk stop"
 echo ""
 
-php -S localhost:8000 public/index.php
+php -S localhost:8000 ../public/index.php

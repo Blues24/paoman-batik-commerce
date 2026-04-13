@@ -31,7 +31,7 @@ class PesananTest extends TestCase {
             'nama'     => 'Pembeli Test',
             'email'    => 'pembeli@mail.com',
         ]);
-        $user              = $akun->findByUsername('pembeli');
+        $user              = $akun->findByIdentifier('pembeli');
         $this->pelangganId = $user['pelanggan_id'];
 
         $this->db->exec("INSERT INTO jenis_produk (jenis_id, nama_jenis) VALUES (1, 'Batik Tulis')");

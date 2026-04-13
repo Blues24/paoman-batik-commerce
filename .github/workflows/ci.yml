@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - API-TEST
+      - backend-update-1
+      - main
   workflow_dispatch:
 
 jobs:
