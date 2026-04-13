@@ -28,4 +28,4 @@ Write-Host "🌐 Backend jalan di http://localhost:8000"
 Write-Host "🛑 Tekan Ctrl+C untuk stop"
 Write-Host ""
 
-php -S localhost:8000 public/index.php
+php -S localhost:8000 ../public/index.php

@@ -20,7 +20,7 @@ class AkunModel {
         'SELECT a.akun_id, a.password_hash, a.status_akun,
                 p.pelanggan_id, p.nama
          FROM akun a
-         JOIN pelanggan p ON p.akun_id = a.akun_id
+         LEFT JOIN pelanggan p ON p.akun_id = a.akun_id
          WHERE a.username = ? OR p.email = ?'
     );
         $stmt->execute([$identifier, $identifier ]);

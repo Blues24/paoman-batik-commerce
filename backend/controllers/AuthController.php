@@ -102,17 +102,15 @@ class AuthController {
         $this->checkRateLimit($key);
 
 
-        if (empty($identifier) || empty($body['password']))
-            $this->respond(false, null, 'Username/Email dan password wajib diisi', 422);
+        if (empty($identifier) || empty($body['password'])) $this->respond(false, null, 'Username/Email dan password wajib diisi', 422);
 
         $user = $model->findByIdentifier($identifier);
 
-        if (!$user || !password_verify($body['password'], $user['password_hash']))
+        if (!$user || !password_verify($body['password'], $user['password_hash'])){
             $this->failAttempt($key);
             $this->respond(false, null, 'Username atau password salah', 401);
-
-        if ($user['status_akun'] !== 'aktif')
-            $this->respond(false, null, 'Akun tidak aktif', 403);
+        }
+        if ($user['status_akun'] !== 'aktif')   $this->respond(false, null, 'Akun tidak aktif', 403);
         
         $this->clearAttempt($key);
         session_regenerate_id(true);
