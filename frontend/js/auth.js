@@ -5,7 +5,7 @@ function showError(msg){
     if (!elm){
         elm = document.createElement('p');
         elm.id = 'error-msg';
-        elm.style.cssText('color:red; text-align:center; margin-top:8px; font-size:14px;');
+        elm.style.cssText ='color:red; text-align:center; margin-top:8px; font-size:14px;';
 
         document.querySelector('.auth-card').appendChild(elm);
     }
@@ -31,8 +31,8 @@ document.querySelector('#login form').addEventListener('submit', async (e) => {
     e.preventDefault();
     clearErrorElm();
 
-    const loginInput = document.getElementById('#login-input').value.trim();
-    const password = document.getElementById('#login-pass').value;
+    const loginInput = document.getElementById('login-input').value.trim();
+    const password = document.getElementById('login-pass').value;
 
     if (!loginInput || !password){
         showError("Username atau Email dan Password wajib diisi...!");
@@ -68,10 +68,10 @@ document.querySelector('#register form').addEventListener('submit', async (e) =>
     e.preventDefault();
     clearErrorElm();
 
-    const nama          = document.getElementById('#register-nama').value.trim();
-    const username  = document.getElementById('#register-username').value.trim();
-    const email          = document.getElementById('#register-email').value.trim();
-    const password  = document.getElementById('#register-pass').value;
+    const nama          = document.getElementById('register-nama').value.trim();
+    const username  = document.getElementById('register-username').value.trim();
+    const email          = document.getElementById('register-email').value.trim();
+    const password  = document.getElementById('register-pass').value;
 
     if (!nama || !username || !email || !password){
         showError('Semua field wajib diisi...!');
@@ -97,7 +97,7 @@ document.querySelector('#register form').addEventListener('submit', async (e) =>
             showError('');
             alert("Registrasi berhasil! Silahkan login..");
             // Pindah ke tab login
-            window.querySelector('.tab').click();
+            document.querySelector('.tab').click();
         } else {
             showError(data.message);
         }
