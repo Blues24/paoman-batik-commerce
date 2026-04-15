@@ -1,5 +1,49 @@
 const API_URL = 'http://localhost:8000/api';
 
+/**
+ *  GLOBAL AUTH STATE
+ * Semua state user disimpan di sini, accessible dari mana saja
+ */
+const authState = {
+    isLoggedIn: false,
+    nama: null,
+    csrf_token : null,
+    
+    init(){
+        this.csrf_token = sessionStorage.getItem('csrf_token');
+        this.nama = sessionStorage.getItem('nama');
+        this.isLoggedIn = !!(this.csrf_token && this.nama);
+
+    },
+
+    setUser(nama, csrf_token){
+        this.nama = nama;
+        this.csrf_token = csrf_token;
+        this.isLoggedIn = true;
+        sessionStorage.setItem('nama', nama);
+        sessionStorage.setItem('csrf_token', csrf_token);
+    },
+
+    clear(){
+        this.nama = null;
+        this.csrf_token = null;
+        this.isLoggedIn = null;
+        sessionStorage.removeItem('nama');
+        sessionStorage.removeItem('csrf_token');
+    },
+
+    getHeaders(){
+        // Helper untuk semua API call yang membutuhkan csrf token
+        return {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': this.csrf_token || ''
+        };
+    }
+};
+
+// Jalankan auth state pada saat script di load
+authState.init();
+
 function showError(msg){
     let elm = document.getElementById('error-msg');
     if (!elm){
@@ -115,3 +159,62 @@ document.querySelectorAll('.eye-icon').forEach(icon => {
         icon.textContent = input.type === 'password' ? '👁️' : '🙈';
     });
 });
+
+/**
+ *  Logout Area
+ *  User bisa logout
+ */
+async function logout(){
+    try {
+         await fetch(`${API_URL}/auth/logout`,{
+            method: 'POST',
+            headers: authState.getHeaders(),
+            credentials: 'include'
+         });
+    } catch (err) {
+        console.error('Tidak bisa logout karena: ', err);
+    }
+
+    authState.clear();
+    window.location.href = '../src/auth.html';
+}
+
+/**
+ *               UPDATE USER PILL (dynamic display) 
+ * Ini akan di-call dari setiap page yang butuh show user info
+ */
+function updateUserPill(){
+    const userPill = document.querySelector('.user-pill');
+    if (!userPill) return;
+
+    if(authState.isLoggedIn){
+        userPill.innerHTML = `
+            <div class="user-meta">
+                <strong>${AuthState.nama || 'User'}</strong>
+                <button onclick="logout()" style="background:none; border:none; color:#666; cursor:pointer; font-size:12px;">Logout</button>
+            </div>
+            <div class="user-icon">
+                <i class="bi bi-person"></i>
+            </div>
+        `;
+    }else {
+        userPill.innerHTML = `
+                <a href="../src/auth.html" style="text-decoration:none; color:inherit;">
+                <div class="user-meta">
+                    <strong>Guest</strong>
+                    <span style="font-size:12px;">Login dulu</span>
+                </div>
+                <div class="user-icon">
+                    <i class="bi bi-person"></i>
+                </div>
+            </a>
+        `
+    }
+}
+
+// Update user pill saat script load (untuk page lain, bukan auth page)
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.querySelector('.user-pill')) {
+        updateUserPill();
+    }
+})
