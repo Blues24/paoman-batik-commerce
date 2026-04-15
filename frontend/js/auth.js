@@ -1,3 +1,5 @@
+const API_URL = 'http://localhost:8000/api';
+
 function showMessage(message, type = "error") {
     let messageBox = document.getElementById("authMessage");
 
