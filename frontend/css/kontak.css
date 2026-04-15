@@ -130,123 +130,80 @@ a {
     padding: 36px 0 64px;
 }
 
-.consult-hero-card {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 24px;
-    padding: 34px;
-    border-radius: 24px;
-    background: linear-gradient(135deg, #10253b 0%, #244774 100%);
-    color: #fff;
-    box-shadow: var(--shadow);
+.contact-header {
+    margin-bottom: 28px;
 }
 
-.hero-badge {
+.section-badge {
     display: inline-flex;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     padding: 8px 14px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.92);
+    background: #eef3ff;
     color: var(--primary);
     font-size: 0.75rem;
     font-weight: 800;
     letter-spacing: 0.08em;
 }
 
-.consult-copy h1 {
-    margin: 0 0 16px;
-    font-size: clamp(2rem, 3vw, 3.4rem);
-    line-height: 1.02;
+.contact-header h1 {
+    margin: 0 0 12px;
+    font-size: clamp(2rem, 3vw, 3rem);
     font-weight: 800;
 }
 
-.consult-copy p {
+.contact-header p {
     margin: 0;
-    max-width: 560px;
-    color: rgba(255, 255, 255, 0.86);
+    max-width: 720px;
+    color: var(--muted);
     line-height: 1.7;
 }
 
-.consult-points {
+.contact-grid {
     display: grid;
-    gap: 14px;
-    align-content: center;
-}
-
-.point-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 18px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.12);
-}
-
-.point-card i {
-    font-size: 1.25rem;
-}
-
-.consult-layout {
-    display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
+    grid-template-columns: 1.15fr 0.85fr;
     gap: 28px;
-    margin-top: 30px;
 }
 
-.consult-info-card,
-.consult-form-card {
+.contact-form-card,
+.info-card,
+.map-card {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 24px;
     box-shadow: var(--shadow);
 }
 
-.consult-info-card {
+.contact-form-card,
+.map-card {
     padding: 26px;
 }
 
-.consult-info-card h2,
-.section-heading h2 {
-    margin: 0 0 12px;
-    font-size: 1.5rem;
+.contact-form-card h2,
+.info-card h2,
+.map-card h2 {
+    margin: 0 0 18px;
+    font-size: 1.4rem;
     font-weight: 800;
 }
 
-.info-list {
+.contact-info-column {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.info-card {
+    padding: 22px;
+}
+
+.highlight-card {
+    background: linear-gradient(180deg, #f7f9ff 0%, #eef3ff 100%);
+}
+
+.contact-form {
     display: grid;
-    gap: 16px;
-}
-
-.info-item {
-    padding: 18px;
-    border-radius: 18px;
-    background: #f8faff;
-    border: 1px solid #e2e7f3;
-}
-
-.info-item strong {
-    display: block;
-    margin-bottom: 8px;
-}
-
-.info-item p,
-.section-heading p {
-    margin: 0;
-    color: var(--muted);
-    line-height: 1.7;
-}
-
-.consult-form-card {
-    padding: 26px;
-}
-
-.section-heading {
-    margin-bottom: 22px;
-}
-
-.consult-form {
-    display: grid;
-    gap: 20px;
+    gap: 18px;
 }
 
 .field-grid {
@@ -288,30 +245,88 @@ a {
     grid-column: 1 / -1;
 }
 
-.consult-actions {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
 .submit-btn {
-    min-width: 220px;
+    width: 100%;
     min-height: 54px;
     border: 0;
     border-radius: 16px;
     background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: #fff;
+    font-size: 1rem;
     font-weight: 800;
 }
 
-.secondary-link {
+.info-stack {
+    display: grid;
+    gap: 16px;
+}
+
+.info-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.info-item i {
+    display: inline-grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #fff;
     color: var(--primary);
-    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.info-item strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.info-item span {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.schedule-list {
+    display: grid;
+    gap: 12px;
+}
+
+.schedule-list div {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #edf1f7;
+}
+
+.schedule-list div:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.schedule-list span {
+    color: var(--muted);
+}
+
+.map-card {
+    margin-top: 28px;
+}
+
+.map-frame {
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+.map-frame iframe {
+    width: 100%;
+    min-height: 420px;
+    border: 0;
 }
 
 @media (max-width: 991.98px) {
-    .consult-hero-card,
-    .consult-layout {
+    .contact-grid {
         grid-template-columns: 1fr;
     }
 
@@ -335,20 +350,18 @@ a {
         padding-top: 24px;
     }
 
-    .consult-hero-card,
-    .consult-info-card,
-    .consult-form-card {
+    .contact-form-card,
+    .info-card,
+    .map-card {
         padding: 20px;
     }
 
-    .field-grid,
-    .consult-actions {
+    .field-grid {
         grid-template-columns: 1fr;
-        flex-direction: column;
-        align-items: stretch;
     }
 
-    .submit-btn {
-        width: 100%;
+    .schedule-list div {
+        flex-direction: column;
+        gap: 6px;
     }
 }

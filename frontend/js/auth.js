@@ -1,4 +1,16 @@
-const API_URL = 'http://localhost:8000/api';
+function showMessage(message, type = "error") {
+    let messageBox = document.getElementById("authMessage");
+
+    if (!messageBox) {
+        messageBox = document.createElement("p");
+        messageBox.id = "authMessage";
+        messageBox.className = "auth-message";
+        document.querySelector(".auth-card").appendChild(messageBox);
+    }
+
+    messageBox.textContent = message;
+    messageBox.className = `auth-message ${type}`;
+}
 
 /**
  *  GLOBAL AUTH STATE
@@ -51,112 +63,92 @@ function showError(msg){
         elm.id = 'error-msg';
         elm.style.cssText ='color:red; text-align:center; margin-top:8px; font-size:14px;';
 
-        document.querySelector('.auth-card').appendChild(elm);
+    if (messageBox) {
+        messageBox.textContent = "";
+        messageBox.className = "auth-message";
     }
-    elm.textContent = msg; 
 }
-
-function clearErrorElm(){
-    const elm = document.getElementById('error-msg');
-    if (elm) elm.textContent = ' ';
-}
-
 
 function openTab(event, tabName) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    // Satu halaman auth dipakai untuk login, daftar, dan reset sandi.
+    document.querySelectorAll(".tab-content").forEach((tab) => tab.classList.remove("active"));
+    document.querySelectorAll(".tab").forEach((tab) => tab.classList.remove("active"));
 
-    document.getElementById(tabName).classList.add('active');
-    event.currentTarget.classList.add('active');
+    document.getElementById(tabName).classList.add("active");
+    event.currentTarget.classList.add("active");
+    clearMessage();
 }
 
-// Login Area
-document.querySelector('#login form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    clearErrorElm();
+function activateTab(tabName) {
+    const selectedTab = document.querySelector(`.tab[data-tab="${tabName}"]`);
 
-    const loginInput = document.getElementById('login-input').value.trim();
-    const password = document.getElementById('login-pass').value;
+    if (selectedTab) {
+        selectedTab.click();
+    }
+}
 
-    if (!loginInput || !password){
-        showError("Username atau Email dan Password wajib diisi...!");
+function getRedirectTarget() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("redirect") || "pembelian.html";
+}
+
+document.querySelector("#login form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    clearMessage();
+
+    const identifier = document.getElementById("login-input").value.trim();
+    const password = document.getElementById("login-pass").value;
+
+    if (!identifier || !password) {
+        showMessage("Username/email dan password wajib diisi.");
         return;
     }
 
-    try {
-        const res = await fetch(`${API_URL}/auth/login`,{
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ identifier: loginInput, password})
-        });
+    // Login frontend-only: validasi pakai data yang tersimpan di localStorage.
+    const result = window.UserSession.loginUser({ identifier, password });
 
-        const data = await res.json();
-
-        if(data.success){
-            sessionStorage.setItem('csrf-token',  data.data.csrf_token);
-            sessionStorage.setItem('nama', data.data.nama);
-            // redirect ke halaman utama
-            window.location.href = '../src/beranda.html';
-        }else {
-            showError(data.message);
-        }
-    } catch (err) {
-            showError('Gagal terhubung ke server. Mohon bersabar');
-            console.error(`Gagal terhubung ke API karena: ${err.message}`);
+    if (!result.success) {
+        showMessage(result.message);
+        return;
     }
+
+    showMessage("Login berhasil, kamu akan diarahkan sebentar lagi.", "success");
+    window.location.href = getRedirectTarget();
 });
 
-// Register area
-document.querySelector('#register form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    clearErrorElm();
+document.querySelector("#register form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    clearMessage();
 
-    const nama          = document.getElementById('register-nama').value.trim();
-    const username  = document.getElementById('register-username').value.trim();
-    const email          = document.getElementById('register-email').value.trim();
-    const password  = document.getElementById('register-pass').value;
+    const nama = document.getElementById("register-nama").value.trim();
+    const username = document.getElementById("register-username").value.trim();
+    const email = document.getElementById("register-email").value.trim();
+    const noHp = document.getElementById("register-phone").value.trim();
+    const password = document.getElementById("register-pass").value;
+    const confirmPassword = document.getElementById("register-pass-confirm").value;
 
-    if (!nama || !username || !email || !password){
-        showError('Semua field wajib diisi...!');
+    if (!nama || !username || !email || !noHp || !password || !confirmPassword) {
+        showMessage("Semua field daftar wajib diisi.");
         return;
     }
 
-    if (password.length < 8){
-        showError('Password harus lebih dari 8 karakter...!');
+    if (password.length < 8) {
+        showMessage("Password minimal 8 karakter.");
         return;
     }
 
-    try {
-        const res = await fetch(`${API_URL}/auth/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json'},
-            credentials: 'include',
-            body: JSON.stringify({  nama, username, email, password})
-        });
-
-        const data = await res.json();
-
-        if (data.success){
-            showError('');
-            alert("Registrasi berhasil! Silahkan login..");
-            // Pindah ke tab login
-            document.querySelector('.tab').click();
-        } else {
-            showError(data.message);
-        }
-    } catch (err) {
-        showError('Gagal terhubung ke server..!');
-        console.error(`Gagal terhubung ke API karena: ${err.message}`);
+    if (password !== confirmPassword) {
+        showMessage("Konfirmasi password belum sama.");
+        return;
     }
-} );
 
-// Toggle Password visibility icon
-document.querySelectorAll('.eye-icon').forEach(icon => {
-    icon.addEventListener('click', () => {
-        const input = icon.previousElementSibling;
-        input.type  = input.type === 'password' ? 'text' : 'password';
-        icon.textContent = input.type === 'password' ? '👁️' : '🙈';
+    // Setelah daftar berhasil, user langsung dianggap login.
+    const result = window.UserSession.registerUser({
+        nama,
+        username,
+        email,
+        noHp,
+        password
     });
 });
 

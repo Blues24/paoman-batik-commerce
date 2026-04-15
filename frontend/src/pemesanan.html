@@ -6,50 +6,19 @@
     <title>Batik Paoman - Pemesanan</title>
     <link href="../css/abaikan/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pemesanan.css" rel="stylesheet">
+    <link href="../css/navuser.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/footer.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg page-navbar">
-        <div class="container page-shell nav-shell">
-            <div class="navbar-nav nav-menu">
-                <a class="nav-link" href="pembelian.html">Produk</a>
-                <a class="nav-link active" href="pemesanan.html">Pemesanan</a>
-                <a class="nav-link" href="konsultasi.html">Konsultasi</a>
-                <a class="nav-link" href="kontak.html">Kontak</a>
-            </div>
-
-            <form class="search-box" role="search">
-                <i class="bi bi-search"></i>
-                <input type="search" placeholder="Cari produk...">
-            </form>
-
-            <div class="nav-actions">
-                <a class="cart-pill" href="pemesanan.html" aria-label="Produk di keranjang">
-                    <i class="bi bi-cart3"></i>
-                    <span>Keranjang</span>
-                    <strong id="cartCount">0</strong>
-                </a>
-
-                <div class="user-pill">
-                    <div class="user-meta">
-                        <strong>Nama</strong>
-                        <span>User</span>
-                    </div>
-                    <div class="user-icon">
-                        <i class="bi bi-person"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <div id="navbar-placeholder"></div>
 
     <main class="page-main">
         <section class="container page-shell order-shell">
             <div class="order-layout">
                 <section class="product-preview-card">
                     <div class="preview-media">
-                        <div class="preview-image-placeholder">
+                        <div id="selectedProductImage" class="preview-image-placeholder">
                             Tempat gambar produk
                         </div>
                     </div>
@@ -197,6 +166,8 @@
 
     <div id="footer-placeholder"></div>
     <script src="../js/footer.js"></script>
+    <script src="../js/user-session.js"></script>
+    <script src="../js/navuser.js"></script>
     <script src="../js/pemesanan.js"></script>
     <script src="../js/session.js" defer></script>
 </body>
