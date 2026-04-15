@@ -7,7 +7,6 @@ header('Access-Control-Allow-Origin: http://127.0.0.1:80');
 header('Access-Control-Allow-Origin: http://127.0.0.1:5500');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
-header('Access-Control-ALlow-Headers: Content-Type, Authorization, X-Requested-With');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204); // No Content
