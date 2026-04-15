@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batik Paoman - Pengaturan Akun</title>
+    <link href="../css/abaikan/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/akun-user.css" rel="stylesheet">
+    <link href="../css/navuser.css" rel="stylesheet">
+    <link href="../css/footer.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="page-main">
+        <section class="container page-shell account-shell">
+            <div class="account-header">
+                <span class="section-badge">PENGATURAN AKUN</span>
+                <h1>Kelola Profil dan Keamanan Akun</h1>
+                <p>Atur nama, email, no. HP, password, dan reset sandi simulasi dari satu halaman ini.</p>
+            </div>
+
+            <div id="accountMessage" class="account-message d-none"></div>
+
+            <div class="account-layout">
+                <aside class="account-summary-card">
+                    <div class="summary-avatar" id="summaryAvatar">U</div>
+                    <h2 id="summaryName">User</h2>
+                    <p id="summaryEmail">email@contoh.com</p>
+
+                    <div class="summary-stats">
+                        <div>
+                            <span>Username</span>
+                            <strong id="summaryUsername">@user</strong>
+                        </div>
+                        <div>
+                            <span>No. HP</span>
+                            <strong id="summaryPhone">08xxxxxxxxxx</strong>
+                        </div>
+                    </div>
+
+                    <a href="pembelian.html" class="summary-link">Kembali ke katalog</a>
+                </aside>
+
+                <section class="account-content">
+                    <article class="settings-card">
+                        <div class="card-heading">
+                            <h2>Status Pesanan</h2>
+                            <p>Cek pesananmu apakah masih menunggu, sedang diproses, atau sudah siap diambil.</p>
+                        </div>
+
+                        <div id="orderHistoryEmpty" class="empty-orders d-none">
+                            Belum ada pesanan yang masuk ke akun ini. Buat pesanan dulu dari halaman pemesanan.
+                        </div>
+
+                        <div id="orderHistoryList" class="order-history-list"></div>
+                    </article>
+
+                    <article class="settings-card">
+                        <div class="card-heading">
+                            <h2>Profil Akun</h2>
+                            <p>Data ini akan muncul di navbar setelah user login.</p>
+                        </div>
+
+                        <form id="profileForm" class="settings-form">
+                            <div class="field-grid">
+                                <label class="field-group">
+                                    <span>Nama Lengkap</span>
+                                    <input type="text" id="profileNama" required>
+                                </label>
+
+                                <label class="field-group">
+                                    <span>Username</span>
+                                    <input type="text" id="profileUsername" required>
+                                </label>
+
+                                <label class="field-group">
+                                    <span>Email</span>
+                                    <input type="email" id="profileEmail" required>
+                                </label>
+
+                                <label class="field-group">
+                                    <span>No. HP</span>
+                                    <input type="text" id="profilePhone" required>
+                                </label>
+                            </div>
+
+                            <label class="field-group">
+                                <span>Alamat</span>
+                                <textarea id="profileAlamat" rows="4" placeholder="Tulis alamat atau catatan akun di sini..."></textarea>
+                            </label>
+
+                            <button type="submit" class="primary-btn">Simpan Perubahan Profil</button>
+                        </form>
+                    </article>
+
+                    <article class="settings-card" id="security-card">
+                        <div class="card-heading">
+                            <h2>Keamanan Akun</h2>
+                            <p>Ganti password user langsung dari halaman ini.</p>
+                        </div>
+
+                        <form id="passwordForm" class="settings-form">
+                            <div class="field-grid">
+                                <label class="field-group">
+                                    <span>Password Saat Ini</span>
+                                    <input type="password" id="currentPassword" required>
+                                </label>
+
+                                <label class="field-group">
+                                    <span>Password Baru</span>
+                                    <input type="password" id="newPassword" required>
+                                </label>
+                            </div>
+
+                            <label class="field-group">
+                                <span>Konfirmasi Password Baru</span>
+                                <input type="password" id="confirmPassword" required>
+                            </label>
+
+                            <button type="submit" class="primary-btn">Ganti Password</button>
+                        </form>
+                    </article>
+
+                    <article class="settings-card accent-card">
+                        <div class="card-heading">
+                            <h2>Reset Sandi</h2>
+                            <p>Simulasi kirim permintaan reset ke email akun aktif.</p>
+                        </div>
+
+                        <div class="reset-box">
+                            <p id="resetEmailLabel">Email reset akan dikirim ke akun aktif.</p>
+                            <button type="button" id="resetPasswordBtn" class="secondary-btn">Kirim Simulasi Reset</button>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <script src="../js/footer.js"></script>
+    <script src="../js/user-session.js"></script>
+    <script src="../js/navuser.js"></script>
+    <script src="../js/akun.js"></script>
+</body>
+</html>

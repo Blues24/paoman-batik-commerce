@@ -31,7 +31,7 @@
 
 .auth-card {
     background: white;
-    width: 400px;
+    width: min(100%, 520px);
     border-radius: 20px;
     overflow: hidden;
     padding: 0 0 30px 0;
@@ -48,11 +48,12 @@
 .tab {
     flex: 1;
     text-align: center;
-    padding: 20px;
+    padding: 18px 12px;
     cursor: pointer;
     font-weight: bold;
     color: #888;
     transition: 0.3s;
+    font-size: 14px;
 }
 
 .tab.active {
@@ -72,6 +73,12 @@
 
 .input-group {
     margin-bottom: 20px;
+}
+
+.input-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
 }
 
 .input-group label {
@@ -114,13 +121,16 @@ input:focus {
     position: relative;
 }
 
-.eye-icon {
+.eye-toggle {
     position: absolute;
     right: 12px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     color: #888;
+    border: 0;
+    background: transparent;
+    font-size: 16px;
 }
 
 /* Button */
@@ -141,4 +151,49 @@ input:focus {
 .btn-submit:hover {
     background: #555;
     transform: translateY(-2px);
+}
+
+.helper-text {
+    margin-top: -4px;
+    margin-bottom: 12px;
+    color: #666;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.auth-message {
+    min-height: 24px;
+    padding: 0 35px;
+    margin-top: 16px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.auth-message.error {
+    color: #c0392b;
+}
+
+.auth-message.success {
+    color: #2e7d32;
+}
+
+@media (max-width: 560px) {
+    .auth-body {
+        height: auto;
+        min-height: 100vh;
+        padding: 24px 16px;
+    }
+
+    .header-text h1 {
+        font-size: 46px;
+    }
+
+    .tab-content {
+        padding: 0 22px;
+    }
+
+    .input-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
 }

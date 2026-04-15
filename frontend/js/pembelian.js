@@ -1,21 +1,22 @@
 const CART_KEY = "batikPaomanCart";
 
+// Pusat data katalog produk yang ditampilkan di halaman pembelian.
 const produkBatik = [
-    { id: 1, nama: "Kain Batik Motif Tangga Istana", kategori: "kain", harga: 50000, tag: "Produk Terlaris" },
-    { id: 2, nama: "Kain Batik Motif Godong Asem", kategori: "kain", harga: 50000, tag: "" },
-    { id: 3, nama: "Baju Motif Batik Kentangan", kategori: "pakaian", harga: 100000, tag: "Produk Baru" },
-    { id: 4, nama: "Kain Batik Motif Mangga Bambu", kategori: "kain", harga: 65000, tag: "" },
-    { id: 5, nama: "Kain Batik Kembang Gunda", kategori: "kain", harga: 65000, tag: "" },
-    { id: 6, nama: "Kemeja Motif Batik Kembang Gunda", kategori: "pakaian", harga: 100000, tag: "" },
-    { id: 7, nama: "Kain Batik Motif Lereng Paoman", kategori: "kain", harga: 75000, tag: "" },
-    { id: 8, nama: "Blus Batik Motif Pesisir", kategori: "pakaian", harga: 120000, tag: "" },
-    { id: 9, nama: "Kain Batik Motif Daun Nila", kategori: "kain", harga: 85000, tag: "" },
-    { id: 10, nama: "Kemeja Batik Motif Kawung Laut", kategori: "pakaian", harga: 135000, tag: "" },
-    { id: 11, nama: "Kain Batik Motif Mega Mendung Paoman", kategori: "kain", harga: 90000, tag: "" },
-    { id: 12, nama: "Outer Batik Motif Sekar Jagad", kategori: "pakaian", harga: 145000, tag: "" },
-    { id: 13, nama: "Kain Batik Motif Bunga Cengkeh", kategori: "kain", harga: 95000, tag: "" },
-    { id: 14, nama: "Tunik Batik Motif Parang Kecil", kategori: "pakaian", harga: 150000, tag: "" },
-    { id: 15, nama: "Kain Batik Motif Ombak Indramayu", kategori: "kain", harga: 110000, tag: "" }
+    { id: 1, nama: "Kain Batik Motif Biru Pesisir", kategori: "kain", harga: 50000, tag: "Produk Terlaris", image: "../img/batik1.jpg" },
+    { id: 2, nama: "Kain Batik Motif Godong Asem", kategori: "kain", harga: 50000, tag: "", image: "../img/batik2.jpg" },
+    { id: 3, nama: "Baju Batik Motif Kentangan", kategori: "pakaian", harga: 100000, tag: "Produk Baru", image: "../img/baju1.png" },
+    { id: 4, nama: "Kain Batik Motif Mangga Bambu", kategori: "kain", harga: 65000, tag: "", image: "../img/batik4.jpg" },
+    { id: 5, nama: "Kain Batik Motif Kembang Gunda", kategori: "kain", harga: 65000, tag: "", image: "../img/batik5.jpg" },
+    { id: 6, nama: "Kemeja Batik Motif Kembang Paoman", kategori: "pakaian", harga: 100000, tag: "", image: "../img/baju2.png" },
+    { id: 7, nama: "Kain Batik Motif Lereng Paoman", kategori: "kain", harga: 75000, tag: "", image: "../img/batik7.jpg" },
+    { id: 8, nama: "Blus Batik Motif Pesisir Laut", kategori: "pakaian", harga: 120000, tag: "", image: "../img/baju3.png" },
+    { id: 9, nama: "Kain Batik Motif Daun Nila", kategori: "kain", harga: 85000, tag: "", image: "../img/batik9.jpg" },
+    { id: 10, nama: "Kemeja Batik Motif Kawung Laut", kategori: "pakaian", harga: 135000, tag: "", image: "../img/baju4.png" },
+    { id: 11, nama: "Kain Batik Motif Biru Pesisir Premium", kategori: "kain", harga: 90000, tag: "", image: "../img/batik1.jpg" },
+    { id: 12, nama: "Outer Batik Motif Godong Asem", kategori: "pakaian", harga: 145000, tag: "", image: "../img/baju5.png" },
+    { id: 13, nama: "Tunik Batik Motif Kentangan", kategori: "pakaian", harga: 95000, tag: "", image: "../img/baju6.png" },
+    { id: 14, nama: "Dress Batik Motif Mangga Bambu", kategori: "pakaian", harga: 150000, tag: "", image: "../img/baju7.png" },
+    { id: 15, nama: "Kain Batik Motif Kembang Gunda Premium", kategori: "kain", harga: 110000, tag: "", image: "../img/batik5.jpg" }
 ];
 
 const itemPerPage = 6;
@@ -61,6 +62,10 @@ function saveCartItems(items) {
 }
 
 function updateCartCount() {
+    if (!cartCount) {
+        return;
+    }
+
     const totalItems = getCartItems().reduce((sum, item) => sum + item.qty, 0);
     cartCount.textContent = totalItems;
 }
@@ -114,6 +119,7 @@ function renderProduk() {
 
     emptyState.classList.add("d-none");
 
+    // Produk dibagi per halaman supaya katalog tetap rapi.
     const startIndex = (currentPage - 1) * itemPerPage;
     const visibleProducts = filteredProducts.slice(startIndex, startIndex + itemPerPage);
 
@@ -124,9 +130,7 @@ function renderProduk() {
             <article class="product-card">
                 <div class="product-media">
                     ${item.tag ? `<span class="product-badge">${item.tag}</span>` : ""}
-                    <div class="product-image-placeholder" aria-label="Area gambar produk kosong">
-
-                    </div>
+                    <img src="${item.image}" alt="${item.nama}" class="product-image">
                 </div>
                 <div class="product-body">
                     <p class="product-category">${kategoriLabel}</p>
@@ -146,7 +150,8 @@ function renderProduk() {
 }
 
 function applyFilters() {
-    const keyword = searchInput.value.trim().toLowerCase();
+    // Filter digabung dari search, kategori, dan batas harga.
+    const keyword = searchInput ? searchInput.value.trim().toLowerCase() : "";
     const maxHarga = Number(priceRange.value);
     const selectedCategories = getSelectedCategories();
 
@@ -193,6 +198,7 @@ function tambahKeKeranjang(productId) {
         return;
     }
 
+    // Produk yang dipilih disimpan ke localStorage supaya bisa dibaca halaman pemesanan.
     const cartItems = getCartItems();
     const existingItem = cartItems.find((item) => item.id === productId);
 
@@ -204,6 +210,7 @@ function tambahKeKeranjang(productId) {
             nama: selectedProduct.nama,
             kategori: selectedProduct.kategori,
             harga: selectedProduct.harga,
+            image: selectedProduct.image,
             qty: 1
         });
     }
@@ -213,7 +220,9 @@ function tambahKeKeranjang(productId) {
     showCartConfirmation(selectedProduct.nama);
 }
 
-searchInput.addEventListener("input", applyFilters);
+if (searchInput) {
+    searchInput.addEventListener("input", applyFilters);
+}
 
 priceRange.addEventListener("input", (event) => {
     priceValue.textContent = formatRingkas(Number(event.target.value));
