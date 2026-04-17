@@ -1,5 +1,3 @@
-const API_URL = 'http://localhost:8000/api';
-
 function showMessage(message, type = "error") {
     let messageBox = document.getElementById("authMessage");
 
@@ -22,49 +20,17 @@ function clearMessage() {
     }
 }
 
-/**
- *  GLOBAL AUTH STATE
- * Semua state user disimpan di sini, accessible dari mana saja
- */
-const authState = {
-    isLoggedIn: false,
-    nama: null,
-    csrf_token : null,
-    
-    init(){
-        this.csrf_token = sessionStorage.getItem('csrf_token');
-        this.nama = sessionStorage.getItem('nama');
-        this.isLoggedIn = !!(this.csrf_token && this.nama);
+function loginUser(credentials) {
+    return window.UserSession.loginUser(credentials);
+}
 
-    },
+function registerUser(payload) {
+    return window.UserSession.registerUser(payload);
+}
 
-    setUser(nama, csrf_token){
-        this.nama = nama;
-        this.csrf_token = csrf_token;
-        this.isLoggedIn = true;
-        sessionStorage.setItem('nama', nama);
-        sessionStorage.setItem('csrf_token', csrf_token);
-    },
-
-    clear(){
-        this.nama = null;
-        this.csrf_token = null;
-        this.isLoggedIn = null;
-        sessionStorage.removeItem('nama');
-        sessionStorage.removeItem('csrf_token');
-    },
-
-    getHeaders(){
-        // Helper untuk semua API call yang membutuhkan csrf token
-        return {
-            'Content-Type': 'application/json',
-            'X-CSRF-Token': this.csrf_token || ''
-        };
-    }
-};
-
-// Jalankan auth state pada saat script di load
-authState.init();
+function requestPasswordReset(identifier) {
+    return window.UserSession.requestPasswordReset(identifier);
+}
 
 function showError(msg){
     let messageBox = document.getElementById('authMessage');
@@ -103,46 +69,7 @@ function getRedirectTarget() {
     return params.get("redirect") || "pembelian.html";
 }
 
-function loginUser(credentials) {
-    const foundUser = window.UserSession.findUserByIdentifier(credentials.identifier);
-
-    if (!foundUser || foundUser.password !== credentials.password) {
-        return { success: false, message: "Username/email atau password salah." };
-    }
-
-    window.UserSession.setCurrentUser(foundUser);
-
-    return {
-        success: true,
-        message: "Login berhasil."
-    };
-}
-
-function registerUser(payload) {
-    const result = window.UserSession.createUserAccount(payload);
-
-    if (!result.success) {
-        return result;
-    }
-
-    window.UserSession.setCurrentUser(result.rawUser);
-    return {
-        success: true,
-        message: result.message
-    };
-}
-
-function requestPasswordReset(identifier) {
-    const foundUser = window.UserSession.findUserByIdentifier(identifier);
-
-    if (!foundUser) {
-        return { success: false, message: "Akun tidak ditemukan." };
-    }
-
-    return window.UserSession.savePasswordResetRequest(foundUser.id);
-}
-
-document.querySelector("#login form").addEventListener("submit", (event) => {
+document.querySelector("#login form").addEventListener("submit", async (event) => {
     event.preventDefault();
     clearMessage();
 
@@ -154,8 +81,7 @@ document.querySelector("#login form").addEventListener("submit", (event) => {
         return;
     }
 
-    // Login frontend-only: validasi pakai data yang tersimpan di localStorage.
-    const result = loginUser({ identifier, password });
+    const result = await loginUser({ identifier, password });
 
     if (!result.success) {
         showMessage(result.message);
@@ -166,7 +92,7 @@ document.querySelector("#login form").addEventListener("submit", (event) => {
     window.location.href = getRedirectTarget();
 });
 
-document.querySelector("#register form").addEventListener("submit", (event) => {
+document.querySelector("#register form").addEventListener("submit", async (event) => {
     event.preventDefault();
     clearMessage();
 
@@ -192,8 +118,7 @@ document.querySelector("#register form").addEventListener("submit", (event) => {
         return;
     }
 
-    // Setelah daftar berhasil, user langsung dianggap login.
-    const result = registerUser({
+    const result = await registerUser({
         nama,
         username,
         email,
@@ -210,7 +135,7 @@ document.querySelector("#register form").addEventListener("submit", (event) => {
     window.location.href = getRedirectTarget();
 });
 
-document.querySelector("#reset form").addEventListener("submit", (event) => {
+document.querySelector("#reset form").addEventListener("submit", async (event) => {
     event.preventDefault();
     clearMessage();
 
@@ -221,7 +146,7 @@ document.querySelector("#reset form").addEventListener("submit", (event) => {
         return;
     }
 
-    const result = requestPasswordReset(identifier);
+    const result = await requestPasswordReset(identifier);
 
     if (!result.success) {
         showMessage(result.message);
@@ -237,16 +162,11 @@ document.querySelector("#reset form").addEventListener("submit", (event) => {
  */
 async function logout(){
     try {
-         await fetch(`${API_URL}/auth/logout`,{
-            method: 'POST',
-            headers: authState.getHeaders(),
-            credentials: 'include'
-         });
+        await window.UserSession.logoutUser();
     } catch (err) {
         console.error('Tidak bisa logout karena: ', err);
     }
 
-    authState.clear();
     window.location.href = '../src/auth.html';
 }
 
@@ -258,17 +178,19 @@ function updateUserPill(){
     const userPill = document.querySelector('.user-pill');
     if (!userPill) return;
 
-    if(authState.isLoggedIn){
+    const currentUser = window.UserSession.getCurrentUser();
+
+    if(currentUser){
         userPill.innerHTML = `
             <div class="user-meta">
-                <strong>${AuthState.nama || 'User'}</strong>
+                <strong>${currentUser.nama || 'User'}</strong>
                 <button onclick="logout()" style="background:none; border:none; color:#666; cursor:pointer; font-size:12px;">Logout</button>
             </div>
             <div class="user-icon">
                 <i class="bi bi-person"></i>
             </div>
         `;
-    }else {
+    } else {
         userPill.innerHTML = `
                 <a href="../src/auth.html" style="text-decoration:none; color:inherit;">
                 <div class="user-meta">

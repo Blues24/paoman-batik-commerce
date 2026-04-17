@@ -2,11 +2,19 @@
 
 // Header Global untuk CORS dan JSON
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: http://127.0.0.1:3000');
-header('Access-Control-Allow-Origin: http://127.0.0.1:80');
-header('Access-Control-Allow-Origin: http://127.0.0.1:5500');
+$allowedOrigins = [
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:80',
+    'http://127.0.0.1:5500',
+];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if (in_array($origin, $allowedOrigins, true)) {
+    header("Access-Control-Allow-Origin: $origin");
+}
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, X-CSRF-Token');
+header('Vary: Origin');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204); // No Content
@@ -41,10 +49,14 @@ require_once __DIR__ . '/../core/Router.php';
 $router = new Router();
 
 // Auth endpoint API routes
-$router->post('/api/auth/register',  ['AuthController', 'register']);
-$router->post('/api/auth/login',     ['AuthController', 'login']);
-$router->post('/api/auth/logout',    ['AuthController', 'logout']);
-$router->post('/api/admin/login',    ['AuthController', 'loginAdmin']);
+$router->post('/api/auth/register',         ['AuthController', 'register']);
+$router->post('/api/auth/login',            ['AuthController', 'login']);
+$router->post('/api/auth/logout',           ['AuthController', 'logout']);
+$router->get ('/api/auth/me',               ['AuthController', 'me']);
+$router->put ('/api/auth/profile',          ['AuthController', 'updateProfile']);
+$router->post('/api/auth/password',         ['AuthController', 'updatePassword']);
+$router->post('/api/auth/reset-password',   ['AuthController', 'requestPasswordReset']);
+$router->post('/api/admin/login',           ['AuthController', 'loginAdmin']);
 
 // Produk endpoint API routes
 $router->get ('/api/produk',                 ['ProdukController', 'index']);
