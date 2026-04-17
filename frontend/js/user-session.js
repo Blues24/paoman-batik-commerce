@@ -43,7 +43,7 @@
         writeJson(CURRENT_USER_KEY, sanitizeUser(user));
     }
 
-    function registerUser(payload) {
+    function createUserAccount(payload) {
         const users = getUsers();
         const nama = payload.nama.trim();
         const username = payload.username.trim();
@@ -73,35 +73,43 @@
 
         users.push(newUser);
         saveUsers(users);
-        setCurrentUser(newUser);
 
         return {
             success: true,
             message: "Akun berhasil dibuat.",
-            user: sanitizeUser(newUser)
+            user: sanitizeUser(newUser),
+            rawUser: newUser
         };
     }
 
-    function loginUser({ identifier, password }) {
+    function findUserByIdentifier(identifier) {
         const users = getUsers();
         const normalizedIdentifier = identifier.trim().toLowerCase();
 
-        // User boleh login pakai username atau email.
-        const foundUser = users.find((user) =>
+        return users.find((user) =>
             user.username.toLowerCase() === normalizedIdentifier ||
             user.email.toLowerCase() === normalizedIdentifier
-        );
+        ) || null;
+    }
 
-        if (!foundUser || foundUser.password !== password) {
-            return { success: false, message: "Username/email atau password salah." };
+    function savePasswordResetRequest(userId) {
+        const users = getUsers();
+        const foundUser = users.find((user) => user.id === userId);
+
+        if (!foundUser) {
+            return { success: false, message: "Akun tidak ditemukan." };
         }
 
-        setCurrentUser(foundUser);
+        const requests = readJson(RESET_REQUESTS_KEY, []);
+        requests.push({
+            userId: foundUser.id,
+            requestedAt: new Date().toISOString()
+        });
+        writeJson(RESET_REQUESTS_KEY, requests);
 
         return {
             success: true,
-            message: "Login berhasil.",
-            user: sanitizeUser(foundUser)
+            message: `Simulasi reset sandi dikirim ke ${foundUser.email}.`
         };
     }
 
@@ -180,32 +188,6 @@
         return { success: true, message: "Password berhasil diganti." };
     }
 
-    function requestPasswordReset(identifier) {
-        const users = getUsers();
-        const normalizedIdentifier = identifier.trim().toLowerCase();
-
-        const foundUser = users.find((user) =>
-            user.username.toLowerCase() === normalizedIdentifier ||
-            user.email.toLowerCase() === normalizedIdentifier
-        );
-
-        if (!foundUser) {
-            return { success: false, message: "Akun tidak ditemukan." };
-        }
-
-        const requests = readJson(RESET_REQUESTS_KEY, []);
-        requests.push({
-            userId: foundUser.id,
-            requestedAt: new Date().toISOString()
-        });
-        writeJson(RESET_REQUESTS_KEY, requests);
-
-        return {
-            success: true,
-            message: `Simulasi reset sandi dikirim ke ${foundUser.email}.`
-        };
-    }
-
     function getOrders() {
         return readJson(ORDERS_KEY, []);
     }
@@ -262,12 +244,13 @@
         // Semua helper session dipusatkan di sini supaya bisa dipakai banyak halaman.
         getUsers,
         getCurrentUser,
-        registerUser,
-        loginUser,
+        setCurrentUser,
+        findUserByIdentifier,
+        createUserAccount,
+        savePasswordResetRequest,
         logoutUser,
         updateProfile,
         updatePassword,
-        requestPasswordReset,
         createOrder,
         getCurrentUserOrders
     };

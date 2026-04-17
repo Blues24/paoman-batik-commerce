@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("resetPasswordBtn").addEventListener("click", () => {
         const latestUser = window.UserSession.getCurrentUser();
-        const result = window.UserSession.requestPasswordReset(latestUser.email);
+        const result = window.UserSession.savePasswordResetRequest(latestUser.id);
         showAccountMessage(result.message, result.success ? "success" : "error");
     });
 });

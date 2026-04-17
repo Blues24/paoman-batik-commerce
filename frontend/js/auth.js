@@ -14,6 +14,14 @@ function showMessage(message, type = "error") {
     messageBox.className = `auth-message ${type}`;
 }
 
+function clearMessage() {
+    const messageBox = document.getElementById("authMessage");
+    if (messageBox) {
+        messageBox.textContent = "";
+        messageBox.className = "auth-message";
+    }
+}
+
 /**
  *  GLOBAL AUTH STATE
  * Semua state user disimpan di sini, accessible dari mana saja
@@ -59,16 +67,17 @@ const authState = {
 authState.init();
 
 function showError(msg){
-    let elm = document.getElementById('error-msg');
-    if (!elm){
-        elm = document.createElement('p');
-        elm.id = 'error-msg';
-        elm.style.cssText ='color:red; text-align:center; margin-top:8px; font-size:14px;';
+    let messageBox = document.getElementById('authMessage');
 
-    if (messageBox) {
-        messageBox.textContent = "";
-        messageBox.className = "auth-message";
+    if (!messageBox) {
+        messageBox = document.createElement('p');
+        messageBox.id = 'authMessage';
+        messageBox.className = 'auth-message';
+        document.querySelector('.auth-card').appendChild(messageBox);
     }
+
+    messageBox.textContent = msg;
+    messageBox.className = 'auth-message error';
 }
 
 function openTab(event, tabName) {
@@ -94,6 +103,45 @@ function getRedirectTarget() {
     return params.get("redirect") || "pembelian.html";
 }
 
+function loginUser(credentials) {
+    const foundUser = window.UserSession.findUserByIdentifier(credentials.identifier);
+
+    if (!foundUser || foundUser.password !== credentials.password) {
+        return { success: false, message: "Username/email atau password salah." };
+    }
+
+    window.UserSession.setCurrentUser(foundUser);
+
+    return {
+        success: true,
+        message: "Login berhasil."
+    };
+}
+
+function registerUser(payload) {
+    const result = window.UserSession.createUserAccount(payload);
+
+    if (!result.success) {
+        return result;
+    }
+
+    window.UserSession.setCurrentUser(result.rawUser);
+    return {
+        success: true,
+        message: result.message
+    };
+}
+
+function requestPasswordReset(identifier) {
+    const foundUser = window.UserSession.findUserByIdentifier(identifier);
+
+    if (!foundUser) {
+        return { success: false, message: "Akun tidak ditemukan." };
+    }
+
+    return window.UserSession.savePasswordResetRequest(foundUser.id);
+}
+
 document.querySelector("#login form").addEventListener("submit", (event) => {
     event.preventDefault();
     clearMessage();
@@ -107,7 +155,7 @@ document.querySelector("#login form").addEventListener("submit", (event) => {
     }
 
     // Login frontend-only: validasi pakai data yang tersimpan di localStorage.
-    const result = window.UserSession.loginUser({ identifier, password });
+    const result = loginUser({ identifier, password });
 
     if (!result.success) {
         showMessage(result.message);
@@ -145,13 +193,42 @@ document.querySelector("#register form").addEventListener("submit", (event) => {
     }
 
     // Setelah daftar berhasil, user langsung dianggap login.
-    const result = window.UserSession.registerUser({
+    const result = registerUser({
         nama,
         username,
         email,
         noHp,
         password
     });
+
+    if (!result.success) {
+        showMessage(result.message);
+        return;
+    }
+
+    showMessage("Akun berhasil dibuat. Kamu akan diarahkan sebentar lagi.", "success");
+    window.location.href = getRedirectTarget();
+});
+
+document.querySelector("#reset form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    clearMessage();
+
+    const identifier = document.getElementById("reset-input").value.trim();
+
+    if (!identifier) {
+        showMessage("Username atau email harus diisi.");
+        return;
+    }
+
+    const result = requestPasswordReset(identifier);
+
+    if (!result.success) {
+        showMessage(result.message);
+        return;
+    }
+
+    showMessage(result.message, "success");
 });
 
 /**
@@ -211,4 +288,4 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.querySelector('.user-pill')) {
         updateUserPill();
     }
-})
+});
