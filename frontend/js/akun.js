@@ -44,9 +44,8 @@ function getPaymentStatusClass(status) {
     return status === "Sudah Dibayar" ? "paid" : "unpaid";
 }
 
-function renderOrderHistory() {
-    // Riwayat pesanan hanya menampilkan order milik user yang sedang login.
-    const orders = window.UserSession.getCurrentUserOrders();
+async function renderOrderHistory() {
+    const orders = await window.UserSession.getCurrentUserOrders();
     const list = document.getElementById("orderHistoryList");
     const emptyState = document.getElementById("orderHistoryEmpty");
 
@@ -63,20 +62,20 @@ function renderOrderHistory() {
         list.innerHTML += `
             <article class="order-item-card">
                 <div class="order-item-media">
-                    ${order.productImage ? `<img src="${order.productImage}" alt="${order.productName}" class="order-item-image">` : `<div class="order-item-fallback">Produk</div>`}
+                    ${order.items?.[0]?.detail_batik_id ? `<img src="${order.productImage || ''}" alt="${order.productName || 'Produk'}" class="order-item-image">` : `<div class="order-item-fallback">Produk</div>`}
                 </div>
                 <div class="order-item-body">
                     <div class="order-item-top">
                         <div>
-                            <p class="order-code">${order.id}</p>
-                            <h3>${order.productName}</h3>
+                            <p class="order-code">${order.pesanan_id || order.id}</p>
+                            <h3>${order.productName || order.items?.[0]?.nama_produk || 'Pesanan'}</h3>
                         </div>
-                        <span class="status-pill ${getOrderStatusClass(order.orderStatus)}">${order.orderStatus}</span>
+                        <span class="status-pill ${getOrderStatusClass(order.status_pesanan || order.orderStatus)}">${order.status_pesanan || order.orderStatus}</span>
                     </div>
-                    <p class="order-meta">${order.productCategory} | ${order.quantity} item | ${formatDate(order.createdAt)}</p>
+                    <p class="order-meta">${order.productCategory || ''} | ${order.total_jumlah || order.quantity || order.items?.reduce((sum, item) => sum + (item.jumlah || 0), 0)} item | ${formatDate(order.tanggal_pesanan || order.createdAt)}</p>
                     <div class="order-item-bottom">
-                        <strong>${formatRupiah(order.totalPrice)}</strong>
-                        <span class="payment-pill ${getPaymentStatusClass(order.paymentStatus)}">${order.paymentStatus}</span>
+                        <strong>${formatRupiah(order.total_harga || order.totalPrice)}</strong>
+                        <span class="payment-pill ${getPaymentStatusClass(order.payment_status || order.paymentStatus)}">${order.payment_status || order.paymentStatus || 'Belum Dibayar'}</span>
                     </div>
                     ${order.notes ? `<p class="order-notes">${order.notes}</p>` : ""}
                 </div>
@@ -96,7 +95,7 @@ function requireLoggedInUser() {
     return currentUser;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const currentUser = requireLoggedInUser();
 
     if (!currentUser) {
@@ -104,12 +103,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     fillAccountSummary(currentUser);
-    renderOrderHistory();
+    await renderOrderHistory();
 
-    document.getElementById("profileForm").addEventListener("submit", (event) => {
+    document.getElementById("profileForm").addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        const result = window.UserSession.updateProfile({
+        const result = await window.UserSession.updateProfile({
             nama: document.getElementById("profileNama").value,
             username: document.getElementById("profileUsername").value,
             email: document.getElementById("profileEmail").value,
@@ -124,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    document.getElementById("passwordForm").addEventListener("submit", (event) => {
+    document.getElementById("passwordForm").addEventListener("submit", async (event) => {
         event.preventDefault();
 
         const currentPassword = document.getElementById("currentPassword").value;
@@ -141,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const result = window.UserSession.updatePassword({ currentPassword, newPassword });
+        const result = await window.UserSession.updatePassword({ currentPassword, newPassword });
         showAccountMessage(result.message, result.success ? "success" : "error");
 
         if (result.success) {
@@ -149,9 +148,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    document.getElementById("resetPasswordBtn").addEventListener("click", () => {
+    document.getElementById("resetPasswordBtn").addEventListener("click", async () => {
         const latestUser = window.UserSession.getCurrentUser();
-        const result = window.UserSession.requestPasswordReset(latestUser.email);
+        const result = await window.UserSession.requestPasswordReset(latestUser.email || latestUser.username);
         showAccountMessage(result.message, result.success ? "success" : "error");
     });
 });

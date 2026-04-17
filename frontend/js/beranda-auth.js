@@ -19,9 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <a href="#" class="btn-daftar" id="berandaLogout">Keluar</a>
     `;
 
-    document.getElementById("berandaLogout").addEventListener("click", (event) => {
+    document.getElementById("berandaLogout").addEventListener("click", async (event) => {
         event.preventDefault();
-        window.UserSession.logoutUser();
+        await window.UserSession.logoutUser();
         window.location.reload();
     });
 });

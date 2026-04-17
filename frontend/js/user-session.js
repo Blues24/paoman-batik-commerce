@@ -1,274 +1,168 @@
-(() => {
-    // Kunci localStorage untuk data user, session aktif, reset password, dan riwayat pesanan.
-    const USERS_KEY = "batikPaomanUsers";
-    const CURRENT_USER_KEY = "batikPaomanCurrentUser";
-    const RESET_REQUESTS_KEY = "batikPaomanResetRequests";
-    const ORDERS_KEY = "batikPaomanOrders";
+const API_URL = 'http://localhost:8000/api';
+const CURRENT_USER_KEY = 'batikPaomanCurrentUser';
 
-    function readJson(key, fallback) {
-        try {
-            return JSON.parse(localStorage.getItem(key)) ?? fallback;
-        } catch {
-            return fallback;
-        }
+function getStoredUser() {
+    try {
+        return JSON.parse(sessionStorage.getItem(CURRENT_USER_KEY)) || null;
+    } catch {
+        return null;
+    }
+}
+
+function setStoredUser(user) {
+    if (!user) {
+        sessionStorage.removeItem(CURRENT_USER_KEY);
+        sessionStorage.removeItem('csrf_token');
+        return;
     }
 
-    function writeJson(key, value) {
-        localStorage.setItem(key, JSON.stringify(value));
+    sessionStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+
+    if (user.csrf_token) {
+        sessionStorage.setItem('csrf_token', user.csrf_token);
     }
+}
 
-    function sanitizeUser(user) {
-        if (!user) {
-            return null;
-        }
+function clearStoredUser() {
+    sessionStorage.removeItem(CURRENT_USER_KEY);
+    sessionStorage.removeItem('csrf_token');
+}
 
-        // Password sengaja tidak ikut dikirim ke UI.
-        const { password, ...safeUser } = user;
-        return safeUser;
-    }
+async function apiFetch(endpoint, options = {}) {
+    const response = await fetch(`${API_URL}${endpoint}`, {
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(options.headers || {})
+        },
+        ...options
+    });
 
-    function getUsers() {
-        return readJson(USERS_KEY, []);
-    }
+    const data = await response.json().catch(() => null);
+    return { response, data };
+}
 
-    function saveUsers(users) {
-        writeJson(USERS_KEY, users);
-    }
-
-    function getCurrentUser() {
-        return readJson(CURRENT_USER_KEY, null);
-    }
-
-    function setCurrentUser(user) {
-        writeJson(CURRENT_USER_KEY, sanitizeUser(user));
-    }
-
-    function registerUser(payload) {
-        const users = getUsers();
-        const nama = payload.nama.trim();
-        const username = payload.username.trim();
-        const email = payload.email.trim().toLowerCase();
-        const noHp = payload.noHp.trim();
-        const password = payload.password;
-
-        // Cegah dua akun memakai username atau email yang sama.
-        const duplicateUser = users.find((user) =>
-            user.username.toLowerCase() === username.toLowerCase() ||
-            user.email.toLowerCase() === email
-        );
-
-        if (duplicateUser) {
-            return { success: false, message: "Username atau email sudah dipakai." };
-        }
-
-        const newUser = {
-            id: Date.now(),
-            nama,
-            username,
-            email,
-            noHp,
-            password,
-            createdAt: new Date().toISOString()
-        };
-
-        users.push(newUser);
-        saveUsers(users);
-        setCurrentUser(newUser);
-
-        return {
-            success: true,
-            message: "Akun berhasil dibuat.",
-            user: sanitizeUser(newUser)
-        };
-    }
-
-    function loginUser({ identifier, password }) {
-        const users = getUsers();
-        const normalizedIdentifier = identifier.trim().toLowerCase();
-
-        // User boleh login pakai username atau email.
-        const foundUser = users.find((user) =>
-            user.username.toLowerCase() === normalizedIdentifier ||
-            user.email.toLowerCase() === normalizedIdentifier
-        );
-
-        if (!foundUser || foundUser.password !== password) {
-            return { success: false, message: "Username/email atau password salah." };
-        }
-
-        setCurrentUser(foundUser);
-
-        return {
-            success: true,
-            message: "Login berhasil.",
-            user: sanitizeUser(foundUser)
-        };
-    }
-
-    function logoutUser() {
-        localStorage.removeItem(CURRENT_USER_KEY);
-    }
-
-    function updateProfile(payload) {
-        const currentUser = getCurrentUser();
-
-        if (!currentUser) {
-            return { success: false, message: "Kamu belum login." };
-        }
-
-        const users = getUsers();
-        const userIndex = users.findIndex((user) => user.id === currentUser.id);
-
-        if (userIndex < 0) {
-            return { success: false, message: "Data akun tidak ditemukan." };
-        }
-
-        const email = payload.email.trim().toLowerCase();
-        const username = payload.username.trim();
-
-        // Saat edit profil, username/email tetap harus unik.
-        const duplicateUser = users.find((user) =>
-            user.id !== currentUser.id &&
-            (user.username.toLowerCase() === username.toLowerCase() || user.email.toLowerCase() === email)
-        );
-
-        if (duplicateUser) {
-            return { success: false, message: "Username atau email sudah dipakai akun lain." };
-        }
-
-        users[userIndex] = {
-            ...users[userIndex],
-            nama: payload.nama.trim(),
-            username,
-            email,
-            noHp: payload.noHp.trim(),
-            alamat: payload.alamat.trim()
-        };
-
-        saveUsers(users);
-        setCurrentUser(users[userIndex]);
-
-        return {
-            success: true,
-            message: "Profil berhasil diperbarui.",
-            user: sanitizeUser(users[userIndex])
-        };
-    }
-
-    function updatePassword({ currentPassword, newPassword }) {
-        const currentUser = getCurrentUser();
-
-        if (!currentUser) {
-            return { success: false, message: "Kamu belum login." };
-        }
-
-        const users = getUsers();
-        const userIndex = users.findIndex((user) => user.id === currentUser.id);
-
-        if (userIndex < 0) {
-            return { success: false, message: "Data akun tidak ditemukan." };
-        }
-
-        if (users[userIndex].password !== currentPassword) {
-            return { success: false, message: "Password saat ini tidak sesuai." };
-        }
-
-        users[userIndex].password = newPassword;
-        saveUsers(users);
-        setCurrentUser(users[userIndex]);
-
-        return { success: true, message: "Password berhasil diganti." };
-    }
-
-    function requestPasswordReset(identifier) {
-        const users = getUsers();
-        const normalizedIdentifier = identifier.trim().toLowerCase();
-
-        const foundUser = users.find((user) =>
-            user.username.toLowerCase() === normalizedIdentifier ||
-            user.email.toLowerCase() === normalizedIdentifier
-        );
-
-        if (!foundUser) {
-            return { success: false, message: "Akun tidak ditemukan." };
-        }
-
-        const requests = readJson(RESET_REQUESTS_KEY, []);
-        requests.push({
-            userId: foundUser.id,
-            requestedAt: new Date().toISOString()
-        });
-        writeJson(RESET_REQUESTS_KEY, requests);
-
-        return {
-            success: true,
-            message: `Simulasi reset sandi dikirim ke ${foundUser.email}.`
-        };
-    }
-
-    function getOrders() {
-        return readJson(ORDERS_KEY, []);
-    }
-
-    function saveOrders(orders) {
-        writeJson(ORDERS_KEY, orders);
-    }
-
-    function createOrder(payload) {
-        const currentUser = getCurrentUser();
-
-        if (!currentUser) {
-            return { success: false, message: "Login dulu supaya pesanan bisa masuk ke akunmu." };
-        }
-
-        // Pesanan baru langsung disimpan ke riwayat akun user yang sedang login.
-        const orders = getOrders();
-        const newOrder = {
-            id: `ORD-${Date.now()}`,
-            userId: currentUser.id,
-            productId: payload.productId,
-            productName: payload.productName,
-            productCategory: payload.productCategory,
-            productImage: payload.productImage || "",
-            quantity: payload.quantity,
-            totalPrice: payload.totalPrice,
-            notes: payload.notes || "",
-            orderStatus: "Menunggu",
-            paymentStatus: "Belum Dibayar",
-            createdAt: new Date().toISOString()
-        };
-
-        orders.unshift(newOrder);
-        saveOrders(orders);
-
-        return {
-            success: true,
-            message: "Pesanan berhasil dibuat dan masuk ke akunmu.",
-            order: newOrder
-        };
-    }
-
-    function getCurrentUserOrders() {
-        const currentUser = getCurrentUser();
-
-        if (!currentUser) {
-            return [];
-        }
-
-        return getOrders().filter((order) => order.userId === currentUser.id);
-    }
-
-    window.UserSession = {
-        // Semua helper session dipusatkan di sini supaya bisa dipakai banyak halaman.
-        getUsers,
-        getCurrentUser,
-        registerUser,
-        loginUser,
-        logoutUser,
-        updateProfile,
-        updatePassword,
-        requestPasswordReset,
-        createOrder,
-        getCurrentUserOrders
+function getHeaders() {
+    return {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': sessionStorage.getItem('csrf_token') || ''
     };
-})();
+}
+
+async function loginUser({ identifier, password }) {
+    const { response, data } = await apiFetch('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ identifier, password })
+    });
+
+    if (!response.ok || !data?.success) {
+        return { success: false, message: data?.message || 'Login gagal.' };
+    }
+
+    setStoredUser(data.data);
+    return { success: true, message: data.message };
+}
+
+async function registerUser(payload) {
+    const { response, data } = await apiFetch('/auth/register', {
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok || !data?.success) {
+        return { success: false, message: data?.message || 'Registrasi gagal.' };
+    }
+
+    setStoredUser(data.data);
+    return { success: true, message: data.message };
+}
+
+async function logoutUser() {
+    const { response, data } = await apiFetch('/auth/logout', {
+        method: 'POST'
+    });
+
+    clearStoredUser();
+    return { success: response.ok && data?.success, message: data?.message || 'Logout selesai.' };
+}
+
+async function fetchCurrentUser() {
+    const { response, data } = await apiFetch('/auth/me');
+
+    if (!response.ok || !data?.success) {
+        clearStoredUser();
+        return null;
+    }
+
+    setStoredUser(data.data);
+    return data.data;
+}
+
+async function updateProfile(payload) {
+    const { response, data } = await apiFetch('/auth/profile', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: getHeaders(),
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok || !data?.success) {
+        return { success: false, message: data?.message || 'Gagal memperbarui profil.' };
+    }
+
+    setStoredUser(data.data);
+    return { success: true, message: data.message, user: data.data };
+}
+
+async function updatePassword({ currentPassword, newPassword }) {
+    const { response, data } = await apiFetch('/auth/password', {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ currentPassword, newPassword })
+    });
+
+    return { success: response.ok && data?.success, message: data?.message || 'Gagal mengganti password.' };
+}
+
+async function requestPasswordReset(identifier) {
+    const { response, data } = await apiFetch('/auth/reset-password', {
+        method: 'POST',
+        body: JSON.stringify({ identifier })
+    });
+
+    return { success: response.ok && data?.success, message: data?.message || 'Gagal request reset password.' };
+}
+
+async function createOrder(items) {
+    const { response, data } = await apiFetch('/pesanan', {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ items })
+    });
+
+    return { success: response.ok && data?.success, message: data?.message || 'Gagal membuat pesanan.', data: data?.data };
+}
+
+async function getCurrentUserOrders() {
+    const { response, data } = await apiFetch('/pesanan/saya');
+
+    if (!response.ok || !data?.success) {
+        return [];
+    }
+
+    return data.data;
+}
+
+window.UserSession = {
+    getCurrentUser: getStoredUser,
+    loginUser,
+    registerUser,
+    logoutUser,
+    fetchCurrentUser,
+    updateProfile,
+    updatePassword,
+    requestPasswordReset,
+    createOrder,
+    getCurrentUserOrders
+};

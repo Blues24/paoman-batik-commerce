@@ -82,8 +82,26 @@ class AuthController {
             $this->respond(false, null, 'Email sudah terdaftar', 409);
 
         try {
-            $model->createWithPelanggan($body);
-            $this->respond(true, null, 'Registrasi berhasil', 201);
+            $akunId = $model->createWithPelanggan($body);
+            $user = $model->findByAkunId($akunId);
+
+            if (!$user) {
+                throw new Exception('Data pengguna gagal diambil setelah registrasi');
+            }
+
+            session_regenerate_id(true);
+            $_SESSION['akun_id']      = $user['akun_id'];
+            $_SESSION['pelanggan_id'] = $user['pelanggan_id'];
+            $_SESSION['csrf_token']   = bin2hex(random_bytes(32));
+
+            $this->respond(true, [
+                'nama'     => $user['nama'],
+                'username' => $user['username'],
+                'email'    => $user['email'],
+                'noHp'     => $user['no_hp'],
+                'alamat'   => $user['alamat'],
+                'csrf_token' => $_SESSION['csrf_token']
+            ], 'Registrasi berhasil', 201);
         } catch (Exception $e) {
             error_log('[Register Error] ' . $e->getMessage());
             $this->respond(false, null, 'Registrasi gagal, coba lagi nanti', 500);
@@ -101,26 +119,135 @@ class AuthController {
 
         $this->checkRateLimit($key);
 
-
-        if (empty($identifier) || empty($body['password'])) $this->respond(false, null, 'Username/Email dan password wajib diisi', 422);
+        if (empty($identifier) || empty($body['password']))
+            $this->respond(false, null, 'Username/Email dan password wajib diisi', 422);
 
         $user = $model->findByIdentifier($identifier);
 
-        if (!$user || !password_verify($body['password'], $user['password_hash'])){
+        if (!$user || !password_verify($body['password'], $user['password_hash'])) {
             $this->failAttempt($key);
             $this->respond(false, null, 'Username atau password salah', 401);
         }
-        if ($user['status_akun'] !== 'aktif')   $this->respond(false, null, 'Akun tidak aktif', 403);
-        
+        if ($user['status_akun'] !== 'aktif')
+            $this->respond(false, null, 'Akun tidak aktif', 403);
+
         $this->clearAttempt($key);
         session_regenerate_id(true);
         $_SESSION['akun_id']      = $user['akun_id'];
         $_SESSION['pelanggan_id'] = $user['pelanggan_id'];
         $_SESSION['csrf_token']   = bin2hex(random_bytes(32));
         $this->respond(true, [
-            'nama'  => $user['nama'],
-            'csrf_token' => $_SESSION['csrf_token']
+            'nama'      => $user['nama'],
+            'username'  => $user['username'],
+            'email'     => $user['email'],
+            'noHp'      => $user['no_hp'],
+            'alamat'    => $user['alamat'],
+            'csrf_token'=> $_SESSION['csrf_token']
         ], 'Login Berhasil yey', 200);
+    }
+
+    public function me(): void {
+        if (empty($_SESSION['akun_id'])) {
+            $this->respond(false, null, 'Unauthorized', 401);
+        }
+
+        $model = new AkunModel();
+        $user = $model->findByAkunId((int) $_SESSION['akun_id']);
+
+        if (!$user) {
+            $this->respond(false, null, 'User tidak ditemukan', 404);
+        }
+
+        $this->respond(true, [
+            'nama'      => $user['nama'],
+            'username'  => $user['username'],
+            'email'     => $user['email'],
+            'noHp'      => $user['no_hp'],
+            'alamat'    => $user['alamat'],
+            'csrf_token'=> $_SESSION['csrf_token'] ?? ''
+        ], 'OK', 200);
+    }
+
+    public function updateProfile(): void {
+        verifyCsrf();
+
+        if (empty($_SESSION['akun_id'])) {
+            $this->respond(false, null, 'Unauthorized', 401);
+        }
+
+        $body  = $this->body();
+        $model = new AkunModel();
+        $akunId = (int) $_SESSION['akun_id'];
+
+        foreach (['username', 'nama', 'email'] as $f) {
+            if (empty($body[$f])) $this->respond(false, null, "Field '$f' wajib diisi", 422);
+        }
+
+        if (!filter_var($body['email'], FILTER_VALIDATE_EMAIL))
+            $this->respond(false, null, 'Format email tidak valid', 422);
+
+        if ($model->usernameExistsExcept($body['username'], $akunId))
+            $this->respond(false, null, 'Username sudah dipakai', 409);
+
+        if ($model->emailExistsExcept($body['email'], $akunId))
+            $this->respond(false, null, 'Email sudah terdaftar', 409);
+
+        try {
+            $user = $model->updateProfile($akunId, $body);
+            $this->respond(true, [
+                'nama'      => $user['nama'],
+                'username'  => $user['username'],
+                'email'     => $user['email'],
+                'noHp'      => $user['no_hp'],
+                'alamat'    => $user['alamat']
+            ], 'Profil berhasil diperbarui', 200);
+        } catch (Exception $e) {
+            error_log('[Profile Update Error] ' . $e->getMessage());
+            $this->respond(false, null, 'Gagal memperbarui profil', 500);
+        }
+    }
+
+    public function updatePassword(): void {
+        verifyCsrf();
+
+        if (empty($_SESSION['akun_id'])) {
+            $this->respond(false, null, 'Unauthorized', 401);
+        }
+
+        $body  = $this->body();
+        $model = new AkunModel();
+        $akunId = (int) $_SESSION['akun_id'];
+
+        if (empty($body['currentPassword']) || empty($body['newPassword']))
+            $this->respond(false, null, 'Password lama dan baru wajib diisi', 422);
+
+        if (strlen($body['newPassword']) < 8)
+            $this->respond(false, null, 'Password baru minimal 8 karakter', 422);
+
+        $result = $model->changePassword($akunId, $body['currentPassword'], $body['newPassword']);
+
+        if ($result !== true) {
+            $this->respond(false, null, $result, 400);
+        }
+
+        $this->respond(true, null, 'Password berhasil diganti', 200);
+    }
+
+    public function requestPasswordReset(): void {
+        $body = $this->body();
+
+        if (empty($body['identifier'])) {
+            $this->respond(false, null, 'Username atau email wajib diisi', 422);
+        }
+
+        $model = new AkunModel();
+        $user = $model->findByIdentifier($body['identifier']);
+
+        if (!$user) {
+            $this->respond(false, null, 'Akun tidak ditemukan', 404);
+        }
+
+        $this->respond(true, ['email' => $user['email']], 'Simulasi reset sandi dikirim ke ' . $user['email'], 200);
     }
 
     /**
@@ -138,9 +265,10 @@ class AuthController {
 
         $admin = $model->findAdminByUsername($body['username']);
 
-        if (!$admin || !password_verify($body['password'], $admin['password']))
+        if (!$admin || !password_verify($body['password'], $admin['password'])) {
             $this->failAttempt($key);
             $this->respond(false, null, 'username atau password admin salah', 401);
+        }
 
         $this->clearAttempt($key);
         session_regenerate_id(true);

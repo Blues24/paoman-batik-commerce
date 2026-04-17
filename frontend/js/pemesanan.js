@@ -208,7 +208,7 @@ qtyInput.addEventListener("input", () => {
     }
 });
 
-orderForm.addEventListener("submit", (event) => {
+orderForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const activeProduct = getActiveProductButton();
@@ -226,19 +226,20 @@ orderForm.addEventListener("submit", (event) => {
     }
 
     const quantity = Math.max(1, Number(qtyInput.value) || 1);
-    const price = Number(activeProduct.dataset.price);
     const notesField = document.querySelector(".notes-field textarea");
+    const cartItems = getCartItems();
 
-    // Pesanan yang dibuat user akan masuk ke riwayat akun.
-    const result = window.UserSession.createOrder({
-        productId: Number(activeProduct.dataset.id),
-        productName: activeProduct.dataset.name,
-        productCategory: activeProduct.dataset.category,
-        productImage: activeProduct.dataset.image,
-        quantity,
-        totalPrice: price * quantity,
-        notes: notesField ? notesField.value.trim() : ""
-    });
+    if (cartItems.length === 0) {
+        alert("Keranjang kosong.");
+        return;
+    }
+
+    const items = cartItems.map((item) => ({
+        detail_batik_id: item.detail_batik_id || item.id,
+        jumlah: Number(item.qty) || 1
+    }));
+
+    const result = await window.UserSession.createOrder(items);
 
     if (!result.success) {
         alert(result.message);
@@ -246,6 +247,8 @@ orderForm.addEventListener("submit", (event) => {
     }
 
     alert("Pesanan berhasil dibuat. Cek statusnya di Pengaturan Akun.");
+    saveCartItems([]);
+    renderCartProducts();
     orderForm.reset();
     qtyInput.value = quantity;
 });

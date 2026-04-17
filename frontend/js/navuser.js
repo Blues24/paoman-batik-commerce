@@ -94,8 +94,8 @@
         });
 
         if (logoutBtn) {
-            logoutBtn.addEventListener("click", () => {
-                window.UserSession.logoutUser();
+            logoutBtn.addEventListener("click", async () => {
+                await window.UserSession.logoutUser();
 
                 if (window.location.pathname.toLowerCase().includes("akun.html")) {
                     window.location.href = "auth.html?redirect=akun.html";
