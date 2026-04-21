@@ -1,0 +1,232 @@
+/* =========================================
+   STANDARD CORE (WAJIB SAMA DI SEMUA CSS)
+   ========================================= */
+:root {
+    --primary-blue: #2B4DBB;
+    --bg-gray: #D1D5DB; /* Warna Abu-abu Mockup Konsisten */
+    --sidebar-white: #FFFFFF;
+    --white: #ffffff;
+    --text-main: #1F2937;
+    --text-muted: #6B7280;
+    --border-color: #E5E7EB;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-gray);
+    color: var(--text-main);
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Main Content Wrapper */
+.main-content {
+    flex: 1;
+    padding: 25px; /* Jarak standar konten dari tepi */
+}
+
+/* TOP BAR KONSISTEN */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--white);
+    padding: 15px 25px;
+    margin: -25px -25px 25px -25px; /* Menutup padding main agar full width di atas */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.header-left h1 {
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.header-left p {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* User Profile (Kanan Atas) */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 1px solid var(--border-color);
+    padding-left: 15px;
+}
+
+.text-profile {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.text-profile .name { font-weight: 700; font-size: 13px; }
+.text-profile .role { font-size: 11px; color: var(--text-muted); }
+
+/* Card Dasar */
+.card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+.avatar {
+    color: var(--text-muted);
+    font-size: 0; /* Menghilangkan whitespace icon */
+}
+
+/* =========================================
+   TABEL KELOLA AKUN (CARD)
+   ========================================= */
+.account-section {
+    width: 100%;
+}
+
+.table-card {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #F9FAF7; /* Warna abu sangat muda sesuai desain */
+    padding: 18px 20px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #8892B0;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-color);
+}
+
+td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #F3F4F6;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+/* Profile Placeholder */
+.profile-circle {
+    width: 36px;
+    height: 36px;
+    background-color: #EDF2F7;
+    border-radius: 50%;
+}
+
+/* Badges (Role & Status) */
+.badge {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-admin { background: #EEF2FF; color: #4338CA; }
+.badge-staff { background: #F3F4F6; color: #4B5563; }
+.badge-customer { background: #F5F3FF; color: #7C3AED; }
+
+.badge-active { background: #DCFCE7; color: #15803D; }
+.badge-inactive { background: #F3F4F6; color: #6B7280; }
+
+/* Action Buttons */
+.action-btns {
+    display: flex;
+    gap: 12px;
+}
+
+.action-btns button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #9CA3AF;
+    transition: all 0.2s;
+    padding: 4px;
+}
+
+.btn-edit:hover { color: var(--primary-blue); }
+.btn-delete:hover { color: var(--danger); }
+
+/* =========================================
+   PAGINATION
+   ========================================= */
+.pagination-container {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border-color);
+}
+
+.pagination {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.page-btn {
+    min-width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    background: var(--white);
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--text-main);
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.page-btn.active {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border-color: var(--primary-blue);
+}
+
+.page-btn:hover:not(.active) {
+    background-color: #F9FAF7;
+    border-color: #D1D5DB;
+}
+
+.page-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+/* Utility Class */
+.text-bold {
+    font-weight: 600;
+}

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Stok - Admin</title>
-    <link rel="stylesheet" href="../../css/laporan.css">
+    <link rel="stylesheet" href="../../css/kelolaStok.css">
     <link rel="stylesheet" href="../../css/navadmin.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -24,10 +24,10 @@
                 <a href="listPesanan.html" class="nav-item" data-target="pesanan">
                     <i data-lucide="clipboard-list"></i> List Pesanan
                 </a>
-                <a href="laporan.html" class="nav-item" data-target="laporan">
-                    <i data-lucide="bar-chart-3"></i> Laporan Penjualan
+                <a href="kelolaStok.html" class="nav-item" data-target="laporan">
+                    <i data-lucide="bar-chart-3"></i> Kelola Stok
                 </a>
-                <a href="akun.html" class="nav-item" data-target="akun">
+                <a href="kelolaAkun.html" class="nav-item" data-target="akun">
                     <i data-lucide="user-cog"></i> Kelola Akun
                 </a>
             </nav>
@@ -40,22 +40,17 @@
 
         <main class="main-content">
             <header class="top-bar">
-                <div class="title-section">
-                    <h1>Kelola Stok</h1>
-                    <p>Pantau dan perbarui ketersediaan produk secara real-time.</p>
-                </div>
-                <div class="header-actions">
-                    <button class="btn-update"><i data-lucide="refresh-cw"></i> Update Stok</button>
-                    <button class="btn-primary"><i data-lucide="plus"></i> Tambah Stok</button>
+                <h1 id="page-title">Kelola Stok</h1>
                     <div class="user-profile">
-                        <i data-lucide="bell" class="notif"></i>
+                        <div class="notif-icon"><i data-lucide="bell"></i></div>
                         <div class="profile-info">
-                            <span class="name">Nama</span>
-                            <span class="role">Admin</span>
+                            <div class="text-profile">
+                                <span class="name">Nama</span>
+                                <span class="role">Admin</span>
+                            </div>
+                            <div class="avatar"><i data-lucide="user-circle"></i></div>
                         </div>
-                        <i data-lucide="user-circle" class="avatar"></i>
                     </div>
-                </div>
             </header>
 
             <div class="filter-section">

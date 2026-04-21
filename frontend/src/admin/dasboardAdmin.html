@@ -25,10 +25,10 @@
                 <a href="listPesanan.html" class="nav-item" data-target="pesanan">
                     <i data-lucide="clipboard-list"></i> List Pesanan
                 </a>
-                <a href="laporan.html" class="nav-item" data-target="laporan">
-                    <i data-lucide="bar-chart-3"></i> Laporan Penjualan
+                <a href="kelolaStok.html" class="nav-item" data-target="laporan">
+                    <i data-lucide="bar-chart-3"></i> Kelola Stok
                 </a>
-                <a href="akun.html" class="nav-item" data-target="akun">
+                <a href="kelolaAkun.html" class="nav-item" data-target="akun">
                     <i data-lucide="user-cog"></i> Kelola Akun
                 </a>
             </nav>
@@ -54,64 +54,85 @@
                     </div>
             </header>
 
-            <section id="content-area">
-                <div class="stats-grid">
-                    <div class="card stat-card">
-                        <i data-lucide="file-text" class="icon blue"></i>
-                        <p>Total Produk</p>
-                        <h3>10</h3>
-                    </div>
-                    <div class="card stat-card">
-                        <i data-lucide="box" class="icon purple"></i>
-                        <p>Produk Aktif</p>
-                        <h3>10</h3>
-                    </div>
-                    <div class="card stat-card">
-                        <i data-lucide="truck" class="icon orange"></i>
-                        <p>Total Pesanan</p>
-                        <h3>0</h3>
-                    </div>
-                    <div class="card stat-card">
-                        <i data-lucide="user-plus" class="icon green"></i>
-                        <p>Total User</p>
-                        <h3>0</h3>
-                    </div>
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue-bg"><i data-lucide="clipboard-list"></i></div>
+                    <p>Total Produk</p>
+                    <h3>10</h3>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple-bg"><i data-lucide="shapes"></i></div>
+                    <p>Produk Aktif</p>
+                    <h3>10</h3>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange-bg"><i data-lucide="truck"></i></div>
+                    <p>Total Pesanan</p>
+                    <h3>0</h3>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green-bg"><i data-lucide="user-plus"></i></div>
+                    <p>Total User</p>
+                    <h3>0</h3>
+                </div>
+            </section>
 
-                <div class="middle-grid">
-                    <div class="card chart-container">
-                        <div class="card-header">
+            <section class="middle-grid">
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <div>
                             <h4>Laporan Penjualan</h4>
-                            <select><option>1 Bulan Terakhir</option></select>
+                            <h2 class="price-placeholder">Rp N/A</h2>
                         </div>
-                        <h2 class="blue-text">Rp N/A</h2>
-                        <div class="chart-placeholder">
-                            <div class="bar" style="height: 40%;"></div>
-                            <div class="bar active" style="height: 50%;"></div>
-                            <div class="bar" style="height: 30%;"></div>
-                            <div class="bar" style="height: 60%;"></div>
-                            <div class="bar" style="height: 45%;"></div>
-                            <div class="bar" style="height: 70%;"></div>
-                            <div class="bar" style="height: 55%;"></div>
-                        </div>
+                        <select class="filter-select">
+                            <option>1 Bulan Terakhir</option>
+                        </select>
                     </div>
-                    
-                    <div class="card history-container">
-                        <div class="card-header">
-                            <h4>Riwayat Pembelian</h4>
-                            <a href="#">Lihat semua</a>
-                        </div>
-                        <div class="history-list">
-                            <div class="history-item">
-                                <div class="avatar-sm"><i data-lucide="user"></i></div>
-                                <div class="details"><strong>N/A</strong><br><small>Order #ORD-2910</small></div>
-                                <div class="status success">Rp. N/A<br><span>SUKSES</span></div>
-                            </div>
-                            </div>
+                    <div class="chart-placeholder">
+                        <div class="bar active" style="height: 60%;"><span>JAN</span></div>
+                        <div class="bar" style="height: 40%;"><span>FEB</span></div>
+                        <div class="bar" style="height: 30%;"><span>MAR</span></div>
+                        <div class="bar" style="height: 50%;"><span>APR</span></div>
+                        <div class="bar" style="height: 45%;"><span>MAY</span></div>
+                        <div class="bar" style="height: 65%;"><span>JUN</span></div>
+                        <div class="bar" style="height: 55%;"><span>JUL</span></div>
                     </div>
                 </div>
 
-                <div class="card table-container">
+                <div class="card history-card">
+                    <div class="card-header">
+                        <h4>Riwayat Pembelian</h4>
+                        <a href="#" class="link-all">Lihat semua</a>
+                    </div>
+                    <div class="history-list">
+                        <div class="history-item">
+                            <i data-lucide="user" class="item-avatar"></i>
+                            <div class="item-info">
+                                <strong>N/A</strong>
+                                <span>Order #ORD-2910</span>
+                            </div>
+                            <div class="item-status">
+                                <strong class="price-sm">Rp. N/A</strong>
+                                <span class="status-badge success">SUKSES</span>
+                            </div>
+                        </div>
+                        <div class="history-item">
+                            <i data-lucide="user" class="item-avatar"></i>
+                            <div class="item-info">
+                                <strong>N/A</strong>
+                                <span>Order #ORD-2911</span>
+                            </div>
+                            <div class="item-status">
+                                <strong class="price-sm">Rp. N/A</strong>
+                                <span class="status-badge warning">MENUNGGU</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bottom-section">
+                <div class="card table-card">
                     <h4>Stock</h4>
                     <table>
                         <thead>
@@ -126,11 +147,14 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="flex-td"><img src="https://via.placeholder.com/30" alt="icon"> Kembang Kapas</td>
+                                <td class="product-cell">
+                                    <img src="https://via.placeholder.com/30" alt="Batik">
+                                    Kembang Kapas
+                                </td>
                                 <td>BT-KK-26</td>
                                 <td>Batik</td>
-                                <td class="red-text">0</td>
-                                <td><span class="badge red">Stok Habis</span></td>
+                                <td class="text-red">0</td>
+                                <td><span class="status-pill red">● Stok Habis</span></td>
                                 <td><i data-lucide="more-vertical"></i></td>
                             </tr>
                         </tbody>
@@ -139,9 +163,6 @@
             </section>
         </main>
     </div>
-
-    
-
     <script src="../../js/navigasiAdmin.js"></script>
     <script>lucide.createIcons();</script>
 </body>

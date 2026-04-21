@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin</title>
+    <link rel="stylesheet" href="../../css/navadmin.css">
+    <link rel="stylesheet" href="../../css/kelolaAkun.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Welcome Admin</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="dasboardAdmin.html" class="nav-item active" data-target="dashboard">
+                    <i data-lucide="layout-dashboard"></i> Dashboard
+                </a>
+                <a href="produk.html" class="nav-item" data-target="produk">
+                    <i data-lucide="package"></i> Produk
+                </a>
+                <a href="listPesanan.html" class="nav-item" data-target="pesanan">
+                    <i data-lucide="clipboard-list"></i> List Pesanan
+                </a>
+                <a href="kelolaStok.html" class="nav-item" data-target="laporan">
+                    <i data-lucide="bar-chart-3"></i> Kelola Stok
+                </a>
+                <a href="kelolaAkun.html" class="nav-item" data-target="akun">
+                    <i data-lucide="user-cog"></i> Kelola Akun
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item logout">
+                    <i data-lucide="log-out"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1 id="page-title">Kelola Akun</h1>
+                    <div class="user-profile">
+                        <div class="notif-icon"><i data-lucide="bell"></i></div>
+                        <div class="profile-info">
+                            <div class="text-profile">
+                                <span class="name">Nama</span>
+                                <span class="role">Admin</span>
+                            </div>
+                            <div class="avatar"><i data-lucide="user-circle"></i></div>
+                        </div>
+                    </div>
+            </header>
+    <section class="account-section">
+        <div class="card table-card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PROFILE</th>
+                            <th>USERNAME</th>
+                            <th>EMAIL</th>
+                            <th>ROLE</th>
+                            <th>STATUS</th>
+                            <th>BERGABUNG</th>
+                            <th>EDIT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><div class="profile-circle"></div></td>
+                            <td><strong>admin</strong></td>
+                            <td>admin11@gmail.com</td>
+                            <td><span class="badge badge-admin">Admin</span></td>
+                            <td><span class="badge badge-active">Aktif</span></td>
+                            <td>12 Okt 2023</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="btn-edit"><i data-lucide="pencil"></i></button>
+                                    <button class="btn-delete"><i data-lucide="trash-2"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div class="profile-circle"></div></td>
+                            <td><strong>sarah</strong></td>
+                            <td>sarah.s@gmail.com</td>
+                            <td><span class="badge badge-admin">Admin</span></td>
+                            <td><span class="badge badge-active">Aktif</span></td>
+                            <td>05 Nov 2023</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="btn-edit"><i data-lucide="pencil"></i></button>
+                                    <button class="btn-delete"><i data-lucide="trash-2"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div class="profile-circle"></div></td>
+                            <td><strong>budi_santoso</strong></td>
+                            <td>budi2@gmail.com</td>
+                            <td><span class="badge badge-customer">Customer</span></td>
+                            <td><span class="badge badge-inactive">Nonaktif</span></td>
+                            <td>20 Jan 2024</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="btn-edit"><i data-lucide="pencil"></i></button>
+                                    <button class="btn-delete"><i data-lucide="trash-2"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div class="profile-circle"></div></td>
+                            <td><strong>mila</strong></td>
+                            <td>mila22@gmail.com</td>
+                            <td><span class="badge badge-customer">Customer</span></td>
+                            <td><span class="badge badge-active">Aktif</span></td>
+                            <td>14 Feb 2024</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="btn-edit"><i data-lucide="pencil"></i></button>
+                                    <button class="btn-delete"><i data-lucide="trash-2"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination-container">
+                <p>Menampilkan 4 dari 10 user</p>
+                <div class="pagination">
+                    <button class="page-btn"><i data-lucide="chevron-left"></i></button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <span>...</span>
+                    <button class="page-btn">4</button>
+                    <button class="page-btn"><i data-lucide="chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+    </div>
+    <script src="../../js/navigasiAdmin.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

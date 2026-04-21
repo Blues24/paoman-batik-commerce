@@ -15,19 +15,19 @@
                 <h2>Welcome Admin</h2>
             </div>
             <nav class="nav-menu">
-                <a href="dasboardAdmin.html" class="nav-item">
+                <a href="dasboardAdmin.html" class="nav-item active" data-target="dashboard">
                     <i data-lucide="layout-dashboard"></i> Dashboard
                 </a>
-                <a href="produk.html" class="nav-item">
+                <a href="produk.html" class="nav-item" data-target="produk">
                     <i data-lucide="package"></i> Produk
                 </a>
-                <a href="listPesanan.html" class="nav-item active">
+                <a href="listPesanan.html" class="nav-item" data-target="pesanan">
                     <i data-lucide="clipboard-list"></i> List Pesanan
                 </a>
-                <a href="laporan.html" class="nav-item">
-                    <i data-lucide="bar-chart-3"></i> Laporan Penjualan
+                <a href="kelolaStok.html" class="nav-item" data-target="laporan">
+                    <i data-lucide="bar-chart-3"></i> Kelola Stok
                 </a>
-                <a href="akun.html" class="nav-item">
+                <a href="kelolaAkun.html" class="nav-item" data-target="akun">
                     <i data-lucide="user-cog"></i> Kelola Akun
                 </a>
             </nav>
@@ -40,26 +40,24 @@
 
         <main class="main-content">
             <header class="top-bar">
-                <div class="title-section">
-                    <h1>Daftar Pesanan</h1>
-                    <div class="filter-pills">
+                <h1 id="page-title">List Pesanan</h1>
+                <div class="filter-pills">
                         <button class="pill active">Semua Pesanan</button>
                         <button class="pill">Diproses</button>
                         <button class="pill">Dalam Pengiriman</button>
                         <button class="pill">Selesai</button>
                         <button class="pill">Dibatalkan</button>
                     </div>
-                </div>
-                <div class="user-profile">
-                    <div class="notif-icon"><i data-lucide="bell"></i></div>
-                    <div class="profile-info">
-                        <div class="text-profile">
-                            <span class="name">Nama</span>
-                            <span class="role">Admin</span>
+                    <div class="user-profile">
+                        <div class="notif-icon"><i data-lucide="bell"></i></div>
+                        <div class="profile-info">
+                            <div class="text-profile">
+                                <span class="name">Nama</span>
+                                <span class="role">Admin</span>
+                            </div>
+                            <div class="avatar"><i data-lucide="user-circle"></i></div>
                         </div>
-                        <div class="avatar"><i data-lucide="user-circle"></i></div>
                     </div>
-                </div>
             </header>
 
             <div class="action-row">
