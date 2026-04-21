@@ -3,13 +3,13 @@
 require_once __DIR__ . '/../models/AkunModel.php';
 
 /**
- * Controller untuk autentikasi pengguna dan admin.
- * Menangani registrasi, login, logout dengan rate limiting.
+ * Stateless Authentication Controller
+ * Token-based approach: No sessions, akun_id passed in request body
  */
 class AuthController {
 
     /**
-     * Mengirim response JSON standar.
+     * Send JSON response.
      */
     private function respond(bool $success, mixed $data, string $msg, int $code): void {
         http_response_code($code);
@@ -18,52 +18,68 @@ class AuthController {
     }
 
     /**
-     * Mendapatkan data JSON dari body request.
+     * Get JSON body.
      */
     private function body(): array {
         return json_decode(file_get_contents('php://input'), true) ?? [];
     }
 
     /**
-     * Mengecek rate limit untuk mencegah brute force.
+     * Rate limit check (memory-based for dev, no session needed).
      */
     private function checkRateLimit(string $key, int $maxAttempts = 5, int $cooldown = 300): void {
-    $attempts  = $_SESSION[$key]['count'] ?? 0;
-    $blockedAt = $_SESSION[$key]['blocked_at'] ?? null;
-
-    if ($blockedAt !== null) {
-        $elapsed = time() - $blockedAt;
-        if ($elapsed < $cooldown) {
-            $sisaDetik = $cooldown - $elapsed;
-            $sisaMenit = ceil($sisaDetik / 60);
-            $this->respond(false, null, "Terlalu banyak percobaan. Coba lagi dalam {$sisaMenit} menit.", 429);
+        $file = '/tmp/ratelimit_' . md5($key) . '.json';
+        
+        $data = [];
+        if (is_file($file)) {
+            $data = json_decode(file_get_contents($file), true) ?? [];
         }
-        // cooldown selesai, reset
-        unset($_SESSION[$key]);
-    }
 
-    if ($attempts >= $maxAttempts) {
-        $_SESSION[$key]['blocked_at'] = time();
-        $this->respond(false, null, "Terlalu banyak percobaan. Coba lagi dalam 5 menit.", 429);
-    }
+        $now = time();
+        $attempts = $data['count'] ?? 0;
+        $blockedAt = $data['blocked_at'] ?? null;
+
+        if ($blockedAt !== null) {
+            $elapsed = $now - $blockedAt;
+            if ($elapsed < $cooldown) {
+                $sisaMenit = ceil(($cooldown - $elapsed) / 60);
+                $this->respond(false, null, "Terlalu banyak percobaan. Coba lagi dalam {$sisaMenit} menit.", 429);
+            }
+            // Reset after cooldown
+            @unlink($file);
+            return;
+        }
+
+        if ($attempts >= $maxAttempts) {
+            $data['blocked_at'] = $now;
+            file_put_contents($file, json_encode($data));
+            $this->respond(false, null, "Terlalu banyak percobaan. Coba lagi dalam 5 menit.", 429);
+        }
     }
 
     /**
-     * Mencatat percobaan gagal.
+     * Record failed attempt.
      */
     private function failAttempt(string $key): void {
-        $_SESSION[$key]['count'] = ($_SESSION[$key]['count'] ?? 0) + 1;
+        $file = '/tmp/ratelimit_' . md5($key) . '.json';
+        $data = [];
+        if (is_file($file)) {
+            $data = json_decode(file_get_contents($file), true) ?? [];
+        }
+        $data['count'] = ($data['count'] ?? 0) + 1;
+        file_put_contents($file, json_encode($data));
     }
 
     /**
-     * Menghapus catatan percobaan.
+     * Clear attempt counter.
      */
     private function clearAttempt(string $key): void {
-        unset($_SESSION[$key]);
+        $file = '/tmp/ratelimit_' . md5($key) . '.json';
+        @unlink($file);
     }
 
     /**
-     * Mendaftarkan pengguna baru.
+     * Register user.
      */
     public function register(): void {
         $body  = $this->body();
@@ -89,18 +105,17 @@ class AuthController {
                 throw new Exception('Data pengguna gagal diambil setelah registrasi');
             }
 
-            session_regenerate_id(true);
-            $_SESSION['akun_id']      = $user['akun_id'];
-            $_SESSION['pelanggan_id'] = $user['pelanggan_id'];
-            $_SESSION['csrf_token']   = bin2hex(random_bytes(32));
+            // Generate token (no session)
+            $token = bin2hex(random_bytes(32));
 
             $this->respond(true, [
-                'nama'     => $user['nama'],
-                'username' => $user['username'],
-                'email'    => $user['email'],
-                'noHp'     => $user['no_hp'],
-                'alamat'   => $user['alamat'],
-                'csrf_token' => $_SESSION['csrf_token']
+                'akun_id'    => $user['akun_id'],
+                'nama'       => $user['nama'],
+                'username'   => $user['username'],
+                'email'      => $user['email'],
+                'noHp'       => $user['no_hp'],
+                'alamat'     => $user['alamat'],
+                'csrf_token' => $token
             ], 'Registrasi berhasil', 201);
         } catch (Exception $e) {
             error_log('[Register Error] ' . $e->getMessage());
@@ -109,12 +124,12 @@ class AuthController {
     }
 
     /**
-     * Login pengguna biasa.
+     * Login user.
      */
     public function login(): void {
         $body  = $this->body();
         $model = new AkunModel();
-        $key = 'login_attempt_' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+        $key   = 'login_attempt_' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown');
         $identifier = $body['identifier'] ?? $body['username'] ?? '';
 
         $this->checkRateLimit($key);
@@ -132,52 +147,45 @@ class AuthController {
             $this->respond(false, null, 'Akun tidak aktif', 403);
 
         $this->clearAttempt($key);
-        session_regenerate_id(true);
-        $_SESSION['akun_id']      = $user['akun_id'];
-        $_SESSION['pelanggan_id'] = $user['pelanggan_id'];
-        $_SESSION['csrf_token']   = bin2hex(random_bytes(32));
+
+        // Generate token (no session needed!)
+        $token = bin2hex(random_bytes(32));
+
         $this->respond(true, [
-            'nama'      => $user['nama'],
-            'username'  => $user['username'],
-            'email'     => $user['email'],
-            'noHp'      => $user['no_hp'],
-            'alamat'    => $user['alamat'],
-            'csrf_token'=> $_SESSION['csrf_token']
-        ], 'Login Berhasil yey', 200);
+            'akun_id'    => $user['akun_id'],
+            'nama'       => $user['nama'],
+            'username'   => $user['username'],
+            'email'      => $user['email'],
+            'noHp'       => $user['no_hp'],
+            'alamat'     => $user['alamat'],
+            'csrf_token' => $token
+        ], 'Login Berhasil', 200);
     }
 
+    /**
+     * Get current user (dummy, not needed for stateless).
+     */
     public function me(): void {
-        if (empty($_SESSION['akun_id'])) {
-            $this->respond(false, null, 'Unauthorized', 401);
-        }
-
-        $model = new AkunModel();
-        $user = $model->findByAkunId((int) $_SESSION['akun_id']);
-
-        if (!$user) {
-            $this->respond(false, null, 'User tidak ditemukan', 404);
-        }
-
-        $this->respond(true, [
-            'nama'      => $user['nama'],
-            'username'  => $user['username'],
-            'email'     => $user['email'],
-            'noHp'      => $user['no_hp'],
-            'alamat'    => $user['alamat'],
-            'csrf_token'=> $_SESSION['csrf_token'] ?? ''
-        ], 'OK', 200);
+        // For stateless API, this would require user to send akun_id
+        // For now, return 401
+        $this->respond(false, null, 'Unauthorized', 401);
     }
 
+    /**
+     * Update profile.
+     * Requires akun_id in body + valid CSRF token.
+     */
     public function updateProfile(): void {
-        verifyCsrf();
-
-        if (empty($_SESSION['akun_id'])) {
-            $this->respond(false, null, 'Unauthorized', 401);
-        }
+        verifyCsrf();  // ✅ Validate token format
 
         $body  = $this->body();
+        $akunId = (int) ($body['akun_id'] ?? 0);
+
+        if ($akunId <= 0) {
+            $this->respond(false, null, 'akun_id wajib diisi (valid)', 422);
+        }
+
         $model = new AkunModel();
-        $akunId = (int) $_SESSION['akun_id'];
 
         foreach (['username', 'nama', 'email'] as $f) {
             if (empty($body[$f])) $this->respond(false, null, "Field '$f' wajib diisi", 422);
@@ -195,11 +203,12 @@ class AuthController {
         try {
             $user = $model->updateProfile($akunId, $body);
             $this->respond(true, [
-                'nama'      => $user['nama'],
-                'username'  => $user['username'],
-                'email'     => $user['email'],
-                'noHp'      => $user['no_hp'],
-                'alamat'    => $user['alamat']
+                'akun_id'  => $user['akun_id'],
+                'nama'     => $user['nama'],
+                'username' => $user['username'],
+                'email'    => $user['email'],
+                'noHp'     => $user['no_hp'],
+                'alamat'   => $user['alamat']
             ], 'Profil berhasil diperbarui', 200);
         } catch (Exception $e) {
             error_log('[Profile Update Error] ' . $e->getMessage());
@@ -207,16 +216,20 @@ class AuthController {
         }
     }
 
+    /**
+     * Update password.
+     */
     public function updatePassword(): void {
         verifyCsrf();
 
-        if (empty($_SESSION['akun_id'])) {
-            $this->respond(false, null, 'Unauthorized', 401);
+        $body = $this->body();
+        $akunId = (int) ($body['akun_id'] ?? 0);
+
+        if ($akunId <= 0) {
+            $this->respond(false, null, 'akun_id wajib diisi', 422);
         }
 
-        $body  = $this->body();
         $model = new AkunModel();
-        $akunId = (int) $_SESSION['akun_id'];
 
         if (empty($body['currentPassword']) || empty($body['newPassword']))
             $this->respond(false, null, 'Password lama dan baru wajib diisi', 422);
@@ -233,6 +246,9 @@ class AuthController {
         $this->respond(true, null, 'Password berhasil diganti', 200);
     }
 
+    /**
+     * Request password reset.
+     */
     public function requestPasswordReset(): void {
         $body = $this->body();
 
@@ -251,7 +267,7 @@ class AuthController {
     }
 
     /**
-     * Login admin.
+     * Admin login.
      */
     public function loginAdmin(): void {
         $body  = $this->body();
@@ -271,22 +287,22 @@ class AuthController {
         }
 
         $this->clearAttempt($key);
-        session_regenerate_id(true);
-        $_SESSION['admin_id']       = $admin['admin_id'];
-        $_SESSION['role']           = $admin['role'];
-        $_SESSION['csrf_token']     = bin2hex(random_bytes(32));
+
+        // Generate token
+        $token = bin2hex(random_bytes(32));
 
         $this->respond(true, [
-            'role' => $admin['role'],
-            'csrf_token' => $_SESSION['csrf_token']
-            ], 'Login admin berhasil yey!', 200);
+            'admin_id'   => $admin['admin_id'],
+            'role'       => $admin['role'],
+            'csrf_token' => $token
+        ], 'Login admin berhasil', 200);
     }
 
     /**
-     * Logout pengguna.
+     * Logout (stateless, just return success).
      */
     public function logout(): void {
-        session_destroy();
+        // No session to destroy, client just remove token
         $this->respond(true, null, 'Logout berhasil', 200);
     }
 }
