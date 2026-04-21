@@ -69,7 +69,7 @@ function getRedirectTarget() {
     return params.get("redirect") || "pembelian.html";
 }
 
-document.querySelector("#login form").addEventListener("submit", async (event) => {
+document.querySelector("#login").addEventListener("submit", async (event) => {
     event.preventDefault();
     clearMessage();
 

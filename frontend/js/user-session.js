@@ -3,7 +3,21 @@ const CURRENT_USER_KEY = 'batikPaomanCurrentUser';
 
 function getStoredUser() {
     try {
-        return JSON.parse(sessionStorage.getItem(CURRENT_USER_KEY)) || null;
+        // Try sessionStorage first
+        let user = JSON.parse(sessionStorage.getItem(CURRENT_USER_KEY));
+        if (user) return user;
+
+        // Fallback ke localStorage
+        user = JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+        if (user) {
+            // Sync back ke sessionStorage
+            sessionStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+            const csrfToken = localStorage.getItem('csrf_token');
+            if (csrfToken) {
+                sessionStorage.setItem('csrf_token', csrfToken);
+            }
+        }
+        return user || null;
     } catch {
         return null;
     }
@@ -13,30 +27,39 @@ function setStoredUser(user) {
     if (!user) {
         sessionStorage.removeItem(CURRENT_USER_KEY);
         sessionStorage.removeItem('csrf_token');
+        localStorage.removeItem(CURRENT_USER_KEY);
+        localStorage.removeItem('csrf_token');
         return;
     }
 
+    // Set ke BOTH sessionStorage dan localStorage
     sessionStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
 
     if (user.csrf_token) {
         sessionStorage.setItem('csrf_token', user.csrf_token);
+        localStorage.setItem('csrf_token', user.csrf_token);
     }
 }
 
 function clearStoredUser() {
     sessionStorage.removeItem(CURRENT_USER_KEY);
     sessionStorage.removeItem('csrf_token');
+    localStorage.removeItem(CURRENT_USER_KEY);
+    localStorage.removeItem('csrf_token');
 }
 
 async function apiFetch(endpoint, options = {}) {
+    const { headers, ...otherOptions} = options;
     const response = await fetch(`${API_URL}${endpoint}`, {
         credentials: 'include',
+        ...otherOptions, // Masukkan method, body, dll disini
         headers: {
             'Content-Type': 'application/json',
-            ...(options.headers || {})
-        },
-        ...options
-    });
+            'X-CSRF-Token': sessionStorage.getItem('csrf_token') || '', // Mengambil CSRF token
+            ...headers // Timpa  headers jika ada yang memakai header spesifik
+        }
+    })
 
     const data = await response.json().catch(() => null);
     return { response, data };
@@ -100,11 +123,13 @@ async function fetchCurrentUser() {
 }
 
 async function updateProfile(payload) {
+    const user = getStoredUser();
     const { response, data } = await apiFetch('/auth/profile', {
         method: 'PUT',
-        credentials: 'include',
-        headers: getHeaders(),
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+            ...payload,
+            akun_id: user.akun_id
+        })
     });
 
     if (!response.ok || !data?.success) {
@@ -118,7 +143,6 @@ async function updateProfile(payload) {
 async function updatePassword({ currentPassword, newPassword }) {
     const { response, data } = await apiFetch('/auth/password', {
         method: 'POST',
-        headers: getHeaders(),
         body: JSON.stringify({ currentPassword, newPassword })
     });
 
@@ -137,7 +161,7 @@ async function requestPasswordReset(identifier) {
 async function createOrder(items) {
     const { response, data } = await apiFetch('/pesanan', {
         method: 'POST',
-        headers: getHeaders(),
+        
         body: JSON.stringify({ items })
     });
 
