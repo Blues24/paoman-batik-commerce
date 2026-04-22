@@ -1,68 +1,22 @@
 const CART_KEY = "batikPaomanCart";
-const API_URL = 'http://localhost:8000/api';
 
-let produkBatik = [];
-
-const productImageMap = {
-    1: "../img/batik1.jpg",
-    2: "../img/batik2.jpg",
-    3: "../img/baju1.png",
-    4: "../img/batik4.jpg",
-    5: "../img/batik5.jpg",
-    6: "../img/baju2.png",
-    7: "../img/batik7.jpg",
-    8: "../img/baju3.png",
-    9: "../img/batik9.jpg",
-    10: "../img/baju4.png",
-    11: "../img/batik1.jpg",
-    12: "../img/baju5.png",
-    13: "../img/baju6.png",
-    14: "../img/baju7.png",
-    15: "../img/batik5.jpg"
-};
-
-async function fetchProducts() {
-    try {
-        const response = await fetch(`${API_URL}/produk`, { credentials: 'include' });
-        const data = await response.json();
-
-        if (!response.ok || !data?.success) {
-            throw new Error(data?.message || 'Gagal memuat produk.');
-        }
-
-        produkBatik = data.data.map((item) => ({
-            id: item.produk_id,
-            nama: item.nama_produk,
-            kategori: item.nama_jenis?.toLowerCase().includes('kain') ? 'kain' : 'pakaian',
-            harga: Number(item.harga_mulai) || 0,
-            tag: '',
-            image: productImageMap[item.produk_id] || '../img/batik1.jpg'
-        }));
-        filteredProducts = [...produkBatik];
-        renderProduk();
-    } catch (error) {
-        console.error(error);
-        // Jika gagal, produk bisa tetap kosong dan halaman menunjukkan empty state.
-        filteredProducts = [];
-        renderProduk();
-    }
-}
-
-async function fetchProductDetail(produkId) {
-    try {
-        const response = await fetch(`${API_URL}/produk/${produkId}`, { credentials: 'include' });
-        const data = await response.json();
-
-        if (!response.ok || !data?.success) {
-            throw new Error(data?.message || 'Gagal memuat detail produk.');
-        }
-
-        return data.data;
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
-}
+const produkBatik = [
+    { id: 1, nama: "Kain Batik Motif Biru Pesisir", kategori: "kain", harga: 50000, tag: "Produk Terlaris", image: "../img/batik1.jpg" },
+    { id: 2, nama: "Kain Batik Motif Godong Asem", kategori: "kain", harga: 50000, tag: "", image: "../img/batik2.jpg" },
+    { id: 3, nama: "Baju Batik Motif Kentangan", kategori: "pakaian", harga: 100000, tag: "Produk Baru", image: "../img/baju1.png" },
+    { id: 4, nama: "Kain Batik Motif Mangga Bambu", kategori: "kain", harga: 65000, tag: "", image: "../img/batik4.jpg" },
+    { id: 5, nama: "Kain Batik Motif Kembang Gunda", kategori: "kain", harga: 65000, tag: "", image: "../img/batik5.jpg" },
+    { id: 6, nama: "Kemeja Batik Motif Kembang Paoman", kategori: "pakaian", harga: 100000, tag: "", image: "../img/baju2.png" },
+    { id: 7, nama: "Kain Batik Motif Lereng Paoman", kategori: "kain", harga: 75000, tag: "", image: "../img/batik7.jpg" },
+    { id: 8, nama: "Blus Batik Motif Pesisir Laut", kategori: "pakaian", harga: 120000, tag: "", image: "../img/baju3.png" },
+    { id: 9, nama: "Kain Batik Motif Daun Nila", kategori: "kain", harga: 85000, tag: "", image: "../img/batik9.jpg" },
+    { id: 10, nama: "Kemeja Batik Motif Kawung Laut", kategori: "pakaian", harga: 135000, tag: "", image: "../img/baju4.png" },
+    { id: 11, nama: "Kain Batik Motif Biru Pesisir Premium", kategori: "kain", harga: 90000, tag: "", image: "../img/batik1.jpg" },
+    { id: 12, nama: "Outer Batik Motif Godong Asem", kategori: "pakaian", harga: 145000, tag: "", image: "../img/baju5.png" },
+    { id: 13, nama: "Tunik Batik Motif Kentangan", kategori: "pakaian", harga: 95000, tag: "", image: "../img/baju6.png" },
+    { id: 14, nama: "Dress Batik Motif Mangga Bambu", kategori: "pakaian", harga: 150000, tag: "", image: "../img/baju7.png" },
+    { id: 15, nama: "Kain Batik Motif Kembang Gunda Premium", kategori: "kain", harga: 110000, tag: "", image: "../img/batik5.jpg" }
+];
 
 const itemPerPage = 6;
 let currentPage = 1;
@@ -116,12 +70,18 @@ function updateCartCount() {
 }
 
 function showCartConfirmation(productName) {
+    if (!cartConfirmOverlay || !cartConfirmMessage) {
+        return;
+    }
+
     cartConfirmMessage.textContent = `${productName} sudah masuk ke keranjang. Mau lanjut belanja atau buka keranjang sekarang?`;
     cartConfirmOverlay.classList.remove("d-none");
 }
 
 function hideCartConfirmation() {
-    cartConfirmOverlay.classList.add("d-none");
+    if (cartConfirmOverlay) {
+        cartConfirmOverlay.classList.add("d-none");
+    }
 }
 
 function getSelectedCategories() {
@@ -164,7 +124,6 @@ function renderProduk() {
 
     emptyState.classList.add("d-none");
 
-    // Produk dibagi per halaman supaya katalog tetap rapi.
     const startIndex = (currentPage - 1) * itemPerPage;
     const visibleProducts = filteredProducts.slice(startIndex, startIndex + itemPerPage);
 
@@ -195,7 +154,6 @@ function renderProduk() {
 }
 
 function applyFilters() {
-    // Filter digabung dari search, kategori, dan batas harga.
     const keyword = searchInput ? searchInput.value.trim().toLowerCase() : "";
     const maxHarga = Number(priceRange.value);
     const selectedCategories = getSelectedCategories();
@@ -236,33 +194,25 @@ function syncSemuaProduk(triggeredInput) {
     }
 }
 
-async function tambahKeKeranjang(productId) {
+function tambahKeKeranjang(productId) {
     const selectedProduct = produkBatik.find((product) => product.id === productId);
 
     if (!selectedProduct) {
         return;
     }
 
-    const detail = await fetchProductDetail(productId);
-    const selectedVariant = detail?.varian?.[0];
-
-    if (!selectedVariant) {
-        alert('Tidak dapat menemukan varian produk. Coba lagi nanti.');
-        return;
-    }
-
     const cartItems = getCartItems();
-    const existingItem = cartItems.find((item) => item.id === productId && item.detail_batik_id === selectedVariant.detail_batik_id);
+    const existingItem = cartItems.find((item) => item.id === productId);
 
     if (existingItem) {
         existingItem.qty += 1;
     } else {
         cartItems.push({
             id: selectedProduct.id,
-            detail_batik_id: selectedVariant.detail_batik_id,
+            detail_batik_id: selectedProduct.id,
             nama: selectedProduct.nama,
             kategori: selectedProduct.kategori,
-            harga: Number(selectedVariant.harga),
+            harga: selectedProduct.harga,
             image: selectedProduct.image,
             qty: 1
         });
@@ -277,10 +227,12 @@ if (searchInput) {
     searchInput.addEventListener("input", applyFilters);
 }
 
-priceRange.addEventListener("input", (event) => {
-    priceValue.textContent = formatRingkas(Number(event.target.value));
-    applyFilters();
-});
+if (priceRange) {
+    priceRange.addEventListener("input", (event) => {
+        priceValue.textContent = formatRingkas(Number(event.target.value));
+        applyFilters();
+    });
+}
 
 categoryFilters.forEach((input) => {
     input.addEventListener("change", (event) => {
@@ -302,45 +254,51 @@ pageButtons.forEach((button) => {
     });
 });
 
-prevPageButton.addEventListener("click", () => {
-    if (currentPage === 1) {
-        return;
-    }
+if (prevPageButton) {
+    prevPageButton.addEventListener("click", () => {
+        if (currentPage === 1) {
+            return;
+        }
 
-    currentPage -= 1;
-    renderProduk();
-});
+        currentPage -= 1;
+        renderProduk();
+    });
+}
 
-nextPageButton.addEventListener("click", () => {
-    if (currentPage === getTotalPages()) {
-        return;
-    }
+if (nextPageButton) {
+    nextPageButton.addEventListener("click", () => {
+        if (currentPage === getTotalPages()) {
+            return;
+        }
 
-    currentPage += 1;
-    renderProduk();
-});
+        currentPage += 1;
+        renderProduk();
+    });
+}
 
-continueShoppingBtn.addEventListener("click", hideCartConfirmation);
+if (continueShoppingBtn) {
+    continueShoppingBtn.addEventListener("click", hideCartConfirmation);
+}
 
-cartConfirmOverlay.addEventListener("click", (event) => {
-    if (event.target === cartConfirmOverlay) {
-        hideCartConfirmation();
-    }
-});
-
-// Muat produk dari API saat halaman dibuka.
-if (productGrid) {
-    fetchProducts();
+if (cartConfirmOverlay) {
+    cartConfirmOverlay.addEventListener("click", (event) => {
+        if (event.target === cartConfirmOverlay) {
+            hideCartConfirmation();
+        }
+    });
 }
 
 document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !cartConfirmOverlay.classList.contains("d-none")) {
+    if (event.key === "Escape" && cartConfirmOverlay && !cartConfirmOverlay.classList.contains("d-none")) {
         hideCartConfirmation();
     }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    priceValue.textContent = formatRingkas(Number(priceRange.value));
+    if (priceValue && priceRange) {
+        priceValue.textContent = formatRingkas(Number(priceRange.value));
+    }
+
     updateCartCount();
-    renderProduk();
+    applyFilters();
 });
