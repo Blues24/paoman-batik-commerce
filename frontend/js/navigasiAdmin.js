@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const href = item.getAttribute('href');
 
         // 1. Logika untuk menentukan menu mana yang "Active" berdasarkan URL
-        if (page === href || (page === '' && href === 'dashboard.html')) {
+        if (page === href || (page === '' && href === '../../src/admin/dasboard.html')) {
             item.classList.add('active');
         } else {
             item.classList.remove('active');
