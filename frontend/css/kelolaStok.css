@@ -253,3 +253,53 @@ td {
     background: var(--primary-blue);
     color: white;
 }
+
+/* Modal Styling */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.close-modal {
+    background: none; border: none; font-size: 24px; cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block; font-size: 13px; margin-bottom: 5px; color: var(--text-muted);
+}
+
+.form-group input {
+    width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px;
+}
+
+.modal-footer {
+    display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;
+}
+
+.btn-secondary {
+    background: #e5e7eb; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer;
+}
