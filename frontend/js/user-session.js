@@ -172,10 +172,49 @@ async function getCurrentUserOrders() {
     const { response, data } = await apiFetch('/pesanan/saya');
 
     if (!response.ok || !data?.success) {
-        return [];
+        return {
+            success: false,
+            message: data?.message || 'Gagal memuat riwayat pesanan.',
+            data: []
+        };
     }
 
-    return data.data;
+    return {
+        success: true,
+        message: data.message || 'Riwayat pesanan berhasil dimuat.',
+        data: data.data || []
+    };
+}
+
+async function getOrderDetail(pesananId) {
+    const { response, data } = await apiFetch(`/pesanan/${pesananId}`);
+
+    if (!response.ok || !data?.success) {
+        return {
+            success: false,
+            message: data?.message || 'Gagal memuat detail pesanan.',
+            data: null
+        };
+    }
+
+    return {
+        success: true,
+        message: data.message || 'Detail pesanan berhasil dimuat.',
+        data: data.data || null
+    };
+}
+
+async function submitReview(payload) {
+    const { response, data } = await apiFetch('/ulasan', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+    });
+
+    return {
+        success: response.ok && data?.success,
+        message: data?.message || 'Gagal mengirim ulasan.',
+        data: data?.data || null
+    };
 }
 
 window.UserSession = {
@@ -188,5 +227,7 @@ window.UserSession = {
     updatePassword,
     requestPasswordReset,
     createOrder,
-    getCurrentUserOrders
+    getCurrentUserOrders,
+    getOrderDetail,
+    submitReview
 };

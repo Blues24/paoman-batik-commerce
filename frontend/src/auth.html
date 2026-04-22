@@ -24,7 +24,7 @@
             </div>
 
             <div id="login" class="tab-content active">
-                <form>
+                <form id="loginForm">
                     <div class="input-group">
                         <label>Username atau Email<span class="required">*</span></label>
                         <input type="text" id="login-input" placeholder="Username atau Email" required>
@@ -49,7 +49,7 @@
             </div>
 
             <div id="register" class="tab-content">
-                <form>
+                <form id="registerForm">
                     <div class="input-group">
                         <label>Nama Lengkap<span class="required">*</span></label>
                         <input type="text" id="register-nama" placeholder="Nama Lengkap" required>
@@ -99,7 +99,7 @@
             </div>
 
             <div id="reset" class="tab-content">
-                <form>
+                <form id="resetForm" class="reset-form">
                     <div class="input-group">
                         <label>Username atau Email<span class="required">*</span></label>
                         <input type="text" id="reset-input" placeholder="Masukkan username atau email" required>
@@ -107,14 +107,27 @@
 
                     <p class="helper-text">Mode ini masih simulasi frontend. Sistem akan menyimpan permintaan reset di browser untuk kebutuhan demo.</p>
 
+                    <div class="reset-info-box">
+                        <div class="reset-info-item">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Permintaan reset akan disimpan untuk simulasi akun di browser.</span>
+                        </div>
+                        <div class="reset-info-item">
+                            <i class="bi bi-person-check"></i>
+                            <span>Gunakan email atau username yang sama dengan akun yang sudah terdaftar.</span>
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn-submit">Kirim Reset Sandi</button>
                 </form>
             </div>
         </div>
+
+        <p id="authMessage" class="auth-message" aria-live="polite"></p>
     </div>
 
     
-    <script src="../js/user-session.js"></script>
-    <script src="../js/auth.js"></script>
+    <script src="../js/user-session.js?v=20260422"></script>
+    <script src="../js/auth.js?v=20260422"></script>
 </body>
 </html>

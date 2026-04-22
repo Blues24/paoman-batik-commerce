@@ -1,11 +1,8 @@
 function showMessage(message, type = "error") {
-    let messageBox = document.getElementById("authMessage");
+    const messageBox = document.getElementById("authMessage");
 
     if (!messageBox) {
-        messageBox = document.createElement("p");
-        messageBox.id = "authMessage";
-        messageBox.className = "auth-message";
-        document.querySelector(".auth-card").appendChild(messageBox);
+        return;
     }
 
     messageBox.textContent = message;
@@ -14,54 +11,51 @@ function showMessage(message, type = "error") {
 
 function clearMessage() {
     const messageBox = document.getElementById("authMessage");
-    if (messageBox) {
-        messageBox.textContent = "";
-        messageBox.className = "auth-message";
-    }
-}
-
-function loginUser(credentials) {
-    return window.UserSession.loginUser(credentials);
-}
-
-function registerUser(payload) {
-    return window.UserSession.registerUser(payload);
-}
-
-function requestPasswordReset(identifier) {
-    return window.UserSession.requestPasswordReset(identifier);
-}
-
-function showError(msg){
-    let messageBox = document.getElementById('authMessage');
 
     if (!messageBox) {
-        messageBox = document.createElement('p');
-        messageBox.id = 'authMessage';
-        messageBox.className = 'auth-message';
-        document.querySelector('.auth-card').appendChild(messageBox);
+        return;
     }
 
-    messageBox.textContent = msg;
-    messageBox.className = 'auth-message error';
+    messageBox.textContent = "";
+    messageBox.className = "auth-message";
+}
+
+function updateModeInUrl(tabName) {
+    const url = new URL(window.location.href);
+
+    if (tabName === "register") {
+        url.searchParams.set("mode", "register");
+    } else if (tabName === "reset") {
+        url.searchParams.set("mode", "reset");
+    } else {
+        url.searchParams.delete("mode");
+    }
+
+    window.history.replaceState({}, "", url.toString());
+}
+
+function setActiveTab(tabName, syncUrl = true) {
+    document.querySelectorAll(".tab-content").forEach((tabPanel) => {
+        tabPanel.classList.toggle("active", tabPanel.id === tabName);
+    });
+
+    document.querySelectorAll(".tab").forEach((tabButton) => {
+        tabButton.classList.toggle("active", tabButton.dataset.tab === tabName);
+    });
+
+    clearMessage();
+
+    if (syncUrl) {
+        updateModeInUrl(tabName);
+    }
 }
 
 function openTab(event, tabName) {
-    // Satu halaman auth dipakai untuk login, daftar, dan reset sandi.
-    document.querySelectorAll(".tab-content").forEach((tab) => tab.classList.remove("active"));
-    document.querySelectorAll(".tab").forEach((tab) => tab.classList.remove("active"));
-
-    document.getElementById(tabName).classList.add("active");
-    event.currentTarget.classList.add("active");
-    clearMessage();
-}
-
-function activateTab(tabName) {
-    const selectedTab = document.querySelector(`.tab[data-tab="${tabName}"]`);
-
-    if (selectedTab) {
-        selectedTab.click();
+    if (event) {
+        event.preventDefault();
     }
+
+    setActiveTab(tabName);
 }
 
 function getRedirectTarget() {
@@ -69,10 +63,20 @@ function getRedirectTarget() {
     return params.get("redirect") || "pembelian.html";
 }
 
-document.querySelector("#login").addEventListener("submit", async (event) => {
+function setSubmitState(button, isLoading, idleLabel, loadingLabel) {
+    if (!button) {
+        return;
+    }
+
+    button.disabled = isLoading;
+    button.textContent = isLoading ? loadingLabel : idleLabel;
+}
+
+async function handleLoginSubmit(event) {
     event.preventDefault();
     clearMessage();
 
+    const submitButton = event.currentTarget.querySelector(".btn-submit");
     const identifier = document.getElementById("login-input").value.trim();
     const password = document.getElementById("login-pass").value;
 
@@ -81,21 +85,30 @@ document.querySelector("#login").addEventListener("submit", async (event) => {
         return;
     }
 
-    const result = await loginUser({ identifier, password });
+    setSubmitState(submitButton, true, "Masuk", "Memproses...");
 
-    if (!result.success) {
-        showMessage(result.message);
-        return;
+    try {
+        const result = await window.UserSession.loginUser({ identifier, password });
+
+        if (!result.success) {
+            showMessage(result.message);
+            return;
+        }
+
+        showMessage("Login berhasil, kamu akan diarahkan sebentar lagi.", "success");
+        window.location.href = getRedirectTarget();
+    } catch (error) {
+        showMessage("Terjadi kendala saat login. Coba lagi sebentar.");
+    } finally {
+        setSubmitState(submitButton, false, "Masuk", "Memproses...");
     }
+}
 
-    showMessage("Login berhasil, kamu akan diarahkan sebentar lagi.", "success");
-    window.location.href = getRedirectTarget();
-});
-
-document.querySelector("#register form").addEventListener("submit", async (event) => {
+async function handleRegisterSubmit(event) {
     event.preventDefault();
     clearMessage();
 
+    const submitButton = event.currentTarget.querySelector(".btn-submit");
     const nama = document.getElementById("register-nama").value.trim();
     const username = document.getElementById("register-username").value.trim();
     const email = document.getElementById("register-email").value.trim();
@@ -118,27 +131,36 @@ document.querySelector("#register form").addEventListener("submit", async (event
         return;
     }
 
-    const result = await registerUser({
-        nama,
-        username,
-        email,
-        noHp,
-        password
-    });
+    setSubmitState(submitButton, true, "Buat Akun", "Mendaftarkan...");
 
-    if (!result.success) {
-        showMessage(result.message);
-        return;
+    try {
+        const result = await window.UserSession.registerUser({
+            nama,
+            username,
+            email,
+            noHp,
+            password
+        });
+
+        if (!result.success) {
+            showMessage(result.message);
+            return;
+        }
+
+        showMessage("Akun berhasil dibuat. Kamu akan diarahkan sebentar lagi.", "success");
+        window.location.href = getRedirectTarget();
+    } catch (error) {
+        showMessage("Terjadi kendala saat daftar akun. Coba lagi sebentar.");
+    } finally {
+        setSubmitState(submitButton, false, "Buat Akun", "Mendaftarkan...");
     }
+}
 
-    showMessage("Akun berhasil dibuat. Kamu akan diarahkan sebentar lagi.", "success");
-    window.location.href = getRedirectTarget();
-});
-
-document.querySelector("#reset form").addEventListener("submit", async (event) => {
+async function handleResetSubmit(event) {
     event.preventDefault();
     clearMessage();
 
+    const submitButton = event.currentTarget.querySelector(".btn-submit");
     const identifier = document.getElementById("reset-input").value.trim();
 
     if (!identifier) {
@@ -146,68 +168,73 @@ document.querySelector("#reset form").addEventListener("submit", async (event) =
         return;
     }
 
-    const result = await requestPasswordReset(identifier);
+    setSubmitState(submitButton, true, "Kirim Reset Sandi", "Mengirim...");
 
-    if (!result.success) {
-        showMessage(result.message);
-        return;
-    }
-
-    showMessage(result.message, "success");
-});
-
-/**
- *  Logout Area
- *  User bisa logout
- */
-async function logout(){
     try {
-        await window.UserSession.logoutUser();
-    } catch (err) {
-        console.error('Tidak bisa logout karena: ', err);
-    }
+        const result = await window.UserSession.requestPasswordReset(identifier);
 
-    window.location.href = '../src/auth.html';
+        if (!result.success) {
+            showMessage(result.message);
+            return;
+        }
+
+        showMessage(result.message, "success");
+    } catch (error) {
+        showMessage("Permintaan reset belum berhasil. Coba lagi sebentar.");
+    } finally {
+        setSubmitState(submitButton, false, "Kirim Reset Sandi", "Mengirim...");
+    }
 }
 
-/**
- *               UPDATE USER PILL (dynamic display) 
- * Ini akan di-call dari setiap page yang butuh show user info
- */
-function updateUserPill(){
-    const userPill = document.querySelector('.user-pill');
-    if (!userPill) return;
+function initializePasswordToggles() {
+    document.querySelectorAll(".eye-toggle").forEach((button) => {
+        button.addEventListener("click", () => {
+            const input = document.getElementById(button.dataset.target);
 
-    const currentUser = window.UserSession.getCurrentUser();
+            if (!input) {
+                return;
+            }
 
-    if(currentUser){
-        userPill.innerHTML = `
-            <div class="user-meta">
-                <strong>${currentUser.nama || 'User'}</strong>
-                <button onclick="logout()" style="background:none; border:none; color:#666; cursor:pointer; font-size:12px;">Logout</button>
-            </div>
-            <div class="user-icon">
-                <i class="bi bi-person"></i>
-            </div>
-        `;
+            const isPassword = input.type === "password";
+            input.type = isPassword ? "text" : "password";
+            button.innerHTML = isPassword ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
+        });
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const mode = new URLSearchParams(window.location.search).get("mode");
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+    const resetForm = document.getElementById("resetForm");
+    const forgotLink = document.querySelector(".forgot-link");
+
+    if (loginForm) {
+        loginForm.addEventListener("submit", handleLoginSubmit);
+    }
+
+    if (registerForm) {
+        registerForm.addEventListener("submit", handleRegisterSubmit);
+    }
+
+    if (resetForm) {
+        resetForm.addEventListener("submit", handleResetSubmit);
+    }
+
+    if (forgotLink) {
+        forgotLink.addEventListener("click", (event) => {
+            event.preventDefault();
+            setActiveTab("reset");
+        });
+    }
+
+    initializePasswordToggles();
+
+    if (mode === "register") {
+        setActiveTab("register", false);
+    } else if (mode === "reset") {
+        setActiveTab("reset", false);
     } else {
-        userPill.innerHTML = `
-                <a href="../src/auth.html" style="text-decoration:none; color:inherit;">
-                <div class="user-meta">
-                    <strong>Guest</strong>
-                    <span style="font-size:12px;">Login dulu</span>
-                </div>
-                <div class="user-icon">
-                    <i class="bi bi-person"></i>
-                </div>
-            </a>
-        `
-    }
-}
-
-// Update user pill saat script load (untuk page lain, bukan auth page)
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.querySelector('.user-pill')) {
-        updateUserPill();
+        setActiveTab("login", false);
     }
 });
