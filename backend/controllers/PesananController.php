@@ -4,6 +4,7 @@ require_once __DIR__ . '/../models/PesananModel.php';
 
 /**
  * Controller untuk mengelola pesanan.
+ * Stateless approach: Accept akun_id/admin_id dari request body
  */
 class PesananController {
 
@@ -17,20 +18,38 @@ class PesananController {
     }
 
     /**
-     * Memastikan user adalah pelanggan yang login.
+     * Mendapatkan data dari body request.
      */
-    private function requirePelanggan(): int {
-        if (empty($_SESSION['pelanggan_id']))
-            $this->respond(false, null, 'Unauthorized: login dulu', 401);
-        return (int) $_SESSION['pelanggan_id'];
+    private function body(): array {
+        return json_decode(file_get_contents('php://input'), true) ?? [];
     }
 
     /**
-     * Memastikan user adalah admin.
+     * Validasi pelanggan dari body (stateless).
      */
-    private function requireAdmin(): void {
-        if (empty($_SESSION['admin_id']))
-            $this->respond(false, null, 'Unauthorized: bukan admin', 401);
+    private function validatePelanggan(): int {
+        $body = $this->body();
+        $akunId = (int) ($body['akun_id'] ?? 0);
+        
+        if ($akunId <= 0) {
+            $this->respond(false, null, 'akun_id wajib diisi', 422);
+        }
+        
+        return $akunId;
+    }
+
+    /**
+     * Validasi admin dari body (stateless).
+     */
+    private function validateAdmin(): int {
+        $body = $this->body();
+        $adminId = (int) ($body['admin_id'] ?? 0);
+        
+        if ($adminId <= 0) {
+            $this->respond(false, null, 'admin_id wajib diisi (admin only)', 422);
+        }
+        
+        return $adminId;
     }
 
     /**
@@ -38,9 +57,15 @@ class PesananController {
      */
     public function store(): void {
         verifyCsrf();
-        $pelangganId = $this->requirePelanggan();
-        $body        = json_decode(file_get_contents('php://input'), true) ?? [];
-        $model       = new PesananModel();
+        
+        $body = $this->body();
+        $akunId = (int) ($body['akun_id'] ?? 0);
+        
+        if ($akunId <= 0) {
+            $this->respond(false, null, 'akun_id wajib diisi', 422);
+        }
+        
+        $model = new PesananModel();
 
         if (empty($body['items']) || !is_array($body['items']))
             $this->respond(false, null, 'Items pesanan tidak boleh kosong', 422);
@@ -68,7 +93,8 @@ class PesananController {
                 ];
             }
 
-            $pesananId = $model->create($pelangganId, $totalHarga);
+            // Use akunId instead of pelangganId (they're the same field)
+            $pesananId = $model->create($akunId, $totalHarga);
             foreach ($resolved as $r) {
                 $model->addItem($pesananId, $r);
                 $model->kurangiStok($r['detail_batik_id'], $r['jumlah']);
@@ -83,30 +109,52 @@ class PesananController {
     }
 
     /**
-     * Mendapatkan pesanan milik pelanggan yang login.
+     * Mendapatkan pesanan milik pelanggan.
      */
     public function myOrders(): void {
-        $pelangganId = $this->requirePelanggan();
-        $model       = new PesananModel();
-        $this->respond(true, $model->getByPelanggan($pelangganId), '', 200);
+        $body = $this->body();
+        $akunId = (int) ($body['akun_id'] ?? 0);
+        
+        if ($akunId <= 0) {
+            $this->respond(false, null, 'akun_id wajib diisi', 422);
+        }
+        
+        $model = new PesananModel();
+        $this->respond(true, $model->getByPelanggan($akunId), '', 200);
     }
 
     /**
      * Mendapatkan detail pesanan berdasarkan ID.
      */
     public function show(string $id): void {
-        $pelangganId = $this->requirePelanggan();
-        $model       = new PesananModel();
-        $pesanan     = $model->findById((int)$id, $pelangganId);
+        $body = $this->body();
+        $akunId = (int) ($body['akun_id'] ?? 0);
+        
+        if ($akunId <= 0) {
+            $this->respond(false, null, 'akun_id wajib diisi', 422);
+        }
+        
+        $model   = new PesananModel();
+        $pesanan = $model->findById((int)$id, $akunId);
         if (!$pesanan) $this->respond(false, null, 'Pesanan tidak ditemukan', 404);
 
         $pesanan['items'] = $model->getItems((int)$id);
         $this->respond(true, $pesanan, '', 200);
     }
 
+    /**
+     * Update status pesanan (admin only).
+     */
     public function updateStatus(string $id): void {
-        $this->requireAdmin();
-        $body        = json_decode(file_get_contents('php://input'), true) ?? [];
+        verifyCsrf();
+        
+        $body = $this->body();
+        $adminId = (int) ($body['admin_id'] ?? 0);
+        
+        if ($adminId <= 0) {
+            $this->respond(false, null, 'admin_id wajib diisi (admin only)', 422);
+        }
+        
         $validStatus = ['pending','dibayar','diproses','dikirim','selesai','dibatalkan'];
 
         if (!in_array($body['status_pesanan'] ?? '', $validStatus))
@@ -117,8 +165,17 @@ class PesananController {
         $this->respond(true, null, 'Status pesanan diupdate');
     }
 
+    /**
+     * Get all orders (admin only).
+     */
     public function adminIndex(): void {
-        $this->requireAdmin();
+        $body = $this->body();
+        $adminId = (int) ($body['admin_id'] ?? 0);
+        
+        if ($adminId <= 0) {
+            $this->respond(false, null, 'admin_id wajib diisi (admin only)', 422);
+        }
+        
         $model = new PesananModel();
         $this->respond(true, $model->getAll($_GET['status'] ?? null), '', 200);
     }

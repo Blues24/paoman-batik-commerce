@@ -4,6 +4,7 @@ require_once __DIR__ . '/../models/ProdukModel.php';
 
 /**
  * Controller untuk mengelola produk dan varian.
+ * Stateless approach: Accept admin_id dari request body untuk operasi admin
  */
 class ProdukController {
 
@@ -17,11 +18,17 @@ class ProdukController {
     }
 
     /**
-     * Memastikan user adalah admin.
+     * Validasi admin dari body (stateless).
      */
-    private function requireAdmin(): void {
-        if (empty($_SESSION['admin_id']))
-            $this->respond(false, null, 'Unauthorized: bukan admin', 401);
+    private function validateAdmin(): int {
+        $body = $this->body();
+        $adminId = (int) ($body['admin_id'] ?? 0);
+        
+        if ($adminId <= 0) {
+            $this->respond(false, null, 'admin_id wajib diisi (admin only)', 422);
+        }
+        
+        return $adminId;
     }
 
     /**
@@ -32,7 +39,7 @@ class ProdukController {
     }
 
     /**
-     * Mendapatkan semua produk.
+     * Mendapatkan semua produk (public endpoint).
      */
     public function index(): void {
         $model = new ProdukModel();
@@ -41,7 +48,7 @@ class ProdukController {
     }
 
     /**
-     * Mendapatkan detail produk berdasarkan ID.
+     * Mendapatkan detail produk berdasarkan ID (public endpoint).
      */
     public function show(string $id): void {
         $model  = new ProdukModel();
@@ -58,9 +65,10 @@ class ProdukController {
      */
     public function store(): void {
         verifyCsrf();
-        $this->requireAdmin();
-        $body  = $this->body();
-        $model = new ProdukModel();
+        
+        $adminId = $this->validateAdmin();
+        $body    = $this->body();
+        $model   = new ProdukModel();
 
         foreach (['jenis_id', 'nama_produk'] as $f) {
             if (empty($body[$f])) $this->respond(false, null, "Field '$f' wajib diisi", 422);
@@ -75,8 +83,9 @@ class ProdukController {
      */
     public function update(string $id): void {
         verifyCsrf();
-        $this->requireAdmin();
-        $model = new ProdukModel();
+        
+        $adminId = $this->validateAdmin();
+        $model   = new ProdukModel();
         $model->update((int)$id, $this->body());
         $this->respond(true, null, 'Produk berhasil diupdate');
     }
@@ -86,8 +95,9 @@ class ProdukController {
      */
     public function destroy(string $id): void {
         verifyCsrf();
-        $this->requireAdmin();
-        $model = new ProdukModel();
+        
+        $adminId = $this->validateAdmin();
+        $model   = new ProdukModel();
         $model->softDelete((int)$id);
         $this->respond(true, null, 'Produk dinonaktifkan');
     }
@@ -97,9 +107,10 @@ class ProdukController {
      */
     public function storeVarian(string $produkId): void {
         verifyCsrf();
-        $this->requireAdmin();
-        $body  = $this->body();
-        $model = new ProdukModel();
+        
+        $adminId = $this->validateAdmin();
+        $body    = $this->body();
+        $model   = new ProdukModel();
 
         foreach (['ukuran', 'warna', 'bahan', 'harga', 'stok'] as $f) {
             if (!isset($body[$f])) $this->respond(false, null, "Field '$f' wajib diisi", 422);
@@ -114,8 +125,9 @@ class ProdukController {
      */
     public function updateVarian(string $varianId): void {
         verifyCsrf();
-        $this->requireAdmin();
-        $model = new ProdukModel();
+        
+        $adminId = $this->validateAdmin();
+        $model   = new ProdukModel();
         $model->updateVarian((int)$varianId, $this->body());
         $this->respond(true, null, 'Varian berhasil diupdate');
     }
