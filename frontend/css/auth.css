@@ -4,12 +4,19 @@
     box-sizing: border-box;
 }
 
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .auth-body {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Ganti path image sesuai lokasi gambar batik Anda */
     background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
                 url("../img/batik-bg1.jpg"); 
     background-size: cover;
@@ -20,7 +27,8 @@
 .header-text {
     text-align: center;
     color: white;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
+    width: min(100%, 520px);
 }
 
 .header-text h1 {
@@ -36,6 +44,7 @@
     overflow: hidden;
     padding: 0 0 30px 0;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    margin: 0 auto;
 }
 
 /* Tab Header */
@@ -69,6 +78,11 @@
 
 .tab-content.active {
     display: block;
+}
+
+.tab-content form {
+    display: flex;
+    flex-direction: column;
 }
 
 .input-group {
@@ -137,7 +151,7 @@ input:focus {
 .btn-submit {
     width: 100%;
     padding: 14px;
-    background: #333; /* Warna gelap seperti gambar */
+    background: #333;
     color: white;
     border: none;
     border-radius: 10px;
@@ -161,10 +175,38 @@ input:focus {
     line-height: 1.6;
 }
 
+.reset-info-box {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding: 14px 16px;
+    border: 1px solid #ece7dd;
+    border-radius: 12px;
+    background: #faf7f1;
+}
+
+.reset-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #666;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.reset-info-item i {
+    color: #f37021;
+    font-size: 15px;
+    margin-top: 1px;
+}
+
+.reset-form {
+    max-width: 100%;
+}
+
 .auth-message {
     min-height: 24px;
-    padding: 0 35px;
-    margin-top: 16px;
+    padding: 14px 35px 0;
     text-align: center;
     font-size: 14px;
 }
@@ -178,6 +220,10 @@ input:focus {
 }
 
 @media (max-width: 560px) {
+    .container {
+        justify-content: flex-start;
+    }
+
     .auth-body {
         height: auto;
         min-height: 100vh;

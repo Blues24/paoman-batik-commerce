@@ -112,8 +112,10 @@ class PesananController {
      * Mendapatkan pesanan milik pelanggan.
      */
     public function myOrders(): void {
+        // Untuk GET request, body biasanya kosong.
+        // Support akun_id via query string supaya frontend bisa memanggil endpoint ini.
         $body = $this->body();
-        $akunId = (int) ($body['akun_id'] ?? 0);
+        $akunId = (int) ($body['akun_id'] ?? ($_GET['akun_id'] ?? 0));
         
         if ($akunId <= 0) {
             $this->respond(false, null, 'akun_id wajib diisi', 422);
@@ -127,8 +129,10 @@ class PesananController {
      * Mendapatkan detail pesanan berdasarkan ID.
      */
     public function show(string $id): void {
+        // Untuk GET request, body biasanya kosong.
+        // Support akun_id via query string supaya frontend bisa memanggil endpoint ini.
         $body = $this->body();
-        $akunId = (int) ($body['akun_id'] ?? 0);
+        $akunId = (int) ($body['akun_id'] ?? ($_GET['akun_id'] ?? 0));
         
         if ($akunId <= 0) {
             $this->respond(false, null, 'akun_id wajib diisi', 422);

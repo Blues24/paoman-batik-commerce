@@ -20,31 +20,39 @@
         }
     }
 
-    function getRedirectLink() {
+    function getLoginLink() {
         const fileName = window.location.pathname.split("/").pop() || "pembelian.html";
         return `auth.html?redirect=${encodeURIComponent(fileName)}`;
+    }
+
+    function getRegisterLink() {
+        const fileName = window.location.pathname.split("/").pop() || "pembelian.html";
+        return `auth.html?redirect=${encodeURIComponent(fileName)}&mode=register`;
     }
 
     function getLoggedOutActions() {
         // Navbar sebelum login: user hanya melihat tombol daftar dan masuk.
         return `
             <div class="auth-links">
-                <a class="auth-link" href="${getRedirectLink()}&mode=register">Daftar</a>
-                <a class="auth-link primary" href="${getRedirectLink()}">Masuk</a>
+                <a class="auth-link" href="${getRegisterLink()}">Daftar</a>
+                <a class="auth-link primary" href="${getLoginLink()}">Masuk</a>
             </div>
         `;
     }
 
     function getLoggedInActions(user) {
-        const initials = user.nama.trim().charAt(0).toUpperCase() || "U";
+        const displayName = (user.nama || user.username || "User").trim();
+        const displayEmail = user.email || "Email belum diisi";
+        const displayPhone = user.noHp || "No. HP belum diisi";
+        const initials = displayName.charAt(0).toUpperCase() || "U";
 
         // Navbar sesudah login: tampilkan nama user + dropdown aksi akun.
         return `
             <div class="user-menu">
                 <button type="button" class="user-menu-trigger" id="userMenuTrigger" aria-expanded="false">
                     <div class="user-meta">
-                        <strong>${user.nama}</strong>
-                        <span>${user.email}</span>
+                        <strong>${displayName}</strong>
+                        <span>${displayEmail}</span>
                     </div>
                     <div class="user-avatar">${initials}</div>
                     <i class="bi bi-chevron-down"></i>
@@ -52,8 +60,8 @@
 
                 <div class="user-menu-dropdown d-none" id="userMenuDropdown">
                     <div class="user-menu-header">
-                        <strong>${user.nama}</strong>
-                        <span>${user.noHp || "No. HP belum diisi"}</span>
+                        <strong>${displayName}</strong>
+                        <span>${displayPhone}</span>
                     </div>
                     <a class="user-menu-link" href="akun.html">
                         <i class="bi bi-person-gear"></i>

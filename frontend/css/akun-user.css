@@ -348,6 +348,119 @@ a {
     color: #2e7d32;
 }
 
+.review-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 0.82rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.review-btn:hover {
+    background: #0ea5e9;
+    color: #fff;
+}
+
+.review-modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.58);
+    z-index: 1200;
+}
+
+.review-modal-overlay.d-none {
+    display: none;
+}
+
+.review-modal-box {
+    width: min(100%, 520px);
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 24px 48px rgba(15, 23, 42, 0.2);
+}
+
+.review-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--line);
+}
+
+.review-modal-header h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.modal-close-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 12px;
+    background: #f3f6fc;
+    color: var(--text);
+}
+
+.review-modal-content {
+    padding: 24px;
+}
+
+.product-review-info {
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: var(--surface-alt);
+}
+
+.review-form {
+    display: grid;
+    gap: 18px;
+}
+
+.star-rating {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.star-btn {
+    border: 0;
+    background: transparent;
+    color: #d1d5db;
+    font-size: 2rem;
+    line-height: 1;
+    padding: 0;
+}
+
+.star-btn:hover,
+.star-btn.active {
+    color: #fbbf24;
+}
+
+.review-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+}
+
 .settings-card {
     padding: 26px;
 }
@@ -477,6 +590,10 @@ a {
 
     .order-item-top,
     .order-item-bottom {
+        flex-direction: column;
+    }
+
+    .review-modal-actions {
         flex-direction: column;
     }
 }

@@ -90,8 +90,7 @@
 
                             <label class="field-group">
                                 <span>Alamat</span>
-                                <textarea id="profileAlamat" rows="4"
-                                    placeholder="Tulis alamat atau catatan akun di sini..."></textarea>
+                                <textarea id="profileAlamat" rows="4" placeholder="Tulis alamat atau catatan akun di sini..."></textarea>
                             </label>
 
                             <button type="submit" class="primary-btn">Simpan Perubahan Profil</button>
@@ -134,8 +133,7 @@
 
                         <div class="reset-box">
                             <p id="resetEmailLabel">Email reset akan dikirim ke akun aktif.</p>
-                            <button type="button" id="resetPasswordBtn" class="secondary-btn">Kirim Simulasi
-                                Reset</button>
+                            <button type="button" id="resetPasswordBtn" class="secondary-btn">Kirim Simulasi Reset</button>
                         </div>
                     </article>
                 </section>
@@ -145,7 +143,6 @@
 
     <div id="footer-placeholder"></div>
 
-    <!-- REVIEW MODAL -->
     <div id="reviewModal" class="review-modal-overlay d-none">
         <div class="review-modal-box" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
             <div class="review-modal-header">
@@ -158,32 +155,26 @@
             <div class="review-modal-content">
                 <div class="product-review-info">
                     <p id="reviewProductName" style="font-weight: 500; margin-bottom: 4px;"></p>
-                    <p id="reviewProductPesananId"
-                        style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 16px;"></p>
+                    <p id="reviewProductPesananId" style="font-size: 12px; color: var(--muted); margin-bottom: 16px;"></p>
                 </div>
 
                 <form id="reviewForm" class="review-form">
-                    <!-- Star Rating -->
                     <div class="field-group">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 500;">Rating (1-5
-                            Bintang)</label>
+                        <label style="display: block; margin-bottom: 8px; font-weight: 500;">Rating (1-5 Bintang)</label>
                         <div class="star-rating" id="starRating">
-                            <button type="button" class="star-btn" data-rating="1" title="Buruk">★</button>
-                            <button type="button" class="star-btn" data-rating="2" title="Cukup">★</button>
-                            <button type="button" class="star-btn" data-rating="3" title="Baik">★</button>
-                            <button type="button" class="star-btn" data-rating="4" title="Sangat Baik">★</button>
-                            <button type="button" class="star-btn" data-rating="5" title="Excellent">★</button>
+                            <button type="button" class="star-btn" data-rating="1" title="Buruk">&#9733;</button>
+                            <button type="button" class="star-btn" data-rating="2" title="Cukup">&#9733;</button>
+                            <button type="button" class="star-btn" data-rating="3" title="Baik">&#9733;</button>
+                            <button type="button" class="star-btn" data-rating="4" title="Sangat Baik">&#9733;</button>
+                            <button type="button" class="star-btn" data-rating="5" title="Istimewa">&#9733;</button>
                         </div>
                         <input type="hidden" id="reviewRating" name="rating" required>
-                        <small id="ratingLabel"
-                            style="color: var(--color-text-secondary); display: block; margin-top: 6px;"></small>
+                        <small id="ratingLabel" style="color: var(--muted); display: block; margin-top: 6px;"></small>
                     </div>
 
-                    <!-- Komentar -->
                     <label class="field-group">
-                        <span>Komentar (Opsional)</span>
-                        <textarea id="reviewKomentar" name="komentar" rows="4"
-                            placeholder="Bagikan pengalaman Anda tentang produk ini..."></textarea>
+                        <span>Komentar</span>
+                        <textarea id="reviewKomentar" name="komentar" rows="4" placeholder="Bagikan pengalamanmu tentang produk ini..."></textarea>
                     </label>
 
                     <div class="review-modal-actions">
@@ -195,12 +186,10 @@
         </div>
     </div>
 
-    <script src="../js/footer.js"></script>
-    <script src="../js/auth.js"></script>
-    <script src="../js/user-session.js"></script>
-    <script src="../js/navuser.js"></script>
-    <script src="../js/akun.js"></script>
-    <script src="../js/ulasan.js"></script>
+    <script src="../js/footer.js?v=20260422"></script>
+    <script src="../js/user-session.js?v=20260422"></script>
+    <script src="../js/navuser.js?v=20260422"></script>
+    <script src="../js/akun.js?v=20260422"></script>
 </body>
 
 </html>

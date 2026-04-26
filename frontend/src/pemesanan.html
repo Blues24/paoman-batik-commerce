@@ -164,10 +164,27 @@
         </section>
     </main>
 
+    <div id="orderNoticeOverlay" class="order-notice-overlay d-none">
+        <div class="order-notice-box" role="dialog" aria-modal="true" aria-labelledby="orderNoticeTitle">
+            <div class="order-notice-icon" id="orderNoticeIcon">
+                <i class="bi bi-info-circle"></i>
+            </div>
+            <div class="order-notice-copy">
+                <h2 id="orderNoticeTitle">Informasi</h2>
+                <p id="orderNoticeMessage">Pesan notifikasi akan tampil di sini.</p>
+            </div>
+            <div class="order-notice-actions" id="orderNoticeActions">
+                <button type="button" class="notice-btn secondary" id="orderNoticeSecondary">Tutup</button>
+                <button type="button" class="notice-btn primary" id="orderNoticePrimary">Oke</button>
+            </div>
+        </div>
+    </div>
+
     <div id="footer-placeholder"></div>
     <script src="../js/footer.js"></script>
     <script src="../js/user-session.js"></script>
     <script src="../js/navuser.js"></script>
     <script src="../js/pemesanan.js"></script>
+    <script src="../js/session.js" defer></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 const API_URL = 'http://localhost:8000/api';
 const CURRENT_USER_KEY = 'batikPaomanCurrentUser';
+const CART_KEY = 'batikPaomanCart';
 
 function getStoredUser() {
     try {
@@ -107,6 +108,8 @@ async function logoutUser() {
     });
 
     clearStoredUser();
+    // Pastikan state pemesanan/keranjang ikut bersih saat logout.
+    localStorage.removeItem(CART_KEY);
     return { success: response.ok && data?.success, message: data?.message || 'Logout selesai.' };
 }
 
@@ -172,13 +175,60 @@ async function createOrder(items) {
 }
 
 async function getCurrentUserOrders() {
-    const { response, data } = await apiFetch('/pesanan/saya');
+    const user = getStoredUser();
+    const akunId = user?.akun_id;
+    const { response, data } = await apiFetch(`/pesanan/saya?akun_id=${encodeURIComponent(String(akunId || ''))}`);
 
     if (!response.ok || !data?.success) {
-        return [];
+        return {
+            success: false,
+            message: data?.message || 'Gagal memuat riwayat pesanan.',
+            data: []
+        };
     }
 
-    return data.data;
+    return {
+        success: true,
+        message: data.message || 'Riwayat pesanan berhasil dimuat.',
+        data: data.data || []
+    };
+}
+
+async function getOrderDetail(pesananId) {
+    const user = getStoredUser();
+    const akunId = user?.akun_id;
+    const { response, data } = await apiFetch(`/pesanan/${pesananId}?akun_id=${encodeURIComponent(String(akunId || ''))}`);
+
+    if (!response.ok || !data?.success) {
+        return {
+            success: false,
+            message: data?.message || 'Gagal memuat detail pesanan.',
+            data: null
+        };
+    }
+
+    return {
+        success: true,
+        message: data.message || 'Detail pesanan berhasil dimuat.',
+        data: data.data || null
+    };
+}
+
+async function submitReview(payload) {
+    const user = getStoredUser();
+    const { response, data } = await apiFetch('/ulasan', {
+        method: 'POST',
+        body: JSON.stringify({
+            ...payload,
+            akun_id: user?.akun_id
+        })
+    });
+
+    return {
+        success: response.ok && data?.success,
+        message: data?.message || 'Gagal mengirim ulasan.',
+        data: data?.data || null
+    };
 }
 
 window.UserSession = {
@@ -191,5 +241,7 @@ window.UserSession = {
     updatePassword,
     requestPasswordReset,
     createOrder,
-    getCurrentUserOrders
+    getCurrentUserOrders,
+    getOrderDetail,
+    submitReview
 };

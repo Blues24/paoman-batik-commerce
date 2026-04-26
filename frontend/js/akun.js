@@ -1,16 +1,18 @@
-//const API_URL = 'http://localhost:8000/api'; // Kena error  redefinition
-
-// =========== EXISTING FUNCTIONS ===========
-
 function showAccountMessage(message, type = "success") {
     const messageBox = document.getElementById("accountMessage");
+
+    if (!messageBox) {
+        return;
+    }
+
     messageBox.textContent = message;
     messageBox.className = `account-message ${type}`;
 }
 
 function fillAccountSummary(user) {
-    // Sinkronkan data summary dan form profil dengan akun yang sedang login.
-    if (!user) return;
+    if (!user) {
+        return;
+    }
 
     document.getElementById("summaryAvatar").textContent = user.nama.trim().charAt(0).toUpperCase();
     document.getElementById("summaryName").textContent = user.nama;
@@ -27,6 +29,10 @@ function fillAccountSummary(user) {
 }
 
 function formatDate(dateString) {
+    if (!dateString) {
+        return "Tanggal belum tersedia";
+    }
+
     return new Date(dateString).toLocaleString("id-ID", {
         day: "2-digit",
         month: "short",
@@ -37,19 +43,25 @@ function formatDate(dateString) {
 }
 
 function formatRupiah(amount) {
-    return `Rp.${Number(amount).toLocaleString("id-ID")}`;
+    return `Rp.${Number(amount || 0).toLocaleString("id-ID")}`;
 }
 
 function getOrderStatusClass(status) {
-    // Map backend status ke class
-    if (status === "selesai") return "ready";
-    if (status === "diproses") return "progress";
-    if (status === "dikirim") return "progress";
+    const normalizedStatus = (status || "").toLowerCase();
+
+    if (normalizedStatus === "selesai" || normalizedStatus === "siap diambil") {
+        return "ready";
+    }
+
+    if (normalizedStatus === "diproses" || normalizedStatus === "dikirim") {
+        return "progress";
+    }
+
     return "waiting";
 }
 
 function getPaymentStatusClass(status) {
-    return status === "dibayar" ? "paid" : "unpaid";
+    return (status || "").toLowerCase() === "dibayar" ? "paid" : "unpaid";
 }
 
 function requireLoggedInUser() {
@@ -63,19 +75,41 @@ function requireLoggedInUser() {
     return currentUser;
 }
 
-// =========== NEW: REVIEW SYSTEM FUNCTIONS ===========
+function getOrderItemCount(order) {
+    return order.total_jumlah || order.quantity || order.items?.reduce((sum, item) => sum + (item.jumlah || 0), 0) || 0;
+}
 
-let selectedOrderForReview = null;
+function getOrderPrimaryImage(order) {
+    return order.productImage || order.items?.[0]?.image || order.items?.[0]?.gambar_produk || "";
+}
+
+function getOrderPrimaryName(order) {
+    return order.productName || order.items?.[0]?.nama_produk || "Pesanan";
+}
+
+function getOrderPrimaryCategory(order) {
+    return order.productCategory || order.items?.[0]?.kategori || "Produk Batik";
+}
+
 let selectedProductForReview = null;
 
 async function renderOrderHistory() {
-    const orders = await window.UserSession.getCurrentUserOrders();
+    const response = await window.UserSession.getCurrentUserOrders();
     const list = document.getElementById("orderHistoryList");
     const emptyState = document.getElementById("orderHistoryEmpty");
 
     list.innerHTML = "";
 
+    if (!response.success) {
+        emptyState.textContent = response.message || "Riwayat pesanan belum bisa dimuat.";
+        emptyState.classList.remove("d-none");
+        return;
+    }
+
+    const orders = response.data || [];
+
     if (orders.length === 0) {
+        emptyState.textContent = "Belum ada pesanan yang masuk ke akun ini. Buat pesanan dulu dari halaman pemesanan.";
         emptyState.classList.remove("d-none");
         return;
     }
@@ -83,29 +117,32 @@ async function renderOrderHistory() {
     emptyState.classList.add("d-none");
 
     orders.forEach((order) => {
-        // Check if order status is "selesai" (completed) untuk enable review button
-        const isCompleted = order.status_pesanan === 'selesai';
+        const orderStatus = order.status_pesanan || order.orderStatus || "Menunggu";
+        const paymentStatus = order.payment_status || order.paymentStatus || "Belum Dibayar";
+        const orderId = order.pesanan_id || order.id;
+        const image = getOrderPrimaryImage(order);
+        const isCompleted = ["selesai", "siap diambil"].includes(String(orderStatus).toLowerCase());
 
         list.innerHTML += `
             <article class="order-item-card">
                 <div class="order-item-media">
-                    ${order.items?.[0]?.detail_batik_id ? `<img src="${order.productImage || ''}" alt="${order.productName || 'Produk'}" class="order-item-image">` : `<div class="order-item-fallback">Produk</div>`}
+                    ${image ? `<img src="${image}" alt="${getOrderPrimaryName(order)}" class="order-item-image">` : `<div class="order-item-fallback">Produk</div>`}
                 </div>
                 <div class="order-item-body">
                     <div class="order-item-top">
                         <div>
-                            <p class="order-code">${order.pesanan_id || order.id}</p>
-                            <h3>${order.productName || order.items?.[0]?.nama_produk || 'Pesanan'}</h3>
+                            <p class="order-code">${orderId}</p>
+                            <h3>${getOrderPrimaryName(order)}</h3>
                         </div>
-                        <span class="status-pill ${getOrderStatusClass(order.status_pesanan || order.orderStatus)}">${order.status_pesanan || order.orderStatus}</span>
+                        <span class="status-pill ${getOrderStatusClass(orderStatus)}">${orderStatus}</span>
                     </div>
-                    <p class="order-meta">${order.productCategory || ''} | ${order.total_jumlah || order.quantity || order.items?.reduce((sum, item) => sum + (item.jumlah || 0), 0)} item | ${formatDate(order.tanggal_pesanan || order.createdAt)}</p>
+                    <p class="order-meta">${getOrderPrimaryCategory(order)} | ${getOrderItemCount(order)} item | ${formatDate(order.tanggal_pesanan || order.createdAt)}</p>
                     <div class="order-item-bottom">
                         <strong>${formatRupiah(order.total_harga || order.totalPrice)}</strong>
-                        <span class="payment-pill ${getPaymentStatusClass(order.payment_status || order.paymentStatus)}">${order.payment_status || order.paymentStatus || 'Belum Dibayar'}</span>
-                        ${isCompleted ? `<button type="button" class="review-btn" onclick="openReviewModal(${order.pesanan_id || order.id})">
-                            <i class="bi bi-star"></i> Beri Ulasan
-                        </button>` : ''}
+                        <span class="payment-pill ${getPaymentStatusClass(paymentStatus)}">${paymentStatus}</span>
+                        ${isCompleted ? `<button type="button" class="review-btn" onclick="openReviewModal(${orderId})">
+                            <i class="bi bi-star-fill"></i> Beri Ulasan
+                        </button>` : ""}
                     </div>
                     ${order.notes ? `<p class="order-notes">${order.notes}</p>` : ""}
                 </div>
@@ -114,137 +151,90 @@ async function renderOrderHistory() {
     });
 }
 
-function openReviewModal(pesananId) {
-    // Fetch order detail untuk ambil product info
-    fetchOrderDetail(pesananId);
-}
+async function openReviewModal(pesananId) {
+    const response = await window.UserSession.getOrderDetail(pesananId);
 
-async function fetchOrderDetail(pesananId) {
-    const csrfToken = sessionStorage.getItem('csrf_token');
-
-    try {
-        const response = await fetch(`${API_URL}/pesanan/${pesananId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-Token': csrfToken || ''
-            },
-            credentials: 'include'
-        });
-
-        const data = await response.json();
-
-        if (data.success && data.data.items && data.data.items.length > 0) {
-            // Ambil item pertama untuk review
-            const firstItem = data.data.items[0];
-            selectedProductForReview = {
-                ...firstItem,
-                pesanan_id: pesananId,
-            };
-
-            // Set modal content
-            document.getElementById("reviewProductName").textContent = firstItem.nama_produk || 'Produk';
-            document.getElementById("reviewProductPesananId").textContent = `Pesanan #${pesananId}`;
-
-            // Reset form
-            document.getElementById("reviewForm").reset();
-            document.getElementById("reviewRating").value = '';
-            document.getElementById("ratingLabel").textContent = '';
-            document.querySelectorAll('.star-btn').forEach(btn => btn.classList.remove('active'));
-
-            // Show modal
-            document.getElementById("reviewModal").classList.remove("d-none");
-        }
-    } catch (err) {
-        console.error('Fetch order detail error:', err);
-        showAccountMessage('Error: Tidak bisa memuat detail pesanan', 'error');
+    if (!response.success || !response.data?.items?.length) {
+        showAccountMessage(response.message || "Detail pesanan belum bisa dimuat.", "error");
+        return;
     }
+
+    const firstItem = response.data.items[0];
+    selectedProductForReview = {
+        ...firstItem,
+        pesanan_id: pesananId
+    };
+
+    document.getElementById("reviewProductName").textContent = firstItem.nama_produk || "Produk";
+    document.getElementById("reviewProductPesananId").textContent = `Pesanan #${pesananId}`;
+    document.getElementById("reviewForm").reset();
+    document.getElementById("reviewRating").value = "";
+    document.getElementById("ratingLabel").textContent = "";
+    document.querySelectorAll(".star-btn").forEach((button) => button.classList.remove("active"));
+    document.getElementById("reviewModal").classList.remove("d-none");
 }
 
 function closeReviewModal() {
     document.getElementById("reviewModal").classList.add("d-none");
-    selectedOrderForReview = null;
     selectedProductForReview = null;
 }
 
-// =========== STAR RATING INTERACTION ===========
 function initStarRating() {
-    const starBtns = document.querySelectorAll('.star-btn');
+    const starButtons = document.querySelectorAll(".star-btn");
+    const ratingInput = document.getElementById("reviewRating");
+    const ratingLabel = document.getElementById("ratingLabel");
+    const labels = ["Buruk", "Cukup", "Baik", "Sangat Baik", "Istimewa"];
 
-    starBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const rating = btn.dataset.rating;
+    starButtons.forEach((button) => {
+        button.addEventListener("click", (event) => {
+            event.preventDefault();
 
-            // Set rating value
-            document.getElementById("reviewRating").value = rating;
+            const rating = Number(button.dataset.rating);
+            ratingInput.value = rating;
 
-            // Update UI
-            starBtns.forEach((b, idx) => {
-                b.classList.toggle('active', idx < rating);
+            starButtons.forEach((starButton) => {
+                starButton.classList.toggle("active", Number(starButton.dataset.rating) <= rating);
             });
 
-            // Update label
-            const labels = ['Buruk', 'Cukup', 'Baik', 'Sangat Baik', 'Excellent'];
-            document.getElementById("ratingLabel").textContent = `${rating} bintang - ${labels[rating - 1]}`;
+            ratingLabel.textContent = `${rating} bintang - ${labels[rating - 1]}`;
         });
     });
 }
 
-// =========== REVIEW FORM SUBMISSION ===========
 function initReviewForm() {
     const reviewForm = document.getElementById("reviewForm");
-    reviewForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
+
+    reviewForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
         if (!selectedProductForReview) {
-            showAccountMessage('Error: Produk tidak terpilih', 'error');
+            showAccountMessage("Produk untuk diulas belum terpilih.", "error");
             return;
         }
 
-        const rating = document.getElementById("reviewRating").value;
-        const komentar = document.getElementById("reviewKomentar").value;
-        const csrfToken = sessionStorage.getItem('csrf_token');
+        const rating = Number(document.getElementById("reviewRating").value);
+        const komentar = document.getElementById("reviewKomentar").value.trim();
 
         if (!rating) {
-            showAccountMessage('Rating harus dipilih', 'error');
+            showAccountMessage("Rating harus dipilih dulu.", "error");
             return;
         }
 
-        try {
-            const response = await fetch(`${API_URL}/ulasan`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': csrfToken || ''
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    produk_id: selectedProductForReview.produk_id || 1,
-                    pesanan_id: selectedProductForReview.pesanan_id,
-                    rating: parseInt(rating),
-                    komentar: komentar || null
-                })
-            });
+        const result = await window.UserSession.submitReview({
+            produk_id: selectedProductForReview.produk_id,
+            pesanan_id: selectedProductForReview.pesanan_id,
+            rating,
+            komentar: komentar || null
+        });
 
-            const data = await response.json();
+        showAccountMessage(result.message, result.success ? "success" : "error");
 
-            if (data.success) {
-                showAccountMessage('✅ Ulasan berhasil dikirim!', 'success');
-                closeReviewModal();
-                // Refresh order list
-                await renderOrderHistory();
-            } else {
-                showAccountMessage(`❌ ${data.message}`, 'error');
-            }
-        } catch (err) {
-            console.error('Submit review error:', err);
-            showAccountMessage('Error: Gagal mengirim ulasan', 'error');
+        if (result.success) {
+            closeReviewModal();
+            await renderOrderHistory();
         }
     });
 }
-
-// =========== DOM READY ===========
 
 document.addEventListener("DOMContentLoaded", async () => {
     const currentUser = requireLoggedInUser();
@@ -254,24 +244,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     fillAccountSummary(currentUser);
-    await renderOrderHistory();
-
-    // Init review system
     initStarRating();
     initReviewForm();
-
-    // =========== EXISTING HANDLERS ===========
+    await renderOrderHistory();
 
     document.getElementById("profileForm").addEventListener("submit", async (event) => {
         event.preventDefault();
-        const currentUser = window.UserSession.getCurrentUser();
+
+        const latestUser = window.UserSession.getCurrentUser();
         const result = await window.UserSession.updateProfile({
             nama: document.getElementById("profileNama").value,
             username: document.getElementById("profileUsername").value,
             email: document.getElementById("profileEmail").value,
             noHp: document.getElementById("profilePhone").value,
             alamat: document.getElementById("profileAlamat").value,
-            akun_id: currentUser.akun_id  
+            akun_id: latestUser?.akun_id
         });
 
         showAccountMessage(result.message, result.success ? "success" : "error");

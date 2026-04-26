@@ -28,7 +28,8 @@ class AuthController {
      * Rate limit check (memory-based for dev, no session needed).
      */
     private function checkRateLimit(string $key, int $maxAttempts = 5, int $cooldown = 300): void {
-        $file = '/tmp/ratelimit_' . md5($key) . '.json';
+        $tmpDir = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR);
+        $file = $tmpDir . DIRECTORY_SEPARATOR . 'ratelimit_' . md5($key) . '.json';
         
         $data = [];
         if (is_file($file)) {
@@ -61,7 +62,8 @@ class AuthController {
      * Record failed attempt.
      */
     private function failAttempt(string $key): void {
-        $file = '/tmp/ratelimit_' . md5($key) . '.json';
+        $tmpDir = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR);
+        $file = $tmpDir . DIRECTORY_SEPARATOR . 'ratelimit_' . md5($key) . '.json';
         $data = [];
         if (is_file($file)) {
             $data = json_decode(file_get_contents($file), true) ?? [];
@@ -74,7 +76,8 @@ class AuthController {
      * Clear attempt counter.
      */
     private function clearAttempt(string $key): void {
-        $file = '/tmp/ratelimit_' . md5($key) . '.json';
+        $tmpDir = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR);
+        $file = $tmpDir . DIRECTORY_SEPARATOR . 'ratelimit_' . md5($key) . '.json';
         @unlink($file);
     }
 

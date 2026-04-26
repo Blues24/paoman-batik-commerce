@@ -32,6 +32,15 @@ const submitButton = document.querySelector(".submit-btn");
 const orderForm = document.querySelector(".order-form");
 const kainFields = document.getElementById("kainFields");
 const pakaianFields = document.getElementById("pakaianFields");
+const orderNoticeOverlay = document.getElementById("orderNoticeOverlay");
+const orderNoticeIcon = document.getElementById("orderNoticeIcon");
+const orderNoticeTitle = document.getElementById("orderNoticeTitle");
+const orderNoticeMessage = document.getElementById("orderNoticeMessage");
+const orderNoticeActions = document.getElementById("orderNoticeActions");
+const orderNoticePrimary = document.getElementById("orderNoticePrimary");
+const orderNoticeSecondary = document.getElementById("orderNoticeSecondary");
+let noticePrimaryHandler = null;
+let noticeSecondaryHandler = null;
 
 function formatRupiah(value) {
     return `Rp.${Number(value).toLocaleString("id-ID")}`;
@@ -47,6 +56,50 @@ function getCartItems() {
 
 function saveCartItems(items) {
     localStorage.setItem(CART_KEY, JSON.stringify(items));
+}
+
+function hideOrderNotice() {
+    if (!orderNoticeOverlay) {
+        return;
+    }
+
+    orderNoticeOverlay.classList.add("d-none");
+    noticePrimaryHandler = null;
+    noticeSecondaryHandler = null;
+}
+
+function showOrderNotice({
+    title = "Informasi",
+    message = "",
+    type = "info",
+    primaryLabel = "Oke",
+    secondaryLabel = "Tutup",
+    onPrimary = null,
+    onSecondary = null,
+    hideSecondary = false
+}) {
+    if (!orderNoticeOverlay) {
+        return;
+    }
+
+    const iconMap = {
+        info: "bi-info-circle",
+        success: "bi-check2-circle",
+        warning: "bi-exclamation-circle",
+        error: "bi-x-circle"
+    };
+
+    orderNoticeTitle.textContent = title;
+    orderNoticeMessage.textContent = message;
+    orderNoticeIcon.className = `order-notice-icon ${type}`;
+    orderNoticeIcon.innerHTML = `<i class="bi ${iconMap[type] || iconMap.info}"></i>`;
+    orderNoticePrimary.textContent = primaryLabel;
+    orderNoticeSecondary.textContent = secondaryLabel;
+    orderNoticeSecondary.classList.toggle("d-none", hideSecondary);
+
+    noticePrimaryHandler = onPrimary;
+    noticeSecondaryHandler = onSecondary;
+    orderNoticeOverlay.classList.remove("d-none");
 }
 
 function updateCartCount() {
@@ -100,6 +153,21 @@ function removeCartItem(productId) {
     const updatedItems = getCartItems().filter((item) => item.id !== productId);
     saveCartItems(updatedItems);
     renderCartProducts();
+}
+
+function updateCartAfterOrder(productId, orderedQty) {
+    const updatedItems = getCartItems()
+        .map((item) => {
+            if (item.id !== productId) {
+                return item;
+            }
+
+            const nextQty = Math.max(0, (Number(item.qty) || 0) - orderedQty);
+            return { ...item, qty: nextQty };
+        })
+        .filter((item) => item.qty > 0);
+
+    saveCartItems(updatedItems);
 }
 
 function bindProductOptions() {
@@ -215,44 +283,122 @@ orderForm.addEventListener("submit", async (event) => {
     const currentUser = window.UserSession?.getCurrentUser();
 
     if (!currentUser) {
-        alert("Login dulu ya, supaya pesanan bisa masuk ke akun kamu.");
-        window.location.href = "auth.html?redirect=pemesanan.html";
+        showOrderNotice({
+            title: "Masuk Dulu",
+            message: "Login dulu ya, supaya pesanan bisa masuk ke akun kamu dan statusnya bisa dipantau dari halaman akun.",
+            type: "warning",
+            primaryLabel: "Masuk Sekarang",
+            secondaryLabel: "Nanti Saja",
+            onPrimary: () => {
+                window.location.href = "auth.html?redirect=pemesanan.html";
+            }
+        });
         return;
     }
 
     if (!activeProduct) {
-        alert("Pilih produk dari keranjang dulu.");
+        showOrderNotice({
+            title: "Pilih Produk",
+            message: "Pilih dulu produk dari keranjang supaya detail pemesanannya bisa diproses.",
+            type: "info",
+            hideSecondary: true
+        });
         return;
     }
 
     const quantity = Math.max(1, Number(qtyInput.value) || 1);
     const notesField = document.querySelector(".notes-field textarea");
+    const activeProductId = Number(activeProduct.dataset.id);
     const cartItems = getCartItems();
+    const selectedCartItem = cartItems.find((item) => item.id === activeProductId);
 
-    if (cartItems.length === 0) {
-        alert("Keranjang kosong.");
+    if (cartItems.length === 0 || !selectedCartItem) {
+        showOrderNotice({
+            title: "Keranjang Kosong",
+            message: "Belum ada produk yang bisa dipesan. Tambahkan dulu produk dari halaman pembelian.",
+            type: "warning",
+            primaryLabel: "Buka Pembelian",
+            secondaryLabel: "Tutup",
+            onPrimary: () => {
+                window.location.href = "pembelian.html";
+            }
+        });
         return;
     }
 
-    const items = cartItems.map((item) => ({
-        detail_batik_id: item.detail_batik_id || item.id,
-        jumlah: Number(item.qty) || 1
-    }));
+    const items = [{
+        detail_batik_id: selectedCartItem.detail_batik_id || selectedCartItem.id,
+        jumlah: quantity
+    }];
 
     const result = await window.UserSession.createOrder(items);
 
     if (!result.success) {
-        alert(result.message);
+        showOrderNotice({
+            title: "Pesanan Belum Berhasil",
+            message: result.message,
+            type: "error",
+            hideSecondary: true
+        });
         return;
     }
 
-    alert("Pesanan berhasil dibuat. Cek statusnya di Pengaturan Akun.");
-    saveCartItems([]);
+    showOrderNotice({
+        title: "Pesanan Berhasil",
+        message: "Pesananmu sudah masuk. Kamu bisa cek status prosesnya di Pengaturan Akun.",
+        type: "success",
+        primaryLabel: "Lihat Akun",
+        secondaryLabel: "Tutup",
+        onPrimary: () => {
+            window.location.href = "akun.html";
+        }
+    });
+    updateCartAfterOrder(activeProductId, quantity);
     renderCartProducts();
     orderForm.reset();
-    qtyInput.value = quantity;
+    qtyInput.value = 1;
+
+    if (notesField) {
+        notesField.value = "";
+    }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
     renderCartProducts();
+});
+
+if (orderNoticePrimary) {
+    orderNoticePrimary.addEventListener("click", () => {
+        const handler = noticePrimaryHandler;
+        hideOrderNotice();
+
+        if (typeof handler === "function") {
+            handler();
+        }
+    });
+}
+
+if (orderNoticeSecondary) {
+    orderNoticeSecondary.addEventListener("click", () => {
+        const handler = noticeSecondaryHandler;
+        hideOrderNotice();
+
+        if (typeof handler === "function") {
+            handler();
+        }
+    });
+}
+
+if (orderNoticeOverlay) {
+    orderNoticeOverlay.addEventListener("click", (event) => {
+        if (event.target === orderNoticeOverlay) {
+            hideOrderNotice();
+        }
+    });
+}
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && orderNoticeOverlay && !orderNoticeOverlay.classList.contains("d-none")) {
+        hideOrderNotice();
+    }
 });
