@@ -1,5 +1,6 @@
 const API_URL = 'http://localhost:8000/api';
 const CURRENT_USER_KEY = 'batikPaomanCurrentUser';
+const CART_KEY = 'batikPaomanCart';
 
 function getStoredUser() {
     try {
@@ -107,6 +108,8 @@ async function logoutUser() {
     });
 
     clearStoredUser();
+    // Pastikan state pemesanan/keranjang ikut bersih saat logout.
+    localStorage.removeItem(CART_KEY);
     return { success: response.ok && data?.success, message: data?.message || 'Logout selesai.' };
 }
 
@@ -172,7 +175,9 @@ async function createOrder(items) {
 }
 
 async function getCurrentUserOrders() {
-    const { response, data } = await apiFetch('/pesanan/saya');
+    const user = getStoredUser();
+    const akunId = user?.akun_id;
+    const { response, data } = await apiFetch(`/pesanan/saya?akun_id=${encodeURIComponent(String(akunId || ''))}`);
 
     if (!response.ok || !data?.success) {
         return {
@@ -190,7 +195,9 @@ async function getCurrentUserOrders() {
 }
 
 async function getOrderDetail(pesananId) {
-    const { response, data } = await apiFetch(`/pesanan/${pesananId}`);
+    const user = getStoredUser();
+    const akunId = user?.akun_id;
+    const { response, data } = await apiFetch(`/pesanan/${pesananId}?akun_id=${encodeURIComponent(String(akunId || ''))}`);
 
     if (!response.ok || !data?.success) {
         return {
@@ -208,9 +215,13 @@ async function getOrderDetail(pesananId) {
 }
 
 async function submitReview(payload) {
+    const user = getStoredUser();
     const { response, data } = await apiFetch('/ulasan', {
         method: 'POST',
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+            ...payload,
+            akun_id: user?.akun_id
+        })
     });
 
     return {
