@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../models/UlasanModel.php';
+require_once __DIR__ . '/../models/AkunModel.php';
 
 /**
  * Controller untuk mengelola ulasan produk.
@@ -22,6 +23,14 @@ class UlasanController {
      */
     private function body(): array {
         return json_decode(file_get_contents('php://input'), true) ?? [];
+    }
+
+    /**
+     * Resolve pelanggan_id dari akun_id.
+     */
+    private function pelangganIdFromAkunId(int $akunId): int {
+        $akunModel = new AkunModel();
+        return $akunModel->getPelangganIdByAkunId($akunId);
     }
 
     /**
@@ -64,6 +73,11 @@ class UlasanController {
         if ($akunId <= 0) {
             $this->respond(false, null, 'akun_id wajib diisi', 422);
         }
+
+        $pelangganId = $this->pelangganIdFromAkunId($akunId);
+        if ($pelangganId <= 0) {
+            $this->respond(false, null, 'Akun belum terhubung ke data pelanggan', 422);
+        }
         
         $model = new UlasanModel();
 
@@ -73,14 +87,13 @@ class UlasanController {
         if ($body['rating'] < 1 || $body['rating'] > 5)
             $this->respond(false, null, 'Rating harus antara 1–5', 422);
 
-        // Verify purchase menggunakan akunId (= pelanggan_id)
-        if (!$model->verifikasiPembelian((int)$body['pesanan_id'], $akunId, (int)$body['produk_id']))
+        if (!$model->verifikasiPembelian((int)$body['pesanan_id'], $pelangganId, (int)$body['produk_id']))
             $this->respond(false, null, 'Pesanan belum selesai atau produk tidak ada di pesanan ini', 403);
 
         try {
             $model->create([
                 'produk_id'    => (int)$body['produk_id'],
-                'pelanggan_id' => $akunId,  // Use akunId instead of session
+                'pelanggan_id' => $pelangganId,
                 'pesanan_id'   => (int)$body['pesanan_id'],
                 'rating'       => (int)$body['rating'],
                 'komentar'     => $body['komentar'] ?? null,

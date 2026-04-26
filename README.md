@@ -13,7 +13,8 @@ Sistem e-commerce untuk UMKM Batik Paoman yang mencakup perancangan database, do
 ## Setup Backend
 
 1. Import `backend/sql/schema.sql` ke MySQL.
-2. (Opsional) Import seed produk `backend/sql/seed_produk_batik.sql` supaya ada data produk.
+2. Import tabel keranjang `backend/sql/schema_cart.sql`.
+3. (Opsional) Import seed produk `backend/sql/seed_produk_batik.sql` supaya ada data produk.
 2. Konfigurasi database di `backend/config/database.php`.
 3. Jalankan server PHP di `backend/public/index.php`.
 

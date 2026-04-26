@@ -43,6 +43,17 @@ class AkunModel {
     }
 
     /**
+     * Mendapatkan pelanggan_id dari akun_id.
+     * Dipakai oleh controller lain karena tabel pesanan/ulasan memakai pelanggan_id.
+     */
+    public function getPelangganIdByAkunId(int $akunId): int {
+        $stmt = $this->db->prepare('SELECT pelanggan_id FROM pelanggan WHERE akun_id = ?');
+        $stmt->execute([$akunId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int)($row['pelanggan_id'] ?? 0);
+    }
+
+    /**
      * Mengecek apakah username sudah ada.
      */
     public function usernameExists(string $username): bool {

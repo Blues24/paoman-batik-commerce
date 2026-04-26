@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../models/PesananModel.php';
+require_once __DIR__ . '/../models/AkunModel.php';
 
 /**
  * Controller untuk mengelola pesanan.
@@ -22,6 +23,14 @@ class PesananController {
      */
     private function body(): array {
         return json_decode(file_get_contents('php://input'), true) ?? [];
+    }
+
+    /**
+     * Resolve pelanggan_id dari akun_id.
+     */
+    private function pelangganIdFromAkunId(int $akunId): int {
+        $akunModel = new AkunModel();
+        return $akunModel->getPelangganIdByAkunId($akunId);
     }
 
     /**
@@ -64,6 +73,11 @@ class PesananController {
         if ($akunId <= 0) {
             $this->respond(false, null, 'akun_id wajib diisi', 422);
         }
+
+        $pelangganId = $this->pelangganIdFromAkunId($akunId);
+        if ($pelangganId <= 0) {
+            $this->respond(false, null, 'Akun belum terhubung ke data pelanggan', 422);
+        }
         
         $model = new PesananModel();
 
@@ -93,8 +107,7 @@ class PesananController {
                 ];
             }
 
-            // Use akunId instead of pelangganId (they're the same field)
-            $pesananId = $model->create($akunId, $totalHarga);
+            $pesananId = $model->create($pelangganId, $totalHarga);
             foreach ($resolved as $r) {
                 $model->addItem($pesananId, $r);
                 $model->kurangiStok($r['detail_batik_id'], $r['jumlah']);
@@ -121,8 +134,13 @@ class PesananController {
             $this->respond(false, null, 'akun_id wajib diisi', 422);
         }
         
+        $pelangganId = $this->pelangganIdFromAkunId($akunId);
+        if ($pelangganId <= 0) {
+            $this->respond(true, [], '', 200);
+        }
+
         $model = new PesananModel();
-        $this->respond(true, $model->getByPelanggan($akunId), '', 200);
+        $this->respond(true, $model->getByPelanggan($pelangganId), '', 200);
     }
 
     /**
@@ -138,8 +156,13 @@ class PesananController {
             $this->respond(false, null, 'akun_id wajib diisi', 422);
         }
         
+        $pelangganId = $this->pelangganIdFromAkunId($akunId);
+        if ($pelangganId <= 0) {
+            $this->respond(false, null, 'Pesanan tidak ditemukan', 404);
+        }
+
         $model   = new PesananModel();
-        $pesanan = $model->findById((int)$id, $akunId);
+        $pesanan = $model->findById((int)$id, $pelangganId);
         if (!$pesanan) $this->respond(false, null, 'Pesanan tidak ditemukan', 404);
 
         $pesanan['items'] = $model->getItems((int)$id);

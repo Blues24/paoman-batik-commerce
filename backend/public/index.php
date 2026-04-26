@@ -97,6 +97,10 @@ $router->post('/api/ulasan',                 ['UlasanController', 'store']);
 $router->get ('/api/produk/:id/ulasan',      ['UlasanController', 'byProduk']);
 $router->put ('/api/ulasan/:id/moderate',    ['UlasanController', 'moderate']);
 
+// ===== Cart Endpoints =====
+$router->get ('/api/cart',                   ['CartController', 'index']);
+$router->post('/api/cart/sync',              ['CartController', 'sync']);
+
 $router->run();
 
 ?>

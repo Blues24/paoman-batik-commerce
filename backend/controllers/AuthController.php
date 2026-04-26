@@ -113,6 +113,7 @@ class AuthController {
 
             $this->respond(true, [
                 'akun_id'    => $user['akun_id'],
+                'pelanggan_id' => $user['pelanggan_id'] ?? null,
                 'nama'       => $user['nama'],
                 'username'   => $user['username'],
                 'email'      => $user['email'],
@@ -156,6 +157,7 @@ class AuthController {
 
         $this->respond(true, [
             'akun_id'    => $user['akun_id'],
+            'pelanggan_id' => $user['pelanggan_id'] ?? null,
             'nama'       => $user['nama'],
             'username'   => $user['username'],
             'email'      => $user['email'],

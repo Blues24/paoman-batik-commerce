@@ -1,22 +1,85 @@
 const CART_KEY = "batikPaomanCart";
 
-const produkBatik = [
-    { id: 1, nama: "Kain Batik Motif Biru Pesisir", kategori: "kain", harga: 50000, tag: "Produk Terlaris", image: "../img/batik1.jpg" },
-    { id: 2, nama: "Kain Batik Motif Godong Asem", kategori: "kain", harga: 50000, tag: "", image: "../img/batik2.jpg" },
-    { id: 3, nama: "Baju Batik Motif Kentangan", kategori: "pakaian", harga: 100000, tag: "Produk Baru", image: "../img/baju1.png" },
-    { id: 4, nama: "Kain Batik Motif Mangga Bambu", kategori: "kain", harga: 65000, tag: "", image: "../img/batik4.jpg" },
-    { id: 5, nama: "Kain Batik Motif Kembang Gunda", kategori: "kain", harga: 65000, tag: "", image: "../img/batik5.jpg" },
-    { id: 6, nama: "Kemeja Batik Motif Kembang Paoman", kategori: "pakaian", harga: 100000, tag: "", image: "../img/baju2.png" },
-    { id: 7, nama: "Kain Batik Motif Lereng Paoman", kategori: "kain", harga: 75000, tag: "", image: "../img/batik7.jpg" },
-    { id: 8, nama: "Blus Batik Motif Pesisir Laut", kategori: "pakaian", harga: 120000, tag: "", image: "../img/baju3.png" },
-    { id: 9, nama: "Kain Batik Motif Daun Nila", kategori: "kain", harga: 85000, tag: "", image: "../img/batik9.jpg" },
-    { id: 10, nama: "Kemeja Batik Motif Kawung Laut", kategori: "pakaian", harga: 135000, tag: "", image: "../img/baju4.png" },
-    { id: 11, nama: "Kain Batik Motif Biru Pesisir Premium", kategori: "kain", harga: 90000, tag: "", image: "../img/batik1.jpg" },
-    { id: 12, nama: "Outer Batik Motif Godong Asem", kategori: "pakaian", harga: 145000, tag: "", image: "../img/baju5.png" },
-    { id: 13, nama: "Tunik Batik Motif Kentangan", kategori: "pakaian", harga: 95000, tag: "", image: "../img/baju6.png" },
-    { id: 14, nama: "Dress Batik Motif Mangga Bambu", kategori: "pakaian", harga: 150000, tag: "", image: "../img/baju7.png" },
-    { id: 15, nama: "Kain Batik Motif Kembang Gunda Premium", kategori: "kain", harga: 110000, tag: "", image: "../img/batik5.jpg" }
+// Data statis sebagai fallback kalau backend belum jalan.
+const produkBatikFallback = [
+    { id: 1, nama: "Kain Batik Motif Biru Pesisir", kategori: "kain", harga: 50000, tag: "Produk Terlaris", image: "../img/batik1.jpg", detail_batik_id: 1 },
+    { id: 2, nama: "Kain Batik Motif Godong Asem", kategori: "kain", harga: 50000, tag: "", image: "../img/batik2.jpg", detail_batik_id: 2 },
+    { id: 3, nama: "Baju Batik Motif Kentangan", kategori: "pakaian", harga: 100000, tag: "Produk Baru", image: "../img/baju1.png", detail_batik_id: 3 },
+    { id: 4, nama: "Kain Batik Motif Mangga Bambu", kategori: "kain", harga: 65000, tag: "", image: "../img/batik4.jpg", detail_batik_id: 4 },
+    { id: 5, nama: "Kain Batik Motif Kembang Gunda", kategori: "kain", harga: 65000, tag: "", image: "../img/batik5.jpg", detail_batik_id: 5 },
+    { id: 6, nama: "Kemeja Batik Motif Kembang Paoman", kategori: "pakaian", harga: 100000, tag: "", image: "../img/baju2.png", detail_batik_id: 6 },
+    { id: 7, nama: "Kain Batik Motif Lereng Paoman", kategori: "kain", harga: 75000, tag: "", image: "../img/batik7.jpg", detail_batik_id: 7 },
+    { id: 8, nama: "Blus Batik Motif Pesisir Laut", kategori: "pakaian", harga: 120000, tag: "", image: "../img/baju3.png", detail_batik_id: 8 },
+    { id: 9, nama: "Kain Batik Motif Daun Nila", kategori: "kain", harga: 85000, tag: "", image: "../img/batik9.jpg", detail_batik_id: 9 },
+    { id: 10, nama: "Kemeja Batik Motif Kawung Laut", kategori: "pakaian", harga: 135000, tag: "", image: "../img/baju4.png", detail_batik_id: 10 },
+    { id: 11, nama: "Kain Batik Motif Biru Pesisir Premium", kategori: "kain", harga: 90000, tag: "", image: "../img/batik1.jpg", detail_batik_id: 11 },
+    { id: 12, nama: "Outer Batik Motif Godong Asem", kategori: "pakaian", harga: 145000, tag: "", image: "../img/baju5.png", detail_batik_id: 12 },
+    { id: 13, nama: "Tunik Batik Motif Kentangan", kategori: "pakaian", harga: 95000, tag: "", image: "../img/baju6.png", detail_batik_id: 13 },
+    { id: 14, nama: "Dress Batik Motif Mangga Bambu", kategori: "pakaian", harga: 150000, tag: "", image: "../img/baju7.png", detail_batik_id: 14 },
+    { id: 15, nama: "Kain Batik Motif Kembang Gunda Premium", kategori: "kain", harga: 110000, tag: "", image: "../img/batik5.jpg", detail_batik_id: 15 }
 ];
+
+let produkBatik = [...produkBatikFallback];
+
+const API_URL = "http://localhost:8000/api";
+
+const imageByName = new Map(produkBatikFallback.map((item) => [item.nama, item.image]));
+
+function guessKategoriFromNama(namaProduk) {
+    const nama = String(namaProduk || "").toLowerCase();
+    return nama.includes("kain") ? "kain" : "pakaian";
+}
+
+async function apiGetJson(endpoint) {
+    const response = await fetch(`${API_URL}${endpoint}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    const data = await response.json().catch(() => null);
+    return { response, data };
+}
+
+async function loadProdukFromApi() {
+    const { response, data } = await apiGetJson("/produk");
+    if (!response.ok || !data?.success || !Array.isArray(data.data)) {
+        throw new Error(data?.message || "Gagal memuat produk dari API.");
+    }
+
+    const list = data.data;
+
+    const detailResults = await Promise.allSettled(
+        list.map((produk) => apiGetJson(`/produk/${produk.produk_id}`))
+    );
+
+    produkBatik = list.map((produk, idx) => {
+        const detail = detailResults[idx];
+        const detailData =
+            detail?.status === "fulfilled" && detail.value?.data?.success
+                ? detail.value.data.data
+                : null;
+
+        const varian = Array.isArray(detailData?.varian) ? detailData.varian : [];
+        const defaultVarian = varian[0] || null;
+
+        const harga =
+            defaultVarian?.harga != null
+                ? Number(defaultVarian.harga)
+                : Number(produk.harga_mulai || 0);
+
+        return {
+            id: Number(produk.produk_id),
+            detail_batik_id: defaultVarian ? Number(defaultVarian.detail_batik_id) : Number(produk.produk_id),
+            nama: produk.nama_produk,
+            kategori: guessKategoriFromNama(produk.nama_produk),
+            harga: Number.isFinite(harga) ? harga : 0,
+            tag: "",
+            image: imageByName.get(produk.nama_produk) || produkBatikFallback[idx % produkBatikFallback.length]?.image || ""
+        };
+    });
+}
 
 const itemPerPage = 6;
 let currentPage = 1;
@@ -209,7 +272,7 @@ function tambahKeKeranjang(productId) {
     } else {
         cartItems.push({
             id: selectedProduct.id,
-            detail_batik_id: selectedProduct.id,
+            detail_batik_id: selectedProduct.detail_batik_id || selectedProduct.id,
             nama: selectedProduct.nama,
             kategori: selectedProduct.kategori,
             harga: selectedProduct.harga,
@@ -300,5 +363,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     updateCartCount();
-    applyFilters();
+    (async () => {
+        try {
+            await loadProdukFromApi();
+        } catch (err) {
+            console.warn("[Produk] fallback ke data statis:", err?.message || err);
+            produkBatik = [...produkBatikFallback];
+        }
+
+        // Sync state ke data terbaru.
+        filteredProducts = [...produkBatik];
+
+        if (priceRange) {
+            const max = produkBatik.reduce((m, p) => Math.max(m, Number(p.harga) || 0), 0);
+            if (max > 0) {
+                priceRange.max = String(max);
+                if (Number(priceRange.value) > max) {
+                    priceRange.value = String(max);
+                }
+                if (priceValue) {
+                    priceValue.textContent = formatRingkas(Number(priceRange.value));
+                }
+            }
+        }
+
+        applyFilters();
+    })();
 });
