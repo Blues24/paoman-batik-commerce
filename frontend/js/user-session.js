@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8000/api';
+const API_URL = 'http://localhost/paoman-batik/backend/public';
 const CURRENT_USER_KEY = 'batikPaomanCurrentUser';
 const CART_KEY = 'batikPaomanCart';
 
