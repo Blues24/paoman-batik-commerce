@@ -9,13 +9,13 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-        <div class="container">
+    <div class="container">
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2>Welcome Admin</h2>
             </div>
             <nav class="nav-menu">
-                <a href="dasboardAdmin.html" class="nav-item active" data-target="dashboard">
+                <a href="dasboardAdmin.html" class="nav-item" data-target="dashboard">
                     <i data-lucide="layout-dashboard"></i> Dashboard
                 </a>
                 <a href="produk.html" class="nav-item" data-target="produk">
@@ -24,7 +24,7 @@
                 <a href="listPesanan.html" class="nav-item" data-target="pesanan">
                     <i data-lucide="clipboard-list"></i> List Pesanan
                 </a>
-                <a href="kelolaStok.html" class="nav-item" data-target="laporan">
+                <a href="kelolaStok.html" class="nav-item active" data-target="laporan">
                     <i data-lucide="bar-chart-3"></i> Kelola Stok
                 </a>
                 <a href="kelolaAkun.html" class="nav-item" data-target="akun">
@@ -41,23 +41,23 @@
         <main class="main-content">
             <header class="top-bar">
                 <h1 id="page-title">Kelola Stok</h1>
-                    <div class="user-profile">
-                        <div class="notif-icon"><i data-lucide="bell"></i></div>
-                        <div class="profile-info">
-                            <div class="text-profile">
-                                <span class="name">Nama</span>
-                                <span class="role">Admin</span>
-                            </div>
-                            <div class="avatar"><i data-lucide="user-circle"></i></div>
+                <div class="user-profile">
+                    <div class="notif-icon"><i data-lucide="bell"></i></div>
+                    <div class="profile-info">
+                        <div class="text-profile">
+                            <span class="name">Nama</span>
+                            <span class="role">Admin</span>
                         </div>
+                        <div class="avatar"><i data-lucide="user-circle"></i></div>
                     </div>
+                </div>
             </header>
 
             <div class="filter-section">
                 <button class="filter-btn active">Semua</button>
-                <button class="filter-btn">Stock Banyak <span class="count green">5</span></button>
-                <button class="filter-btn">Stock Sedikit <span class="count yellow">4</span></button>
-                <button class="filter-btn">Stock Habis <span class="count red">1</span></button>
+                <button class="filter-btn">Stock Banyak <span class="count green">0</span></button>
+                <button class="filter-btn">Stock Sedikit <span class="count yellow">0</span></button>
+                <button class="filter-btn">Stock Habis <span class="count red">0</span></button>
             </div>
 
             <div class="card table-container">
@@ -71,60 +71,18 @@
                             <th>STOK TERSEDIA</th>
                             <th>SATUAN</th>
                             <th>STATUS</th>
-                            <th>EDIT</th>
+                            <th>AKSI</th>
                         </tr>
                     </thead>
                     <tbody id="stokTableBody">
                         </tbody>
-                        <tr>
-                            <td><img src="path/to/batik1.jpg" alt="Batik" class="img-product"></td>
-                            <td>Tangga Istana</td>
-                            <td class="text-muted">BT-TI-26</td>
-                            <td>Batik</td>
-                            <td><strong>21</strong></td>
-                            <td>Pasang</td>
-                            <td><span class="badge green">Stok Banyak</span></td>
-                            <td>
-                                <button class="btn-icon"><i data-lucide="pencil"></i></button>
-                                <button class="btn-icon"><i data-lucide="trash-2"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><img src="path/to/batik2.jpg" alt="Batik" class="img-product"></td>
-                            <td>Godong Asem</td>
-                            <td class="text-muted">BT-GA-26</td>
-                            <td>Batik</td>
-                            <td><strong>6</strong></td>
-                            <td>Pasang</td>
-                            <td><span class="badge yellow">Stok Sedikit</span></td>
-                            <td>
-                                <button class="btn-icon"><i data-lucide="pencil"></i></button>
-                                <button class="btn-icon"><i data-lucide="trash-2"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><img src="path/to/batik3.jpg" alt="Batik" class="img-product"></td>
-                            <td>Kembang Kapas</td>
-                            <td class="text-muted">BT-KK-26</td>
-                            <td>Batik</td>
-                            <td class="text-danger"><strong>0</strong></td>
-                            <td>Pasang</td>
-                            <td><span class="badge red">Stok Habis</span></td>
-                            <td>
-                                <button class="btn-icon"><i data-lucide="pencil"></i></button>
-                                <button class="btn-icon"><i data-lucide="trash-2"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
                 </table>
 
                 <div class="pagination">
-                    <p>Menampilkan 4 dari 10 Produk</p>
+                    <p id="paginationInfo">Menampilkan 0 dari 0 Produk</p>
                     <div class="page-controls">
                         <button class="page-btn"><i data-lucide="chevron-left"></i></button>
                         <button class="page-btn active">1</button>
-                        <button class="page-btn">2</button>
-                        <button class="page-btn">3</button>
                         <button class="page-btn"><i data-lucide="chevron-right"></i></button>
                     </div>
                 </div>
@@ -133,31 +91,30 @@
     </div>
 
     <div id="modalEdit" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Edit Stok Produk</h3>
-            <button class="close-modal">&times;</button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Stok Produk</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="formEditStok">
+                <input type="hidden" id="editIndex">
+                <div class="form-group">
+                    <label>Nama Produk</label>
+                    <input type="text" id="editNama" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Jumlah Stok Baru</label>
+                    <input type="number" id="editStokValue" min="0" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary close-modal">Batal</button>
+                    <button type="submit" class="btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
         </div>
-        <form id="formEditStok">
-            <input type="hidden" id="editIndex">
-            <div class="form-group">
-                <label>Nama Produk</label>
-                <input type="text" id="editNama" disabled>
-            </div>
-            <div class="form-group">
-                <label>Jumlah Stok Baru</label>
-                <input type="number" id="editStokValue" min="0" required>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-secondary close-modal">Batal</button>
-                <button type="submit" class="btn-primary">Simpan Perubahan</button>
-            </div>
-        </form>
     </div>
-</div>
 
     <script src="../../js/navigasiAdmin.js"></script>
     <script src="../../js/stok.js"></script>
-    <script>lucide.createIcons();</script>
 </body>
 </html>

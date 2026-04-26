@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentFilter = 'Semua';
     const tableBody = document.getElementById('stokTableBody');
     const filterBtns = document.querySelectorAll('.filter-btn');
+    const modalEdit = document.getElementById('modalEdit');
 
     function renderApp() {
         renderTable();
@@ -20,15 +21,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!tableBody) return;
         tableBody.innerHTML = '';
 
-        // FIX LOGIKA FILTER: Sesuaikan dengan teks tombol di HTML
-        const filteredData = produkData.filter(item => {
+        // 2. LOGIKA FILTER
+        let displayData = produkData.filter(item => {
             if (currentFilter === 'Stock Banyak') return item.stok > 10;
             if (currentFilter === 'Stock Sedikit') return item.stok > 0 && item.stok <= 10;
             if (currentFilter === 'Stock Habis') return item.stok === 0;
-            return true; // Untuk 'Semua'
+            return true; 
         });
 
-        filteredData.forEach(p => {
+        // 3. LOGIKA SORTING (Terbanyak ke Terkecil)
+        displayData.sort((a, b) => b.stok - a.stok);
+
+        displayData.forEach(p => {
             const status = getStatusLabel(p.stok);
             const row = `
                 <tr>
@@ -48,7 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
             tableBody.insertAdjacentHTML('beforeend', row);
         });
 
-        lucide.createIcons();
+        // Update Pagination Info
+        const info = document.getElementById('paginationInfo');
+        if (info) info.textContent = `Menampilkan ${displayData.length} dari ${produkData.length} Produk`;
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
         attachActionEvents();
     }
 
@@ -59,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
             habis: produkData.filter(p => p.stok === 0).length
         };
 
-        // Pastikan class selector ini sesuai dengan <span> di HTML kamu
         const banyakBadge = document.querySelector('.count.green');
         const sedikitBadge = document.querySelector('.count.yellow');
         const habisBadge = document.querySelector('.count.red');
@@ -79,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.btn-delete').forEach(btn => {
             btn.onclick = () => {
                 const id = parseInt(btn.dataset.id);
-                if (confirm('Hapus produk ini?')) {
+                if (confirm('Hapus produk ini dari daftar stok?')) {
                     produkData = produkData.filter(p => p.id !== id);
                     renderApp();
                 }
@@ -90,27 +97,36 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.onclick = () => {
                 const id = parseInt(btn.dataset.id);
                 const item = produkData.find(p => p.id === id);
-                document.getElementById('editIndex').value = item.id;
-                document.getElementById('editNama').value = item.nama;
-                document.getElementById('editStokValue').value = item.stok;
-                document.getElementById('modalEdit').style.display = 'flex';
+                if (item) {
+                    document.getElementById('editIndex').value = item.id;
+                    document.getElementById('editNama').value = item.nama;
+                    document.getElementById('editStokValue').value = item.stok;
+                    modalEdit.style.display = 'flex';
+                }
             };
         });
     }
 
-    // FIX EVENT FILTER: Mengambil teks murni tanpa angka count
+    // Modal Close Logic
+    document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.onclick = () => modalEdit.style.display = 'none';
+    });
+
+    window.onclick = (event) => {
+        if (event.target == modalEdit) modalEdit.style.display = 'none';
+    };
+
+    // Filter Logic
     filterBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             filterBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-            
-            // Mengambil teks dari Node pertama (sebelum <span>)
-            // Contoh: "Stock Banyak "
             currentFilter = this.childNodes[0].textContent.trim();
             renderTable();
         });
     });
 
+    // Form Edit Submit
     const formEdit = document.getElementById('formEditStok');
     if (formEdit) {
         formEdit.onsubmit = (e) => {
@@ -121,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (index !== -1) {
                 produkData[index].stok = newStok;
-                document.getElementById('modalEdit').style.display = 'none';
+                modalEdit.style.display = 'none';
                 renderApp();
             }
         };

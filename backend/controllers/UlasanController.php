@@ -4,6 +4,7 @@ require_once __DIR__ . '/../models/UlasanModel.php';
 
 /**
  * Controller untuk mengelola ulasan produk.
+ * Stateless approach: Accept akun_id/admin_id dari request body
  */
 class UlasanController {
 
@@ -17,20 +18,38 @@ class UlasanController {
     }
 
     /**
-     * Memastikan user adalah pelanggan yang login.
+     * Mendapatkan data dari body request.
      */
-    private function requirePelanggan(): int {
-        if (empty($_SESSION['pelanggan_id']))
-            $this->respond(false, null, 'Unauthorized: login dulu', 401);
-        return (int) $_SESSION['pelanggan_id'];
+    private function body(): array {
+        return json_decode(file_get_contents('php://input'), true) ?? [];
     }
 
     /**
-     * Memastikan user adalah admin.
+     * Validasi pelanggan dari body (stateless).
      */
-    private function requireAdmin(): void {
-        if (empty($_SESSION['admin_id']))
-            $this->respond(false, null, 'Unauthorized: bukan admin', 401);
+    private function validatePelanggan(): int {
+        $body = $this->body();
+        $akunId = (int) ($body['akun_id'] ?? 0);
+        
+        if ($akunId <= 0) {
+            $this->respond(false, null, 'akun_id wajib diisi', 422);
+        }
+        
+        return $akunId;
+    }
+
+    /**
+     * Validasi admin dari body (stateless).
+     */
+    private function validateAdmin(): int {
+        $body = $this->body();
+        $adminId = (int) ($body['admin_id'] ?? 0);
+        
+        if ($adminId <= 0) {
+            $this->respond(false, null, 'admin_id wajib diisi (admin only)', 422);
+        }
+        
+        return $adminId;
     }
 
     /**
@@ -38,9 +57,15 @@ class UlasanController {
      */
     public function store(): void {
         verifyCsrf();
-        $pelangganId = $this->requirePelanggan();
-        $body        = json_decode(file_get_contents('php://input'), true) ?? [];
-        $model       = new UlasanModel();
+        
+        $body = $this->body();
+        $akunId = (int) ($body['akun_id'] ?? 0);
+        
+        if ($akunId <= 0) {
+            $this->respond(false, null, 'akun_id wajib diisi', 422);
+        }
+        
+        $model = new UlasanModel();
 
         foreach (['produk_id', 'pesanan_id', 'rating'] as $f) {
             if (empty($body[$f])) $this->respond(false, null, "Field '$f' wajib diisi", 422);
@@ -48,13 +73,14 @@ class UlasanController {
         if ($body['rating'] < 1 || $body['rating'] > 5)
             $this->respond(false, null, 'Rating harus antara 1–5', 422);
 
-        if (!$model->verifikasiPembelian((int)$body['pesanan_id'], $pelangganId, (int)$body['produk_id']))
+        // Verify purchase menggunakan akunId (= pelanggan_id)
+        if (!$model->verifikasiPembelian((int)$body['pesanan_id'], $akunId, (int)$body['produk_id']))
             $this->respond(false, null, 'Pesanan belum selesai atau produk tidak ada di pesanan ini', 403);
 
         try {
             $model->create([
                 'produk_id'    => (int)$body['produk_id'],
-                'pelanggan_id' => $pelangganId,
+                'pelanggan_id' => $akunId,  // Use akunId instead of session
                 'pesanan_id'   => (int)$body['pesanan_id'],
                 'rating'       => (int)$body['rating'],
                 'komentar'     => $body['komentar'] ?? null,
@@ -68,7 +94,7 @@ class UlasanController {
     }
 
     /**
-     * Mendapatkan ulasan berdasarkan produk.
+     * Mendapatkan ulasan berdasarkan produk (public endpoint).
      */
     public function byProduk(string $produkId): void {
         $model = new UlasanModel();
@@ -79,9 +105,11 @@ class UlasanController {
      * Mengupdate status ulasan (admin only).
      */
     public function moderate(string $id): void {
-        $this->requireAdmin();
-        $body   = json_decode(file_get_contents('php://input'), true) ?? [];
-        $status = $body['status'] ?? '';
+        verifyCsrf();
+        
+        $adminId = $this->validateAdmin();
+        $body    = $this->body();
+        $status  = $body['status'] ?? '';
 
         if (!in_array($status, ['aktif', 'disembunyikan']))
             $this->respond(false, null, 'Status tidak valid', 422);

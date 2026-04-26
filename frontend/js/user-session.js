@@ -159,10 +159,13 @@ async function requestPasswordReset(identifier) {
 }
 
 async function createOrder(items) {
+    const user = getStoredUser();
     const { response, data } = await apiFetch('/pesanan', {
         method: 'POST',
-        
-        body: JSON.stringify({ items })
+        body: JSON.stringify({ 
+            akun_id: user.akun_id,
+            items: items
+         })
     });
 
     return { success: response.ok && data?.success, message: data?.message || 'Gagal membuat pesanan.', data: data?.data };

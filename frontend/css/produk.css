@@ -213,3 +213,27 @@ body {
     cursor: pointer;
     font-size: 14px;
 }
+
+/* Badge Warna Dinamis */
+.badge-status.badge-tersedia {
+    background: var(--primary-blue);
+}
+
+.badge-status.badge-habis {
+    background: #EF4444; /* Merah untuk stok habis */
+}
+
+/* Memperbaiki Header Right agar rapi */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Responsif: Jika layar kecil, kolom berkurang */
+@media (max-width: 1200px) {
+    .product-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+    .product-grid { grid-template-columns: repeat(2, 1fr); }
+}
