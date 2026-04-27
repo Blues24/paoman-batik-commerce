@@ -1,4 +1,25 @@
 <IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Disable rewrite untuk file/folder yang exist
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Rewrite semua request ke index.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Tambahan: Set proper headers
+<IfModule mod_headers.c>
+    Header always set X-Powered-By "Batik Paoman API"
+</IfModule>
+
+# Optional: Disable directory listing
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
+
+<IfModule mod_rewrite.c>
   RewriteEngine On
 
   # Jika diakses dari subfolder, Apache biasanya sudah set path yang benar.

@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost/paoman-batik/backend/public';
+const API_URL = 'http://localhost/paoman-batik/backend/public/api';
 const CURRENT_USER_KEY = 'batikPaomanCurrentUser';
 const CART_KEY = 'batikPaomanCart';
 
@@ -66,60 +66,6 @@ async function apiFetch(endpoint, options = {}) {
     return { response, data };
 }
 
-function getLocalCartItems() {
-    try {
-        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
-    } catch {
-        return [];
-    }
-}
-
-function setLocalCartItems(items) {
-    localStorage.setItem(CART_KEY, JSON.stringify(items || []));
-}
-
-async function fetchServerCart() {
-    const user = getStoredUser();
-    const akunId = user?.akun_id;
-    if (!akunId) {
-        return { success: false, data: [] };
-    }
-
-    const { response, data } = await apiFetch(`/cart?akun_id=${encodeURIComponent(String(akunId))}`, {
-        method: 'GET'
-    });
-
-    if (!response.ok || !data?.success) {
-        return { success: false, data: [] };
-    }
-
-    return { success: true, data: data.data || [] };
-}
-
-async function syncCartToServer() {
-    const user = getStoredUser();
-    const akunId = user?.akun_id;
-    if (!akunId) {
-        return { success: false, data: [] };
-    }
-
-    const items = getLocalCartItems().map((item) => ({
-        detail_batik_id: item.detail_batik_id || item.id,
-        qty: item.qty
-    }));
-
-    const { response, data } = await apiFetch('/cart/sync', {
-        method: 'POST',
-        body: JSON.stringify({ akun_id: akunId, items })
-    });
-
-    if (!response.ok || !data?.success) {
-        return { success: false, data: [] };
-    }
-
-    return { success: true, data: data.data || [] };
-}
-
 function getHeaders() {
     return {
         'Content-Type': 'application/json',
@@ -138,8 +84,6 @@ async function loginUser({ identifier, password }) {
     }
 
     setStoredUser(data.data);
-    // Setelah login, simpan keranjang lokal ke server (persist ke DB).
-    await syncCartToServer().catch(() => null);
     return { success: true, message: data.message };
 }
 
@@ -155,8 +99,6 @@ async function registerUser(payload) {
     }
 
     setStoredUser(data.data);
-    // Setelah register, simpan keranjang lokal ke server (persist ke DB).
-    await syncCartToServer().catch(() => null);
     return { success: true, message: data.message };
 }
 
@@ -301,7 +243,5 @@ window.UserSession = {
     createOrder,
     getCurrentUserOrders,
     getOrderDetail,
-    submitReview,
-    fetchServerCart,
-    syncCartToServer
+    submitReview
 };
