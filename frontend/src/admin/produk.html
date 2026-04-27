@@ -42,7 +42,7 @@
             <header class="top-bar">
                 <h1 id="page-title">Produk</h1>
                 <div class="header-right" style="display: flex; align-items: center; gap: 20px;">
-                    <button class="btn-primary">
+                    <button class="btn-primary" id="btnTambahProduk">
                         <i data-lucide="plus"></i> Tambah Produk Baru
                     </button>
                     <div class="user-profile">
@@ -62,6 +62,37 @@
                 </div>
         </main>
     </div>
+
+<button class="btn-primary" id="btnTambahProduk">
+    <i data-lucide="plus"></i> Tambah Produk Baru
+</button>
+
+<div id="modalProduk" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Tambah Produk Baru</h3>
+        <hr style="margin: 10px 0;">
+        <form id="formProduk">
+            <div class="form-group">
+                <label>Nama Produk</label>
+                <input type="text" id="namaProduk" placeholder="Contoh: Batik Mega Mendung" required>
+            </div>
+            <div class="form-group">
+                <label>Harga (Rp)</label>
+                <input type="number" id="hargaProduk" placeholder="150000" required>
+            </div>
+            <div class="form-group">
+                <label>Stok Awal</label>
+                <input type="number" id="stokProduk" placeholder="10" required>
+            </div>
+            <div class="form-group">
+                <label>URL Gambar</label>
+                <input type="text" id="imgProduk" value="../../img/batik7.jpg" required>
+            </div>
+            <button type="submit" class="btn-save">Simpan Produk</button>
+        </form>
+    </div>
+</div>
 
     <script src="../../js/navigasiAdmin.js"></script>
     <script src="../../js/produk.js"></script>

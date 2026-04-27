@@ -165,21 +165,20 @@ margin-bottom:10px;
 /* gambar hero */
 
 .hero-img {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
     position: relative;
-    width: 100%; /* Menggunakan 100% agar fleksibel mengikuti layar */
     z-index: 2;
-    display: flex;
-    justify-content: center;
-    padding: 20px 0; /* Memberi ruang napas atas bawah */
 }
 
+/* Hapus atau ganti bagian ini di CSS Anda */
 .hero-img img {
-    width: 95%; /* Membuat gambar lebih lebar ke samping (hampir mentok layar) */
-    max-width: 1200px; /* Tingkatkan batas maksimalnya, misal ke 1200px atau lebih */
-    height: 500px; /* Memberikan tinggi spesifik agar lebih "lebar" ke bawah */
-    object-fit: cover; /* KRUSIAL: Agar gambar tidak terlihat gepeng saat ditarik */
-    border-radius: 8px; /* Opsional: sedikit lengkungan agar terlihat modern */
-    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    /* Gunakan yang di poin nomor 1 di atas */
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
 }
 
 /* PRODUK */
@@ -813,3 +812,23 @@ margin-top: 15px;
     color: #e0e0e0;
 }
 
+.carousel-item img { 
+    height: 500px; 
+    object-fit: cover; 
+}
+
+/* Memaksa semua gambar di dalam carousel berukuran sama */
+#carouselExample .carousel-inner .carousel-item img {
+    width: 100%;
+    height: 500px; /* Kamu bisa ubah angka ini sesuai selera, misal 450px atau 600px */
+    object-fit: cover; /* Ini yang membuat gambar tidak gepeng meskipun aslinya beda ukuran */
+    object-position: center; /* Memastikan bagian tengah batik tetap terlihat */
+    border-radius: 10px; /* Opsional: agar sudut gambar melengkung rapi */
+}
+
+/* Responsif untuk HP agar tidak terlalu tinggi */
+@media (max-width: 768px) {
+    #carouselExample .carousel-inner .carousel-item img {
+        height: 300px; 
+    }
+}

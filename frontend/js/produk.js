@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. DATA SUMBER (Gunakan data yang sama dengan stok agar sinkron)
+    // 1. DATA SUMBER (Data awal)
     let dataProduk = [
         { id: 1, nama: "Tangga Istana", harga: 150000, stok: 21, img: "../../img/batik7.jpg" },
         { id: 2, nama: "Godong Asem", harga: 135000, stok: 6, img: "../../img/batik3.jpg" },
@@ -8,18 +8,53 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const productGrid = document.getElementById('productGrid');
+    const modal = document.getElementById('modalProduk');
+    const btnTambah = document.getElementById('btnTambahProduk');
+    const btnClose = document.querySelector('.close-modal');
+    const formProduk = document.getElementById('formProduk');
+
+    // --- Logika Buka/Tutup Modal ---
+    if (btnTambah) {
+        btnTambah.onclick = () => { modal.style.display = "block"; };
+    }
+
+    btnClose.onclick = () => { modal.style.display = "none"; };
+
+    window.onclick = (event) => {
+        if (event.target == modal) modal.style.display = "none";
+    };
+
+    // --- Logika Tambah Data ---
+    formProduk.onsubmit = (e) => {
+        e.preventDefault();
+
+        const baru = {
+            id: Date.now(), // Gunakan timestamp sebagai ID unik
+            nama: document.getElementById('namaProduk').value,
+            harga: parseInt(document.getElementById('hargaProduk').value),
+            stok: parseInt(document.getElementById('stokProduk').value),
+            img: document.getElementById('imgProduk').value
+        };
+
+        // Masukkan data baru ke array utama
+        dataProduk.push(baru);
+
+        // Jalankan ulang fungsi render untuk memperbarui tampilan
+        renderProduk(); 
+        
+        // Bersihkan form dan tutup modal
+        formProduk.reset();
+        modal.style.display = "none";
+    };
 
     function renderProduk() {
         if (!productGrid) return;
         productGrid.innerHTML = '';
 
         dataProduk.forEach(p => {
-            // Logika Status Badge
             const statusText = p.stok > 0 ? "TERSEDIA" : "HABIS";
             const statusClass = p.stok > 0 ? "badge-tersedia" : "badge-habis";
-
-            // Format Harga ke Rupiah
-            const formatHarga = p.harga ? `Rp ${p.harga.toLocaleString('id-ID')}` : "Rp N/A";
+            const formatHarga = `Rp ${p.harga.toLocaleString('id-ID')}`;
 
             const productCard = `
                 <div class="product-card">
@@ -41,30 +76,22 @@ document.addEventListener('DOMContentLoaded', () => {
             productGrid.insertAdjacentHTML('beforeend', productCard);
         });
 
-        // Jalankan Lucide Icon setelah render
         if (typeof lucide !== 'undefined') lucide.createIcons();
-        
-        // Tambahkan Event Listener untuk tombol
         attachEventListeners();
     }
 
     function attachEventListeners() {
-        // Logika Hapus
         document.querySelectorAll('.btn-delete').forEach(btn => {
             btn.onclick = () => {
-                const id = parseInt(btn.dataset.id);
+                const id = Number(btn.dataset.id);
                 if (confirm('Apakah Anda yakin ingin menghapus produk ini?')) {
                     dataProduk = dataProduk.filter(p => p.id !== id);
                     renderProduk();
                 }
             };
         });
-
-        // Logika View/Edit (Bisa dikembangkan ke Modal atau halaman baru)
-        document.querySelectorAll('.btn-view').forEach(btn => {
-            btn.onclick = () => alert('Menampilkan detail produk ID: ' + btn.dataset.id);
-        });
     }
 
+    // Jalankan render pertama kali saat halaman dimuat
     renderProduk();
 });

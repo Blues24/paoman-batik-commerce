@@ -128,23 +128,79 @@
                 </table>
             </div>
 
-            <div class="pagination-container">
-                <p>Menampilkan 4 dari 10 user</p>
-                <div class="pagination">
-                    <button class="page-btn"><i data-lucide="chevron-left"></i></button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn">2</button>
-                    <button class="page-btn">3</button>
-                    <span>...</span>
-                    <button class="page-btn">4</button>
-                    <button class="page-btn"><i data-lucide="chevron-right"></i></button>
-                </div>
-            </div>
+<div class="pagination-container">
+    <p id="pagination-info">Menampilkan 4 dari 10 user</p>
+    <div class="pagination" id="pagination-wrapper">
+        <button class="page-btn" id="prev-page"><i data-lucide="chevron-left"></i></button>
+        <div id="page-numbers" style="display: flex; gap: 6px;">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <span>...</span>
+            <button class="page-btn">4</button>
         </div>
+        <button class="page-btn" id="next-page"><i data-lucide="chevron-right"></i></button>
+    </div>
+</div>
     </section>
 </main>
+
+
+
+<div id="editModal" class="modal-overlay">
+    <div class="modal-content modal-wide">
+        <div class="modal-header">
+            <h3>Edit Akun User</h3>
+            <button class="close-modal" id="closeEdit">&times;</button>
+        </div>
+        <form id="formEditUser">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="editUsername" readonly class="input-readonly">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="editEmail" required>
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select id="editRole">
+                    <option value="Admin">Admin</option>
+                    <option value="Customer">Customer</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="editStatus">
+                    <option value="Aktif">Aktif</option>
+                    <option value="Nonaktif">Nonaktif</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" id="btnCancelEdit">Batal</button>
+                <button type="submit" class="btn-save">Simpan Perubahan</button>
+            </div>
+        </form>
     </div>
+</div>
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-icon" style="background: #FEE2E2; color: #DC2626; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+            <i data-lucide="alert-triangle" style="width: 32px; height: 32px;"></i>
+        </div>
+        <h3>Hapus Akun?</h3>
+        <p id="deleteModalMessage" style="font-size: 14px; color: #6B7280; margin-bottom: 25px; line-height: 1.5;">
+            Apakah Anda yakin ingin menghapus akun ini secara permanen?
+        </p>
+        <div class="modal-actions">
+            <button type="button" class="btn-cancel" id="btnCancelDelete">Batal</button>
+            <button type="button" class="btn-confirm" id="btnConfirmDelete" style="background: #DC2626; color: white;">Hapus</button>
+        </div>
+    </div>
+</div>
+
     <script src="../../js/navigasiAdmin.js"></script>
+    <script src="../../js/kelolaAkun.js"></script>
     <script>lucide.createIcons();</script>
 </body>
 </html>
