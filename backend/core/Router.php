@@ -54,6 +54,14 @@ class Router {
         $rawUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $uri = rtrim($rawUri, '/') ?: '/';
 
+        // Jika project diakses dari subfolder (mis. /paoman-batik/backend/public),
+        // strip base path agar route cukup didefinisikan sebagai /api/...
+        $scriptDir = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '')), '/');
+        if (!empty($scriptDir) && $scriptDir !== '/' && strpos($uri, $scriptDir) === 0) {
+            $uri = substr($uri, strlen($scriptDir)) ?: '/';
+            $uri = rtrim($uri, '/') ?: '/';
+        }
+
         $this->log("Method=$method Uri=$uri");
 
         // Handle OPTIONS request untuk CORS

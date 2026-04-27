@@ -8,6 +8,9 @@ class Database {
             self::loadEnv();
 
             $name   = getenv('DB_NAME') ?: 'batik_store';
+            // Guard: env kadang kebawa komentar (mis. "batik_store # ...")
+            $name = trim(explode('#', $name, 2)[0]);
+            $name = trim(preg_split('/\s+/', $name, 2)[0] ?? 'batik_store');
             $user   = getenv('DB_USER') ?: 'root';
             $pass   = getenv('DB_PASS') ?: '';
             $socket = getenv('DB_SOCKET') ?: '';

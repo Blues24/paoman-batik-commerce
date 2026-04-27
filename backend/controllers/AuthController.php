@@ -21,7 +21,20 @@ class AuthController {
      * Get JSON body.
      */
     private function body(): array {
-        return json_decode(file_get_contents('php://input'), true) ?? [];
+        $raw = file_get_contents('php://input');
+        if ($raw !== false && trim($raw) !== '') {
+            $decoded = json_decode($raw, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+
+        // Fallback: handle form-encoded POST (or environments where raw body is unavailable)
+        if (!empty($_POST) && is_array($_POST)) {
+            return $_POST;
+        }
+
+        return [];
     }
 
     /**

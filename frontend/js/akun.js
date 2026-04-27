@@ -79,8 +79,30 @@ function getOrderItemCount(order) {
     return order.total_jumlah || order.quantity || order.items?.reduce((sum, item) => sum + (item.jumlah || 0), 0) || 0;
 }
 
+const orderImageByName = {
+    "Kain Batik Motif Biru Pesisir": "../img/batik1.jpg",
+    "Kain Batik Motif Godong Asem": "../img/batik2.jpg",
+    "Baju Batik Motif Kentangan": "../img/baju1.png",
+    "Kain Batik Motif Mangga Bambu": "../img/batik4.jpg",
+    "Kain Batik Motif Kembang Gunda": "../img/batik5.jpg",
+    "Kemeja Batik Motif Kembang Paoman": "../img/baju2.png",
+    "Kain Batik Motif Lereng Paoman": "../img/batik7.jpg",
+    "Blus Batik Motif Pesisir Laut": "../img/baju3.png",
+    "Kain Batik Motif Daun Nila": "../img/batik9.jpg",
+    "Kemeja Batik Motif Kawung Laut": "../img/baju4.png",
+    "Kain Batik Motif Biru Pesisir Premium": "../img/batik1.jpg",
+    "Outer Batik Motif Godong Asem": "../img/baju5.png",
+    "Tunik Batik Motif Kentangan": "../img/baju6.png",
+    "Dress Batik Motif Mangga Bambu": "../img/baju7.png",
+    "Kain Batik Motif Kembang Gunda Premium": "../img/batik5.jpg"
+};
+
 function getOrderPrimaryImage(order) {
-    return order.productImage || order.items?.[0]?.image || order.items?.[0]?.gambar_produk || "";
+    const explicit = order.productImage || order.items?.[0]?.image || order.items?.[0]?.gambar_produk || "";
+    if (explicit) return explicit;
+
+    const name = getOrderPrimaryName(order);
+    return orderImageByName[name] || "";
 }
 
 function getOrderPrimaryName(order) {
@@ -122,6 +144,7 @@ async function renderOrderHistory() {
         const orderId = order.pesanan_id || order.id;
         const image = getOrderPrimaryImage(order);
         const isCompleted = ["selesai", "siap diambil"].includes(String(orderStatus).toLowerCase());
+        const isPending = String(orderStatus).toLowerCase() === "pending";
 
         list.innerHTML += `
             <article class="order-item-card">
@@ -143,12 +166,30 @@ async function renderOrderHistory() {
                         ${isCompleted ? `<button type="button" class="review-btn" onclick="openReviewModal(${orderId})">
                             <i class="bi bi-star-fill"></i> Beri Ulasan
                         </button>` : ""}
+                        ${isPending ? `<button type="button" class="review-btn" onclick="cancelMyOrder(${orderId})">
+                            <i class="bi bi-x-circle"></i> Batalkan
+                        </button>` : ""}
                     </div>
                     ${order.notes ? `<p class="order-notes">${order.notes}</p>` : ""}
                 </div>
             </article>
         `;
     });
+}
+
+async function cancelMyOrder(pesananId) {
+    const ok = confirm("Batalkan pesanan ini? Jika dibatalkan, stok akan dikembalikan.");
+    if (!ok) return;
+
+    try {
+        const result = await window.UserSession.cancelOrder(pesananId);
+        showAccountMessage(result.message, result.success ? "success" : "error");
+        if (result.success) {
+            await renderOrderHistory();
+        }
+    } catch (e) {
+        showAccountMessage("Gagal membatalkan pesanan. Coba lagi.", "error");
+    }
 }
 
 async function openReviewModal(pesananId) {

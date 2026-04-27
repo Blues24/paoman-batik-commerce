@@ -95,6 +95,71 @@ class PesananModel {
     }
 
     /**
+     * Ambil item minimal untuk pengembalian stok saat pembatalan.
+     */
+    public function getItemStocks(int $pesananId): array {
+        $stmt = $this->db->prepare(
+            'SELECT detail_batik_id, jumlah
+             FROM detail_pesanan
+             WHERE pesanan_id = ?'
+        );
+        $stmt->execute([$pesananId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Tambah stok varian (digunakan saat cancel).
+     */
+    public function tambahStok(int $varianId, int $jumlah): void {
+        $stmt = $this->db->prepare(
+            'UPDATE detail_batik SET stok = stok + ? WHERE detail_batik_id = ?'
+        );
+        $stmt->execute([$jumlah, $varianId]);
+    }
+
+    /**
+     * Batalkan pesanan milik pelanggan (pending saja) + rollback stok.
+     */
+    public function cancelByPelanggan(int $pesananId, int $pelangganId): bool|string {
+        $this->db->beginTransaction();
+        try {
+            $stmt = $this->db->prepare(
+                'SELECT status_pesanan FROM pesanan WHERE pesanan_id = ? AND pelanggan_id = ? FOR UPDATE'
+            );
+            $stmt->execute([$pesananId, $pelangganId]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$row) {
+                $this->db->rollBack();
+                return 'Pesanan tidak ditemukan';
+            }
+
+            $status = $row['status_pesanan'] ?? '';
+            if ($status !== 'pending') {
+                $this->db->rollBack();
+                return 'Pesanan tidak bisa dibatalkan (status sudah berubah)';
+            }
+
+            $items = $this->getItemStocks($pesananId);
+            foreach ($items as $it) {
+                $detailId = (int)($it['detail_batik_id'] ?? 0);
+                $qty = (int)($it['jumlah'] ?? 0);
+                if ($detailId > 0 && $qty > 0) {
+                    $this->tambahStok($detailId, $qty);
+                }
+            }
+
+            $stmt = $this->db->prepare('UPDATE pesanan SET status_pesanan = ? WHERE pesanan_id = ?');
+            $stmt->execute(['dibatalkan', $pesananId]);
+
+            $this->db->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            return 'Gagal membatalkan pesanan';
+        }
+    }
+
+    /**
      * Mengupdate status pesanan.
      */
     public function updateStatus(int $pesananId, string $status): void {

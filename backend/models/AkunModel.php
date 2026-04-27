@@ -147,7 +147,7 @@ class AkunModel {
         }
     }
 
-    public function changePassword(int $akunId, string $currentPassword, string $newPassword): true|string {
+    public function changePassword(int $akunId, string $currentPassword, string $newPassword): bool|string {
         $user = $this->findByAkunId($akunId);
 
         if (!$user) {

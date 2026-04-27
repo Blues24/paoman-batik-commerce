@@ -22,7 +22,19 @@ class PesananController {
      * Mendapatkan data dari body request.
      */
     private function body(): array {
-        return json_decode(file_get_contents('php://input'), true) ?? [];
+        $raw = file_get_contents('php://input');
+        if ($raw !== false && trim($raw) !== '') {
+            $decoded = json_decode($raw, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+
+        if (!empty($_POST) && is_array($_POST)) {
+            return $_POST;
+        }
+
+        return [];
     }
 
     /**
@@ -167,6 +179,34 @@ class PesananController {
 
         $pesanan['items'] = $model->getItems((int)$id);
         $this->respond(true, $pesanan, '', 200);
+    }
+
+    /**
+     * Batalkan pesanan (user).
+     * POST /api/pesanan/:id/cancel
+     * Body: { akun_id }
+     */
+    public function cancel(string $id): void {
+        verifyCsrf();
+
+        $body = $this->body();
+        $akunId = (int) ($body['akun_id'] ?? ($_GET['akun_id'] ?? 0));
+        if ($akunId <= 0) {
+            $this->respond(false, null, 'akun_id wajib diisi', 422);
+        }
+
+        $pelangganId = $this->pelangganIdFromAkunId($akunId);
+        if ($pelangganId <= 0) {
+            $this->respond(false, null, 'Akun belum terhubung ke data pelanggan', 422);
+        }
+
+        $model = new PesananModel();
+        $result = $model->cancelByPelanggan((int)$id, $pelangganId);
+        if ($result === true) {
+            $this->respond(true, null, 'Pesanan berhasil dibatalkan', 200);
+        }
+
+        $this->respond(false, null, is_string($result) ? $result : 'Gagal membatalkan pesanan', 400);
     }
 
     /**

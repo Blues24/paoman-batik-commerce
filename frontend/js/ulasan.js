@@ -5,12 +5,14 @@
  * - Format review data
  */
 
-//const API_URL = 'http://localhost:8000/api'; // Kena Error redefinition
+(() => {
+const DEFAULT_API_BASE = 'http://localhost/paoman-batik/backend/public/api';
 
 // =========== FETCH & DISPLAY REVIEWS ===========
 async function fetchProductReviews(produkId) {
     try {
-        const response = await fetch(`${API_URL}/produk/${produkId}/ulasan`, {
+        const apiBase = window.API_URL || DEFAULT_API_BASE;
+        const response = await fetch(`${apiBase}/produk/${produkId}/ulasan`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include'
@@ -167,3 +169,9 @@ function closeReviewModal() {
 
 // =========== EXPORT untuk ke pembelian.html ===========
 // Bisa di-import untuk display reviews di product detail page
+
+window.fetchProductReviews = fetchProductReviews;
+window.renderReviews = renderReviews;
+window.renderRatingDistribution = renderRatingDistribution;
+window.closeReviewModal = closeReviewModal;
+})();

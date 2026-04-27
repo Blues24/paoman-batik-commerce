@@ -1,3 +1,4 @@
+(() => {
 const CART_KEY = "batikPaomanCart";
 
 // Data statis sebagai fallback kalau backend belum jalan.
@@ -21,7 +22,8 @@ const produkBatikFallback = [
 
 let produkBatik = [...produkBatikFallback];
 
-const API_URL = "http://localhost:8000/api";
+const DEFAULT_API_BASE = "http://localhost/paoman-batik/backend/public/api";
+const API_URL = window.API_URL || DEFAULT_API_BASE;
 
 const imageByName = new Map(produkBatikFallback.map((item) => [item.nama, item.image]));
 
@@ -286,6 +288,9 @@ function tambahKeKeranjang(productId) {
     showCartConfirmation(selectedProduct.nama);
 }
 
+// Dipakai oleh onclick inline di template card.
+window.tambahKeKeranjang = tambahKeKeranjang;
+
 if (searchInput) {
     searchInput.addEventListener("input", applyFilters);
 }
@@ -390,3 +395,4 @@ document.addEventListener("DOMContentLoaded", () => {
         applyFilters();
     })();
 });
+})();

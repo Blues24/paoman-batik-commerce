@@ -89,46 +89,42 @@ try {
     $router = new Router();
     debugLog("Router initialized");
 
-    // Determine base path dari REQUEST_URI
-    // Contoh: /paoman-batik/backend/public/api/produk
-    $baseApi = '/paoman-batik/backend/public/api';
-
     // ===== Auth Endpoints =====
-    $router->post("$baseApi/auth/register",         ['AuthController', 'register']);
-    $router->post("$baseApi/auth/login",            ['AuthController', 'login']);
-    $router->post("$baseApi/auth/logout",           ['AuthController', 'logout']);
-    $router->get ("$baseApi/auth/me",               ['AuthController', 'me']);
-    $router->put ("$baseApi/auth/profile",          ['AuthController', 'updateProfile']);
-    $router->post("$baseApi/auth/password",         ['AuthController', 'updatePassword']);
-    $router->post("$baseApi/auth/reset-password",   ['AuthController', 'requestPasswordReset']);
-    $router->post("$baseApi/admin/login",           ['AuthController', 'loginAdmin']);
+    $router->post('/api/auth/register',         ['AuthController', 'register']);
+    $router->post('/api/auth/login',            ['AuthController', 'login']);
+    $router->post('/api/auth/logout',           ['AuthController', 'logout']);
+    $router->get ('/api/auth/me',               ['AuthController', 'me']);
+    $router->put ('/api/auth/profile',          ['AuthController', 'updateProfile']);
+    $router->post('/api/auth/password',         ['AuthController', 'updatePassword']);
+    $router->post('/api/auth/reset-password',   ['AuthController', 'requestPasswordReset']);
+    $router->post('/api/admin/login',           ['AuthController', 'loginAdmin']);
 
     // ===== Produk Endpoints =====
-    $router->get ("$baseApi/produk",                 ['ProdukController', 'index']);
-    $router->get ("$baseApi/produk/:id",             ['ProdukController', 'show']);
-    $router->post("$baseApi/produk",                 ['ProdukController', 'store']);
-    $router->put ("$baseApi/produk/:id",             ['ProdukController', 'update']);
-    $router->delete("$baseApi/produk/:id",           ['ProdukController', 'destroy']);
-    $router->post("$baseApi/produk/:id/varian",      ['ProdukController', 'storeVarian']);
-    $router->put ("$baseApi/varian/:id",             ['ProdukController', 'updateVarian']);
+    $router->get ('/api/produk',                 ['ProdukController', 'index']);
+    $router->get ('/api/produk/:id',             ['ProdukController', 'show']);
+    $router->post('/api/produk',                 ['ProdukController', 'store']);
+    $router->put ('/api/produk/:id',             ['ProdukController', 'update']);
+    $router->delete('/api/produk/:id',           ['ProdukController', 'destroy']);
+    $router->post('/api/produk/:id/varian',      ['ProdukController', 'storeVarian']);
+    $router->put ('/api/varian/:id',             ['ProdukController', 'updateVarian']);
 
     // ===== Pesanan Endpoints =====
-    $router->post("$baseApi/pesanan",                ['PesananController', 'store']);
-    $router->get ("$baseApi/pesanan/saya",           ['PesananController', 'myOrders']);
-    $router->get ("$baseApi/pesanan/:id",            ['PesananController', 'show']);
-    $router->get ("$baseApi/admin/pesanan",          ['PesananController', 'adminIndex']);
-    $router->put ("$baseApi/pesanan/:id/status",     ['PesananController', 'updateStatus']);
+    $router->post('/api/pesanan',                ['PesananController', 'store']);
+    $router->get ('/api/pesanan/saya',           ['PesananController', 'myOrders']);
+    $router->get ('/api/pesanan/:id',            ['PesananController', 'show']);
+    $router->post('/api/pesanan/:id/cancel',     ['PesananController', 'cancel']);
+    $router->get ('/api/admin/pesanan',          ['PesananController', 'adminIndex']);
+    $router->put ('/api/pesanan/:id/status',     ['PesananController', 'updateStatus']);
 
     // ===== Ulasan Endpoints =====
-    $router->post("$baseApi/ulasan",                 ['UlasanController', 'store']);
-    $router->get ("$baseApi/produk/:id/ulasan",      ['UlasanController', 'byProduk']);
-    $router->put ("$baseApi/ulasan/:id/moderate",    ['UlasanController', 'moderate']);
+    $router->post('/api/ulasan',                 ['UlasanController', 'store']);
+    $router->get ('/api/produk/:id/ulasan',      ['UlasanController', 'byProduk']);
+    $router->put ('/api/ulasan/:id/moderate',    ['UlasanController', 'moderate']);
 
     // ===== Cart Endpoints =====
-    $router->get ("$baseApi/cart",                   ['CartController', 'index']);
-    $router->post("$baseApi/cart/sync",              ['CartController', 'sync']);
+    $router->get ('/api/cart',                   ['CartController', 'index']);
+    $router->post('/api/cart/sync',              ['CartController', 'sync']);
 
-    debugLog("Routes registered with base: $baseApi");
     $router->run();
 
 } catch (Throwable $e) {

@@ -1,4 +1,8 @@
-const API_URL = 'http://localhost/paoman-batik/backend/public/api';
+(() => {
+const DEFAULT_API_BASE = 'http://localhost/paoman-batik/backend/public/api';
+// Global base URL supaya file lain bisa pakai tanpa re-declare const.
+window.API_URL = window.API_URL || DEFAULT_API_BASE;
+
 const CURRENT_USER_KEY = 'batikPaomanCurrentUser';
 const CART_KEY = 'batikPaomanCart';
 
@@ -52,7 +56,7 @@ function clearStoredUser() {
 
 async function apiFetch(endpoint, options = {}) {
     const { headers, ...otherOptions} = options;
-    const response = await fetch(`${API_URL}${endpoint}`, {
+    const response = await fetch(`${window.API_URL}${endpoint}`, {
         credentials: 'include',
         ...otherOptions, // Masukkan method, body, dll disini
         headers: {
@@ -91,7 +95,11 @@ async function registerUser(payload) {
     const { response, data } = await apiFetch('/auth/register', {
         method: 'POST',
         credentials: 'include',
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+            ...payload,
+            // Backend pakai snake_case.
+            no_hp: payload?.noHp ?? payload?.no_hp ?? null
+        })
     });
 
     if (!response.ok || !data?.success) {
@@ -131,6 +139,7 @@ async function updateProfile(payload) {
         method: 'PUT',
         body: JSON.stringify({
             ...payload,
+            no_hp: payload?.noHp ?? payload?.no_hp ?? null,
             akun_id: user.akun_id
         })
     });
@@ -214,6 +223,22 @@ async function getOrderDetail(pesananId) {
     };
 }
 
+async function cancelOrder(pesananId) {
+    const user = getStoredUser();
+    const akunId = user?.akun_id;
+    const { response, data } = await apiFetch(
+        `/pesanan/${encodeURIComponent(String(pesananId))}/cancel?akun_id=${encodeURIComponent(String(akunId || ''))}`,
+        {
+        method: 'POST',
+        body: JSON.stringify({ akun_id: akunId })
+    });
+
+    return {
+        success: response.ok && data?.success,
+        message: data?.message || (response.ok ? 'Pesanan dibatalkan.' : 'Gagal membatalkan pesanan.')
+    };
+}
+
 async function submitReview(payload) {
     const user = getStoredUser();
     const { response, data } = await apiFetch('/ulasan', {
@@ -243,5 +268,7 @@ window.UserSession = {
     createOrder,
     getCurrentUserOrders,
     getOrderDetail,
+    cancelOrder,
     submitReview
 };
+})();
