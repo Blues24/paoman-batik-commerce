@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Jika diakses dari subfolder, Apache biasanya sudah set path yang benar.
+  # Jangan paksa RewriteBase supaya portable.
+
+  # Kirim semua request yang bukan file/folder fisik ke index.php
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.php [L]
+</IfModule>
+
