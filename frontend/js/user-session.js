@@ -77,18 +77,70 @@ function getHeaders() {
     };
 }
 
-async function loginUser({ identifier, password }) {
-    const { response, data } = await apiFetch('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ identifier, password })
-    });
+async function loginUser( credentials ) {
+    try {
+        // Cek apakah yang login ini admin atau bukan
+        const adminResponse = await fetch(`${DEFAULT_API_BASE}/admin/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                username: credentials.identifier,
+                password: credentials.password,
+            })
+        });
+        
+        const adminData = await adminResponse.json();
 
-    if (!response.ok || !data?.success) {
-        return { success: false, message: data?.message || 'Login gagal.' };
+        if (adminResponse.ok && adminData.success){
+            const dataAdmin = {
+                ...adminData.data,
+                username: credentials.identifier,
+                password: credentials.password,
+                role: adminData.data.role,
+            };
+            setStoredUser(dataAdmin);
+            return {
+                 success: true,
+                 role: 'admin',
+                 message: 'Admin berhasil login!'
+                 };
+        } else {
+            // Jika bukan admin maka coba pakai endpoint login USER
+            const userResponse = await fetch(`${DEFAULT_API_BASE}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(credentials)
+            });
+
+            const userData = await userResponse.json();
+
+            if (userResponse.ok && userData.success) {
+                const dataUser = {
+                    ...userData.data,
+                    username: credentials.identifier,
+                    role: 'pelanggan'
+                };
+                setStoredUser(dataUser);
+                return {
+                    success: true,
+                    role: 'pelanggan',
+                    message: 'Pelanggan berhasil login!'
+                }
+            } else {
+                return {
+                    success: false,
+                    message: userData.message || adminData.message || 'Login gagal'
+                }
+            }
+        }
+    } catch (err){
+        console.error("Login error: ", err);
+        return {
+            success: false,
+            message: 'Terjadi kesalahan koneksi ke server....'
+        };
     }
-
-    setStoredUser(data.data);
-    return { success: true, message: data.message };
+    
 }
 
 async function registerUser(payload) {
