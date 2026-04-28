@@ -164,6 +164,45 @@ class AkunModel {
 
         return true;
     }
+    
+    /**
+     * Mengambil semua data pelanggan (user) untuk dikelola admin.
+     */
+    public function getAllPelanggan(int $limit, int $offset): array {
+        $stmt = $this->db->prepare(
+            'SELECT a.akun_id, a.username, p.email, a.status_akun as status 
+             FROM akun a 
+             INNER JOIN pelanggan p ON a.akun_id = p.akun_id 
+             LIMIT ? OFFSET ?'
+        );
+        // Menggunakan INNER JOIN ke pelanggan memastikan hanya 'user' yang tertarik, 
+        // karena admin tidak memiliki data di tabel pelanggan.
+        $stmt->bindValue(1, $limit, PDO::PARAM_INT);
+        $stmt->bindValue(2, $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Menghitung total pelanggan untuk paginasi.
+     */
+    public function countPelanggan(): int {
+        $stmt = $this->db->query('SELECT COUNT(*) FROM pelanggan');
+        return (int) $stmt->fetchColumn();
+    }
+
+    /**
+     * Menghapus akun pelanggan.
+     */
+    public function deleteAkun(int $akunId): bool {
+        // Pastikan ID ini memang milik pelanggan sebelum dihapus
+        $stmt = $this->db->prepare(
+            'DELETE a FROM akun a 
+             INNER JOIN pelanggan p ON a.akun_id = p.akun_id 
+             WHERE a.akun_id = ?'
+        );
+        return $stmt->execute([$akunId]);
+    }
 
     /**
      * Mencari admin berdasarkan username.
@@ -174,5 +213,33 @@ class AkunModel {
         );
         $stmt->execute([$username]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function updatePelangganByAdmin(int $akunId, string $email, string $status): bool {
+    $this->db->beginTransaction();
+    try {
+        // 1. Update Status di tabel Akun
+        $stmt1 = $this->db->prepare('UPDATE akun SET status_akun = ? WHERE akun_id = ?');
+        $stmt1->execute([$status, $akunId]);
+
+        // 2. Update Email di tabel Pelanggan
+        $stmt2 = $this->db->prepare('UPDATE pelanggan SET email = ? WHERE akun_id = ?');
+        $stmt2->execute([$email, $akunId]);
+
+        $this->db->commit();
+        return true;
+    } catch (Exception $e) {
+        $this->db->rollBack();
+        return false;
+    }
+}
+
+    // Fungsi pembantu untuk statistik
+    public function countProduk(): int {
+        return (int) $this->db->query('SELECT COUNT(*) FROM produk')->fetchColumn();
+    }
+    
+    public function countPesanan(): int {
+        return (int) $this->db->query('SELECT COUNT(*) FROM pesanan')->fetchColumn();
     }
 }

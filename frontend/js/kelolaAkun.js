@@ -1,242 +1,182 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('customAlert');
-    const btnCancel = document.getElementById('btnCancel');
-    const btnConfirm = document.getElementById('btnConfirm');
-    let rowToDelete = null;
-
-    // Fungsi buka modal
-    function openModal(row, username) {
-        rowToDelete = row;
-        document.getElementById('modalMessage').innerText = `Akun "${username}" akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.`;
-        modal.style.display = 'flex';
-    }
-
-    // Fungsi tutup modal
-    function closeModal() {
-        modal.style.display = 'none';
-        rowToDelete = null;
-    }
-
-    // Event Listener untuk tombol delete di tabel
-    document.querySelectorAll('.btn-delete').forEach(button => {
-        button.addEventListener('click', function() {
-            const row = this.closest('tr');
-            const username = row.querySelector('td:nth-child(2) strong').textContent;
-            openModal(row, username);
-        });
-    });
-
-    // Klik Batal
-    btnCancel.addEventListener('click', closeModal);
-
-    // Klik Konfirmasi Hapus
-    btnConfirm.addEventListener('click', () => {
-        if (rowToDelete) {
-            rowToDelete.style.transition = '0.3s';
-            rowToDelete.style.opacity = '0';
-            rowToDelete.style.transform = 'translateX(20px)';
-            
-            setTimeout(() => {
-                rowToDelete.remove();
-                closeModal();
-                // Opsional: Tampilkan notifikasi sukses kecil di pojok
-                console.log("Data berhasil dihapus.");
-            }, 300);
-        }
-    });
-
-    // Tutup modal jika klik di luar box putih
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
-});
-
-
-    // Tambahkan logika ini di dalam DOMContentLoaded kelolaAkun.js
-const editModal = document.getElementById('editModal');
-const formEdit = document.getElementById('formEditUser');
-let currentRow = null;
-
-// Fungsi Buka Modal Edit
-document.querySelectorAll('.btn-edit').forEach(button => {
-    button.addEventListener('click', function() {
-        currentRow = this.closest('tr');
-        
-        // Ambil data dari baris tabel
-        const username = currentRow.querySelector('td:nth-child(2) strong').textContent;
-        const email = currentRow.querySelector('td:nth-child(3)').textContent;
-        const role = currentRow.querySelector('.badge[class*="badge-admin"], .badge[class*="badge-customer"]').textContent;
-        const status = currentRow.querySelector('.badge[class*="badge-active"], .badge[class*="badge-inactive"]').textContent;
-
-        // Isi form modal dengan data tersebut
-        document.getElementById('editUsername').value = username;
-        document.getElementById('editEmail').value = email;
-        document.getElementById('editRole').value = role;
-        document.getElementById('editStatus').value = status;
-
-        editModal.style.display = 'flex';
-    });
-});
-
-// Fungsi Tutup Modal Edit
-const closeEditBtns = [document.getElementById('closeEdit'), document.getElementById('btnCancelEdit')];
-closeEditBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        editModal.style.display = 'none';
-    });
-});
-
-// Simpan Perubahan
-formEdit.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    if (currentRow) {
-        // Ambil nilai baru dari input
-        const newEmail = document.getElementById('editEmail').value;
-        const newRole = document.getElementById('editRole').value;
-        const newStatus = document.getElementById('editStatus').value;
-
-        // Update tampilan tabel secara langsung (Simulasi)
-        currentRow.querySelector('td:nth-child(3)').textContent = newEmail;
-        
-        // Update Badge Role
-        const roleBadge = currentRow.querySelector('td:nth-child(4) .badge');
-        roleBadge.textContent = newRole;
-        roleBadge.className = `badge badge-${newRole.toLowerCase()}`;
-
-        // Update Badge Status
-        const statusBadge = currentRow.querySelector('td:nth-child(5) .badge');
-        statusBadge.textContent = newStatus;
-        statusBadge.className = `badge badge-${newStatus === 'Aktif' ? 'active' : 'inactive'}`;
-
-        alert('Data berhasil diperbarui!');
-        editModal.style.display = 'none';
-    }
-});
+// kelolaAkun.js
 
 document.addEventListener('DOMContentLoaded', () => {
+    //  INISIALISASI VARIABEL & ELEMEN 
     let currentPage = 1;
-    const totalPages = 4;
-    const itemsPerPage = 4;
-    const totalItems = 10;
+    const itemsPerPage = 4; 
+    let totalItems = 10;
+    let currentRow = null;
 
+    // Elemen penomoran halaman
     const pageNumbersContainer = document.getElementById('page-numbers');
     const prevBtn = document.getElementById('prev-page');
     const nextBtn = document.getElementById('next-page');
     const infoText = document.getElementById('pagination-info');
 
-    // Fungsi untuk memperbarui tampilan info (e.g., "Menampilkan 4 dari 10 user")
-    function updatePaginationInfo() {
-        const start = (currentPage - 1) * itemsPerPage + 1;
-        const end = Math.min(currentPage * itemsPerPage, totalItems);
-        infoText.textContent = `Menampilkan ${end - start + 1} dari ${totalItems} user`;
+    // Elemen Modal Hapus
+    const deleteModal = document.getElementById('deleteModal');
+    const btnCancelDelete = document.getElementById('btnCancelDelete');
+    const btnConfirmDelete = document.getElementById('btnConfirmDelete');
+    const deleteMessage = document.getElementById('deleteModalMessage');
+
+    // Elemen Modal Edit
+    const editModal = document.getElementById('editModal');
+    const formEdit = document.getElementById('formEditUser');
+    const closeEdit = document.getElementById('closeEdit');
+    const btnCancelEdit = document.getElementById('btnCancelEdit');
+
+    // FUNGSI UTAMA: RENDER DATA DARI API
+    async function renderTableData(page) {
+        console.log(`Memuat data untuk halaman ${page}...`);
+
+        try {
+            // Memanggil API Backend (AdminController)
+            const { response, data } = await apiFetch(`/admin/pelanggan?page=${page}`, {
+                method: 'GET'
+            });
+
+            if (response.ok && data.success) {
+                const tbody = document.querySelector('.table-card table tbody');
+                tbody.innerHTML = '';
+
+                data.data.users.forEach(user => {
+                    // Gunakan data-id agar JS tahu akun mana yang dikelola
+                    const row = `
+                        <tr data-id="${user.akun_id}">
+                            <td><div class="profile-circle"></div></td>
+                            <td><strong>${user.username}</strong></td>
+                            <td>${user.email}</td>
+                            <td><span class="badge badge-customer">Customer</span></td>
+                            <td><span class="badge badge-${user.status === 'aktif' ? 'active' : 'inactive'}">${user.status === 'aktif' ? 'Aktif' : 'Nonaktif'}</span></td>
+                            <td>${user.tanggal_bergabung || '-'}</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="btn-edit"><i data-lucide="pencil"></i></button>
+                                    <button class="btn-delete"><i data-lucide="trash-2"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+
+                // Update info paginasi dari server
+                totalItems = data.data.total;
+                updatePaginationUI(data.data.totalPages);
+
+                lucide.createIcons();
+                attachRowEventListeners();
+            }
+        } catch (error) {
+            console.error("Gagal sinkronisasi data:", error);
+        }
     }
 
-    // Fungsi untuk memperbarui status tombol active dan disabled
-    function updatePaginationUI() {
-        // Handle Tombol Angka
-        const buttons = pageNumbersContainer.querySelectorAll('.page-btn');
-        buttons.forEach(btn => {
-            if (parseInt(btn.textContent) === currentPage) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
+    // FUNGSI PEMBANTU: LOGIKA MODAL EDIT & HAPUS 
+    function attachRowEventListeners() {
+        // Tombol Edit
+        document.querySelectorAll('.btn-edit').forEach(button => {
+            button.onclick = function () {
+                currentRow = this.closest('tr');
+                const username = currentRow.querySelector('td:nth-child(2) strong').textContent;
+                const email = currentRow.querySelector('td:nth-child(3)').textContent;
+                const role = currentRow.querySelector('td:nth-child(4) .badge').textContent;
+                const status = currentRow.querySelector('td:nth-child(5) .badge').textContent;
+
+                document.getElementById('editUsername').value = username;
+                document.getElementById('editEmail').value = email;
+                document.getElementById('editRole').value = role;
+                document.getElementById('editStatus').value = status;
+
+                editModal.style.display = 'flex';
+            };
         });
 
-        // Handle Tombol Prev/Next
+        // Tombol Delete
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.onclick = function () {
+                currentRow = this.closest('tr');
+                const username = currentRow.querySelector('td:nth-child(2) strong').textContent;
+                deleteMessage.innerHTML = `Akun <strong>${username}</strong> akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.`;
+                deleteModal.style.display = 'flex';
+            };
+        });
+    }
+
+    // Event Submit Edit
+    formEdit.onsubmit = async (e) => {
+        e.preventDefault();
+        if (currentRow) {
+            const akunId = currentRow.getAttribute('data-id');
+            const payload = {
+                akun_id: akunId,
+                email: document.getElementById('editEmail').value,
+                status: document.getElementById('editStatus').value
+            };
+
+            const { response } = await apiFetch('/admin/update-pelanggan', {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                alert('Data berhasil diperbarui!');
+                editModal.style.display = 'none';
+                renderTableData(currentPage);
+            }
+        }
+    };
+
+    // Event Konfirmasi Hapus
+    btnConfirmDelete.onclick = async () => {
+        if (currentRow) {
+            const akunId = currentRow.getAttribute('data-id');
+            const { response } = await apiFetch('/admin/delete-pelanggan', {
+                method: 'POST',
+                body: JSON.stringify({ akun_id: akunId })
+            });
+
+            if (response.ok) {
+                currentRow.style.transition = '0.3s';
+                currentRow.style.opacity = '0';
+                currentRow.style.transform = 'translateX(20px)';
+                setTimeout(() => {
+                    deleteModal.style.display = 'none';
+                    renderTableData(currentPage);
+                }, 300);
+            }
+        }
+    };
+
+    // FUNGSI PEMBANTU: LOGIKA PAGINASI UI
+    function updatePaginationUI(totalPages) {
+        const start = (currentPage - 1) * itemsPerPage + 1;
+        const end = Math.min(currentPage * itemsPerPage, totalItems);
+        infoText.textContent = `Menampilkan ${start}-${end} dari ${totalItems} user`;
+
         prevBtn.disabled = (currentPage === 1);
-        nextBtn.disabled = (currentPage === totalPages);
-        
-        updatePaginationInfo();
+        nextBtn.disabled = (currentPage === totalPages || totalPages === 0);
     }
 
-    // Event Listener untuk Angka Halaman
-    pageNumbersContainer.addEventListener('click', (e) => {
-        if (e.target.classList.contains('page-btn')) {
-            currentPage = parseInt(e.target.textContent);
-            renderTableData(currentPage); // Panggil fungsi muat data
-            updatePaginationUI();
-        }
+    // Event Paginasi
+    prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderTableData(currentPage); } };
+    nextBtn.onclick = () => { currentPage++; renderTableData(currentPage); };
+
+    // Tutup Modals
+    [closeEdit, btnCancelEdit, btnCancelDelete].forEach(btn => {
+        if (btn) btn.onclick = () => {
+            editModal.style.display = 'none';
+            deleteModal.style.display = 'none';
+        };
     });
 
-    // Event Listener untuk Tombol Previous
-    prevBtn.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            renderTableData(currentPage);
-            updatePaginationUI();
+    window.onclick = (e) => {
+        if (e.target === editModal || e.target === deleteModal) {
+            editModal.style.display = 'none';
+            deleteModal.style.display = 'none';
         }
-    });
-
-    // Event Listener untuk Tombol Next
-    nextBtn.addEventListener('click', () => {
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderTableData(currentPage);
-            updatePaginationUI();
-        }
-    });
-
-    // Simulasi fungsi muat data ke tabel
-    function renderTableData(page) {
-        console.log(`Memuat data untuk halaman ${page}...`);
-        // Di sini Anda bisa melakukan fetch data dari database via PHP
-        // Contoh: fetch(`get_users.php?page=${page}`)
-    }
+    };
 
     // Inisialisasi awal
-    updatePaginationUI();
-});
-
-// --- LOGIKA HAPUS USER ---
-const deleteModal = document.getElementById('deleteModal');
-const btnCancelDelete = document.getElementById('btnCancelDelete');
-const btnConfirmDelete = document.getElementById('btnConfirmDelete');
-const deleteMessage = document.getElementById('deleteModalMessage');
-let rowToDelete = null;
-
-// Buka Modal Hapus
-document.querySelectorAll('.btn-delete').forEach(button => {
-    button.addEventListener('click', function() {
-        rowToDelete = this.closest('tr');
-        const username = rowToDelete.querySelector('td:nth-child(2) strong').textContent;
-        
-        // Update pesan agar lebih personal
-        deleteMessage.innerHTML = `Akun <strong>${username}</strong> akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.`;
-        
-        deleteModal.style.display = 'flex';
-    });
-});
-
-// Klik Batal
-btnCancelDelete.addEventListener('click', () => {
-    deleteModal.style.display = 'none';
-    rowToDelete = null;
-});
-
-// Klik Konfirmasi Hapus
-btnConfirmDelete.addEventListener('click', () => {
-    if (rowToDelete) {
-        // Efek transisi saat menghapus baris
-        rowToDelete.style.transition = '0.3s';
-        rowToDelete.style.opacity = '0';
-        rowToDelete.style.transform = 'translateX(20px)';
-        
-        setTimeout(() => {
-            rowToDelete.remove();
-            deleteModal.style.display = 'none';
-            rowToDelete = null;
-            
-            // Kamu bisa menambahkan toast/notifikasi sukses di sini
-            console.log("User berhasil dihapus.");
-        }, 300);
-    }
-});
-
-// Tutup modal jika klik di luar area putih
-window.addEventListener('click', (e) => {
-    if (e.target === deleteModal) {
-        deleteModal.style.display = 'none';
-    }
+    renderTableData(currentPage);
 });
