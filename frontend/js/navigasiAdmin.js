@@ -44,12 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         const result = await window.UserSession.logoutUser();
                         if (result.success) {
                             // Redirect ke folder auth
-                            window.location.href = "../auth/login.html";
+                            window.location.href = "../auth.html";
                         }
                     } else {
                         // Fallback jika library belum dimuat
                         localStorage.removeItem(CURRENT_USER_KEY);
-                        window.location.href = "../auth/login.html";
+                        window.location.href = "../auth.html";
                     }
                 }
             });
