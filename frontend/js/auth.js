@@ -89,18 +89,24 @@ async function handleLoginSubmit(event) {
 
     try {
         const result = await window.UserSession.loginUser({ identifier, password });
+        
+        if (result.success){
+            showMessage("Login berhasil! mengalihkan... ", "success");
 
-        if (!result.success) {
+            // Logika pengalihan halaman berdasarkan role
+            setTimeout(() => {
+                if (result.role === 'admin'){
+                    window.location.href = "../src/admin/dasboardAdmin.html";
+                } else {
+                    window.location.href = "../src/beranda.html";
+                }
+            }, 1000);
+        } else {
             showMessage(result.message);
-            return;
         }
-
-        showMessage("Login berhasil, kamu akan diarahkan sebentar lagi.", "success");
-        window.location.href = getRedirectTarget();
-    } catch (error) {
-        showMessage("Terjadi kendala saat login. Coba lagi sebentar.");
-    } finally {
-        setSubmitState(submitButton, false, "Masuk", "Memproses...");
+    } catch ( err ){
+        showMessage("Gagal melakukan login. Silahkan coba lagi");
+        console.error(err.message);
     }
 }
 

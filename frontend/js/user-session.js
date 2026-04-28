@@ -163,14 +163,35 @@ async function registerUser(payload) {
 }
 
 async function logoutUser() {
-    const { response, data } = await apiFetch('/auth/logout', {
-        method: 'POST'
-    });
+    try {
+        // Ambil data user yang sekarang untuk pengecekan role
+        const userData = localStorage.getItem(CURRENT_USER_KEY);
+        const curentUser = userData ? JSON.parse(userData)  : null;
 
-    clearStoredUser();
-    // Pastikan state pemesanan/keranjang ikut bersih saat logout.
-    localStorage.removeItem(CART_KEY);
-    return { success: response.ok && data?.success, message: data?.message || 'Logout selesai.' };
+        // Cek apakah user yang sekarang itu pelanggan atau admin
+        const isPelanggan = currentUser && currentUser.role === 'pelanggan'; // jika nilai variabel ini false maka itu admin
+
+        // 1. Panggil logout melalui API
+        const { response, data } = await fetch(`${DEFAULT_API_BASE}/auth/logout`, {
+            method: 'POST'
+        });
+        // 2. Pembersihan total terhadap local dan session storage di browser
+        // Menghapus data user, CSRF TOKEN, dan data keranjang
+        clearStoredUser();
+        
+        if (isPelanggan) {
+            localStorage.removeItem(CART_KEY);
+        }
+        return {
+            success: true,
+            message: data?.message || "Logout berhasil."
+        };
+    } catch ( err ) {
+        console.error("Logout error: ", err);
+        // Fallback tetap hapus data lokal
+        localStorage.removeItem(CURRENT_USER_KEY);
+        return { success: true, message: "Logout lokal berhasil." };
+    }
 }
 
 async function fetchCurrentUser() {
