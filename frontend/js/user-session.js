@@ -190,8 +190,8 @@ async function logoutUser() {
     } catch ( err ) {
         console.error("Logout error: ", err);
         // Fallback tetap hapus data lokal
-        localStorage.removeItem(CURRENT_USER_KEY);
-        return { success: true, message: "Logout lokal berhasil." };
+        clearStoredUser();
+        return { success: true, message: "Logout paksa berhasil." };
     }
 }
 
