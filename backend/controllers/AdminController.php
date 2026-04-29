@@ -48,26 +48,24 @@ class AdminController {
         $body = $this->body();
         $akunId = (int)($body['akun_id'] ?? 0);
         $email = $body['email'] ?? '';
-        $status = $body['status'] ?? ''; // 'Aktif' atau 'Nonaktif'
-    
-        if ($akunId <= 0 || empty($email)) {
-            $this->respond(false, null, 'Data tidak lengkap', 422);
+        $status = strtolower($body['status'] ?? ''); 
+
+        if ($akunId <= 0) {
+            $this->respond(false, null, 'ID Akun tidak ditemukan', 422);
         }
-    
+
         $model = new AkunModel();
         try {
-            // Konversi status ke format database ('aktif'/'nonaktif')
-            $dbStatus = (strtolower($status) === 'aktif') ? 'aktif' : 'nonaktif';
-            
-            $result = $model->updatePelangganByAdmin($akunId, $email, $dbStatus);
-    
-            if ($result) {
-                $this->respond(true, null, 'Data pelanggan berhasil diperbarui', 200);
+            // Gunakan fungsi updatePelangganByAdmin yang kita rancang tadi
+            $success = $model->updatePelangganByAdmin($akunId, $email, $status);
+
+            if ($success) {
+                $this->respond(true, null, 'Berhasil memperbarui data', 200);
             } else {
-                $this->respond(false, null, 'Gagal memperbarui data', 400);
+                $this->respond(false, null, 'Gagal update database', 400);
             }
         } catch (Exception $e) {
-            $this->respond(false, null, 'Terjadi kesalahan server', 500);
+            $this->respond(false, null, $e->getMessage(), 500);
         }
     }
 

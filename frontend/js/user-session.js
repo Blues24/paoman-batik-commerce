@@ -67,6 +67,7 @@ async function apiFetch(endpoint, options = {}) {
     })
 
     const data = await response.json().catch(() => null);
+    window.apiFetch = apiFetch;
     return { response, data };
 }
 
