@@ -99,6 +99,12 @@ try {
     $router->post('/api/auth/reset-password',   ['AuthController', 'requestPasswordReset']);
     $router->post('/api/admin/login',           ['AuthController', 'loginAdmin']);
 
+    // ===== Admin management Endpoints =====
+    $router->get ('/api/admin/ambil-data-pelanggan', ['AdminController', 'getPelanggan']);
+    $router->post('/api/admin/hapus-data-pelanggan', ['AdminController', 'deletePelanggan']);
+    $router->post('/api/admin/update-data-pelanggan', ['AdminController', 'updatePelanggan']);
+    $router->get ('/api/admin/statistik-dashboard',  ['AdminController', 'getStats']);
+
     // ===== Produk Endpoints =====
     $router->get ('/api/produk',                 ['ProdukController', 'index']);
     $router->get ('/api/produk/:id',             ['ProdukController', 'show']);
