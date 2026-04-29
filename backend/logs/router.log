@@ -9802,3 +9802,1048 @@ with 1 params
 [2026-04-27 11:53:06] Method=GET Uri=/api/pesanan/saya
 [2026-04-27 11:53:06] MATCH: PesananController::myOrders
 [2026-04-27 11:53:06] CALL: PesananController::myOrders with 0 params
+[2026-04-29 03:47:02] Method=POST Uri=/api/auth/login
+[2026-04-29 03:47:02] MATCH: AuthController::login
+[2026-04-29 03:47:02] CALL: AuthController::login with 0 params
+[2026-04-29 03:47:29] Method=POST Uri=/api/auth/login
+[2026-04-29 03:47:29] MATCH: AuthController::login
+[2026-04-29 03:47:29] CALL: AuthController::login with 0 params
+[2026-04-29 03:48:35] Method=POST Uri=/api/auth/login
+[2026-04-29 03:48:35] MATCH: AuthController::login
+[2026-04-29 03:48:35] CALL: AuthController::login with 0 params
+[2026-04-29 04:14:27] Method=POST Uri=/api/auth/login
+[2026-04-29 04:14:27] MATCH: AuthController::login
+[2026-04-29 04:14:27] CALL: AuthController::login with 0 params
+[2026-04-29 04:14:39] Method=POST Uri=/api/auth/login
+[2026-04-29 04:14:39] MATCH: AuthController::login
+[2026-04-29 04:14:39] CALL: AuthController::login with 0 params
+[2026-04-29 04:17:09] Method=POST Uri=/api/auth/login
+[2026-04-29 04:17:09] MATCH: AuthController::login
+[2026-04-29 04:17:09] CALL: AuthController::login with 0 params
+[2026-04-29 04:19:40] Method=POST Uri=/api/auth/login
+[2026-04-29 04:19:40] MATCH: AuthController::login
+[2026-04-29 04:19:40] CALL: AuthController::login with 0 params
+[2026-04-29 04:21:07] Method=POST Uri=/api/auth/login
+[2026-04-29 04:21:07] MATCH: AuthController::login
+[2026-04-29 04:21:07] CALL: AuthController::login with 0 params
+[2026-04-29 04:27:11] Method=POST Uri=/api/auth/login
+[2026-04-29 04:27:11] MATCH: AuthController::login
+[2026-04-29 04:27:11] CALL: AuthController::login with 0 params
+[2026-04-29 04:30:38] Method=POST Uri=/api/admin/login
+[2026-04-29 04:30:38] MATCH: AuthController::loginAdmin
+[2026-04-29 04:30:38] CALL: AuthController::loginAdmin with 0 params
+[2026-04-29 04:30:44] Method=GET Uri=/api/admin/ambil-data-pelanggan
+[2026-04-29 04:30:44] MATCH: AdminController::getPelanggan
+[2026-04-29 04:30:44] CALL: AdminController::getPelanggan with 0 params
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk
+[2026-04-29 04:32:57] MATCH: ProdukController::index
+[2026-04-29 04:32:57] CALL: ProdukController::index with 0 params
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/30
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/29
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/28
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/27
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/26
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/25
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/24
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/22
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/23
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/20
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/21
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/19
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/18
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/17
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/15
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/14
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/13
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/12
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/11
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/10
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/9
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/8
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/7
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/6
+
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/5
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/4
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/3
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/2
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+ith 1 params
+[2026-04-29 04:32:57] Method=GET Uri=/api/produk/1
+[2026-04-29 04:32:57] MATCH: ProdukController::show
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:32:57] CALL: ProdukController::show with 1 params
+[2026-04-29 04:34:10] Method=POST Uri=/api/pesanan
+[2026-04-29 04:34:10] MATCH: PesananController::store
+[2026-04-29 04:34:10] CALL: PesananController::store with 0 params
+[2026-04-29 04:35:50] Method=POST Uri=/api/auth/register
+[2026-04-29 04:35:50] MATCH: AuthController::register
+[2026-04-29 04:35:50] CALL: AuthController::register with 0 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk
+[2026-04-29 04:35:59] MATCH: ProdukController::index
+[2026-04-29 04:35:59] CALL: ProdukController::index with 0 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/30
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/29
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/28
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/27
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/25
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/24
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/23
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/22
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/21
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/20
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/19
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/18
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/17
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/16
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/15
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/14
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/12
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/11
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/10
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/9
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/8
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/7
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/6
+
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/5
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/4
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/3
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/2
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] Method=GET Uri=/api/produk/1
+[2026-04-29 04:35:59] MATCH: ProdukController::show
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:35:59] CALL: ProdukController::show with 1 params
+[2026-04-29 04:36:32] Method=POST Uri=/api/pesanan
+[2026-04-29 04:36:32] MATCH: PesananController::store
+[2026-04-29 04:36:32] CALL: PesananController::store with 0 params
+[2026-04-29 04:36:36] Method=GET Uri=/api/pesanan/saya
+[2026-04-29 04:36:36] MATCH: PesananController::myOrders
+[2026-04-29 04:36:36] CALL: PesananController::myOrders with 0 params
+[2026-04-29 04:41:33] Method=GET Uri=/api/pesanan/saya
+[2026-04-29 04:41:33] MATCH: PesananController::myOrders
+[2026-04-29 04:41:33] CALL: PesananController::myOrders with 0 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk
+[2026-04-29 05:00:06] MATCH: ProdukController::index
+[2026-04-29 05:00:06] CALL: ProdukController::index with 0 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/30
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/28
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/29
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/26
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/25
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/24
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/27
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/23
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/22
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/21
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/20
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/19
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/18
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/17
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/16
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/15
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/14
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/13
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/12
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/11
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/10
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] MATCH: ProdukController::show[2026-04-29 05:00:06] Method=GET Uri=/api/produk/8
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/7
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/6
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/5
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/4
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/3
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/2
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] Method=GET Uri=/api/produk/1
+[2026-04-29 05:00:06] MATCH: ProdukController::show
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:06] CALL: ProdukController::show with 1 params
+[2026-04-29 05:00:37] Method=POST Uri=/api/pesanan
+[2026-04-29 05:00:37] MATCH: PesananController::store
+[2026-04-29 05:00:37] CALL: PesananController::store with 0 params
+[2026-04-29 05:00:44] Method=GET Uri=/api/pesanan/saya
+[2026-04-29 05:00:44] MATCH: PesananController::myOrders
+[2026-04-29 05:00:44] CALL: PesananController::myOrders with 0 params
+[2026-04-29 05:01:42] Method=POST Uri=/api/pesanan/4/cancel
+[2026-04-29 05:01:42] MATCH: PesananController::cancel
+[2026-04-29 05:01:42] CALL: PesananController::cancel with 1 params
+[2026-04-29 05:01:42] Method=GET Uri=/api/pesanan/saya
+[2026-04-29 05:01:42] MATCH: PesananController::myOrders
+[2026-04-29 05:01:42] CALL: PesananController::myOrders with 0 params
+[2026-04-29 05:01:49] Method=POST Uri=/api/pesanan/3/cancel
+[2026-04-29 05:01:49] MATCH: PesananController::cancel
+[2026-04-29 05:01:49] CALL: PesananController::cancel with 1 params
+[2026-04-29 05:01:49] Method=GET Uri=/api/pesanan/saya
+[2026-04-29 05:01:49] MATCH: PesananController::myOrders
+[2026-04-29 05:01:49] CALL: PesananController::myOrders with 0 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk
+[2026-04-29 05:06:31] MATCH: ProdukController::index
+[2026-04-29 05:06:31] CALL: ProdukController::index with 0 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/30
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/28
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/27
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/26
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/25
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/24
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/23
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/22
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/21
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/20
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/19
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/18
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/17
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/15
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/14
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/13
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/12
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/11
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/10
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/9
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/8
+with 1 params
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/7
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/6
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/5
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/4
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/3
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/2
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:06:31] Method=GET Uri=/api/produk/1
+[2026-04-29 05:06:31] MATCH: ProdukController::show
+[2026-04-29 05:06:31] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk
+[2026-04-29 05:07:48] MATCH: ProdukController::index
+[2026-04-29 05:07:48] CALL: ProdukController::index with 0 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/28
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/29
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/27
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/30
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/25
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/24
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/23
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/22
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/20
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/21
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/19
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/18
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/17
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/16
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/14
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/15
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/13
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/12
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/11
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/10
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/9
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/8
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/7
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/6
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/5
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/3
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/2
+[2026-04-29 05:07:48] Method=GET Uri=/api/produk/1
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] MATCH: ProdukController::show
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:07:48] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:28] Method=GET Uri=/api/produk
+[2026-04-29 05:36:28] MATCH: ProdukController::index
+[2026-04-29 05:36:28] CALL: ProdukController::index with 0 params
+[2026-04-29 05:36:28] Method=GET Uri=/api/produk/30
+[2026-04-29 05:36:28] MATCH: ProdukController::show
+[2026-04-29 05:36:28] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:28] Method=GET Uri=/api/produk/29
+[2026-04-29 05:36:28] MATCH: ProdukController::show
+[2026-04-29 05:36:28] Method=GET Uri=/api/produk/28
+[2026-04-29 05:36:28] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:28] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:28] Method=GET Uri=/api/produk/26
+[2026-04-29 05:36:28] MATCH: ProdukController::show
+[2026-04-29 05:36:28] Method=GET Uri=/api/produk/27
+[2026-04-29 05:36:28] Method=GET Uri=/api/produk/25
+[2026-04-29 05:36:28] MATCH: ProdukController::show
+[2026-04-29 05:36:28] MATCH: ProdukController::show
+[2026-04-29 05:36:28] MATCH: ProdukController::show
+[2026-04-29 05:36:28] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:28] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:28] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:28] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:28] Method=GET Uri=/api/produk/23
+[2026-04-29 05:36:28] MATCH: ProdukController::show
+[2026-04-29 05:36:28] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:28] Method=GET Uri=/api/produk/22
+[2026-04-29 05:36:28] MATCH: ProdukController::show
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/21
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/20
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/19
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/18
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/17
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/16
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/15
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/14
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/13
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/12
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/11
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/10
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/9
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/8
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/7
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/6
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/5
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/4
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/3
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/2
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] Method=GET Uri=/api/produk/1
+[2026-04-29 05:36:29] MATCH: ProdukController::show
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 05:36:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:28] Method=GET Uri=/api/produk
+[2026-04-29 06:32:28] MATCH: ProdukController::index
+[2026-04-29 06:32:29] CALL: ProdukController::index with 0 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/30
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/29
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/28
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/25
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/26
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/27
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/24
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/23
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/21
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/22
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/20
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/19
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/18
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/17
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/16
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/15
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/14
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/13
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/11
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/12
+ith 1 params
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/10
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/9
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/8
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/6
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/7
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/4
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/5
+
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/3
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/2
+[2026-04-29 06:32:29] Method=GET Uri=/api/produk/1
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] MATCH: ProdukController::show
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:29] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk
+[2026-04-29 06:32:49] MATCH: ProdukController::index
+[2026-04-29 06:32:49] CALL: ProdukController::index with 0 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/30
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/29
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/28
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/25
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/27
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+ith 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/24
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/23
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/22
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/20
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/19
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/17
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/16
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/15
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/14
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/13
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/12
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/11
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/10
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/9
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/8
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/7
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/6
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/5
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/4
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/3
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/2
+[2026-04-29 06:32:49] Method=GET Uri=/api/produk/1
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] MATCH: ProdukController::show
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:49] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk
+[2026-04-29 06:32:59] MATCH: ProdukController::index
+[2026-04-29 06:32:59] CALL: ProdukController::index with 0 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/30
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/29
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/28
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/26
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/27
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/25
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+ith 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/24
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/23
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/22
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/19
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/17
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/21
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/18
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/20
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/16
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/13
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/15
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/14
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/12
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/11
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/10
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk
+[2026-04-29 06:32:59] MATCH: ProdukController::index
+[2026-04-29 06:32:59] CALL: ProdukController::index with 0 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/30
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/28
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/29
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/27
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/26
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/25
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/24
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/23
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/22
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/21
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/20
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/18
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/17
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/15
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/14
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/13
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/12
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/11
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/10
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/9
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/8
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/7
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/6
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/5
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/4
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/1
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/2
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk
+[2026-04-29 06:32:59] MATCH: ProdukController::index
+[2026-04-29 06:32:59] CALL: ProdukController::index with 0 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/30
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/29
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/28
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/27
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/25
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/26
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/24
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/23
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/22
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/21
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/20
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/19
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/18
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/17
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/16
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/15
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/14
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/13
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/12
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/11
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/10
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/9
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/8
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/7
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/6
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/5
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/4
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/3
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/2
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] Method=GET Uri=/api/produk/1
+[2026-04-29 06:32:59] MATCH: ProdukController::show
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 06:32:59] CALL: ProdukController::show with 1 params
+[2026-04-29 14:04:41] Method=GET Uri=/api/admin/ambil-data-pelanggan
+[2026-04-29 14:04:41] MATCH: AdminController::getPelanggan
+[2026-04-29 14:04:41] CALL: AdminController::getPelanggan with 0 params
+[2026-04-29 14:10:39] Method=GET Uri=/api/admin/ambil-data-pelanggan
+[2026-04-29 14:10:39] MATCH: AdminController::getPelanggan
+[2026-04-29 14:10:39] CALL: AdminController::getPelanggan with 0 params
+[2026-04-29 14:11:45] Method=POST Uri=/api/admin/login
+[2026-04-29 14:11:45] MATCH: AuthController::loginAdmin
+[2026-04-29 14:11:45] CALL: AuthController::loginAdmin with 0 params
+[2026-04-29 14:19:51] Method=GET Uri=/api/admin/ambil-data-pelanggan
+[2026-04-29 14:19:51] MATCH: AdminController::getPelanggan
+[2026-04-29 14:19:51] CALL: AdminController::getPelanggan with 0 params
+[2026-04-29 14:35:11] Method=GET Uri=/api/admin/ambil-data-pelanggan
+[2026-04-29 14:35:11] MATCH: AdminController::getPelanggan
+[2026-04-29 14:35:11] CALL: AdminController::getPelanggan with 0 params
+[2026-04-29 14:36:37] Method=POST Uri=/api/admin/login
+[2026-04-29 14:36:37] MATCH: AuthController::loginAdmin
+[2026-04-29 14:36:37] CALL: AuthController::loginAdmin with 0 params

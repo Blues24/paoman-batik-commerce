@@ -21874,3 +21874,699 @@ aoman-batik/backend/public/api/produk/23 ===
 [2026-04-27 11:52:47] Router initialized
 [2026-04-27 11:53:06] === REQUEST: GET /paoman-batik/backend/public/api/pesanan/saya?akun_id=2 ===
 [2026-04-27 11:53:06] Router initialized
+[2026-04-29 03:47:02] === REQUEST: POST /paoman-batik/backend/public/api/auth/login ===
+[2026-04-29 03:47:02] Router initialized
+[2026-04-29 03:47:29] === REQUEST: POST /paoman-batik/backend/public/api/auth/login ===
+[2026-04-29 03:47:29] Router initialized
+[2026-04-29 03:48:35] === REQUEST: POST /paoman-batik/backend/public/api/auth/login ===
+[2026-04-29 03:48:35] Router initialized
+[2026-04-29 04:14:27] === REQUEST: POST /paoman-batik/backend/public/api/auth/login ===
+[2026-04-29 04:14:27] Router initialized
+[2026-04-29 04:14:39] === REQUEST: POST /paoman-batik/backend/public/api/auth/login ===
+[2026-04-29 04:14:39] Router initialized
+[2026-04-29 04:17:09] === REQUEST: POST /paoman-batik/backend/public/api/auth/login ===
+[2026-04-29 04:17:09] Router initialized
+[2026-04-29 04:19:40] === REQUEST: POST /paoman-batik/backend/public/api/auth/login ===
+[2026-04-29 04:19:40] Router initialized
+[2026-04-29 04:21:07] === REQUEST: POST /paoman-batik/backend/public/api/auth/login ===
+[2026-04-29 04:21:07] Router initialized
+[2026-04-29 04:27:11] === REQUEST: POST /paoman-batik/backend/public/api/auth/login ===
+[2026-04-29 04:27:11] Router initialized
+[2026-04-29 04:30:38] === REQUEST: POST /paoman-batik/backend/public/api/admin/login ===
+[2026-04-29 04:30:38] Router initialized
+[2026-04-29 04:30:44] === REQUEST: GET /paoman-batik/backend/public/api/admin/ambil-data-pelanggan?page=1 ===
+[2026-04-29 04:30:44] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/30 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/29 ===
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/28 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/27 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/25 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/24 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/22 ===
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/23 ===
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/20 ===
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/21 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/19 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/18 ===
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/17 ===
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/16 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/15 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/14 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/13 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/12 ===
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/10 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] Router initialized
+aoman-batik/backend/public/api/produk/9 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/8 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/7 ===
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/6 ===
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/5 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/4 ===
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/3 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/2 ===
+[2026-04-29 04:32:57] === REQUEST: GET /paoman-batik/backend/public/api/produk/1 ===
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:32:57] Router initialized
+[2026-04-29 04:34:10] === REQUEST: POST /paoman-batik/backend/public/api/pesanan ===
+[2026-04-29 04:34:10] Router initialized
+[2026-04-29 04:35:50] === REQUEST: POST /paoman-batik/backend/public/api/auth/register ===
+[2026-04-29 04:35:50] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/30 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/29 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/28 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/27 ===
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/25 ===
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/26 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/24 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/23 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/22 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/21 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/20 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/19 ===
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/18 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/17 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/16 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/15 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/14 ===
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/13 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/12 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/11 ===
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/10 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/9 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/8 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/7 ===
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/6 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/5 ===
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/4 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/3 ===
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/2 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/1 ===
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:35:59] Router initialized
+[2026-04-29 04:36:32] === REQUEST: POST /paoman-batik/backend/public/api/pesanan ===
+[2026-04-29 04:36:32] Router initialized
+[2026-04-29 04:36:36] === REQUEST: GET /paoman-batik/backend/public/api/pesanan/saya?akun_id=4 ===
+[2026-04-29 04:36:36] Router initialized
+[2026-04-29 04:41:33] === REQUEST: GET /paoman-batik/backend/public/api/pesanan/saya?akun_id=4 ===
+[2026-04-29 04:41:33] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/30 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/29 ===
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/28 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/26 ===
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/25 ===
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/27 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/24 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/23 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/22 ===
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/21 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/20 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/19 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/18 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/17 ===
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/16 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/15 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/14 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/13 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/12 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/11 ===
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/10 ===
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/9 ===
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/8 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/7 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/6 ===
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/5 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/4 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/3 ===
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/2 ===
+[2026-04-29 05:00:06] === REQUEST: GET /paoman-batik/backend/public/api/produk/1 ===
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:06] Router initialized
+[2026-04-29 05:00:37] === REQUEST: POST /paoman-batik/backend/public/api/pesanan ===
+[2026-04-29 05:00:37] Router initialized
+[2026-04-29 05:00:44] === REQUEST: GET /paoman-batik/backend/public/api/pesanan/saya?akun_id=4 ===
+[2026-04-29 05:00:44] Router initialized
+[2026-04-29 05:01:42] === REQUEST: POST /paoman-batik/backend/public/api/pesanan/4/cancel?akun_id=4 ===
+[2026-04-29 05:01:42] Router initialized
+[2026-04-29 05:01:42] === REQUEST: GET /paoman-batik/backend/public/api/pesanan/saya?akun_id=4 ===
+[2026-04-29 05:01:42] Router initialized
+[2026-04-29 05:01:49] === REQUEST: POST /paoman-batik/backend/public/api/pesanan/3/cancel?akun_id=4 ===
+[2026-04-29 05:01:49] Router initialized
+[2026-04-29 05:01:49] === REQUEST: GET /paoman-batik/backend/public/api/pesanan/saya?akun_id=4 ===
+[2026-04-29 05:01:49] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/30 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/29 ===
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/28 ===
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/27 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/26 ===
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/25 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/24 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/23 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/22 ===
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/21 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/20 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/19 ===
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/18 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/17 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/16 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/15 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/14 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/13 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/12 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/11 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/10 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/9 ===
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/8 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/7 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/6 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/5 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/4 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/3 ===
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/2 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:06:31] === REQUEST: GET /paoman-batik/backend/public/api/produk/1 ===
+[2026-04-29 05:06:31] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/28 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/29 ===
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/27 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/30 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/26 ===
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/25 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/24 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/23 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/22 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/20 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/21 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/19 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/18 ===
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/17 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/16 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/14 ===
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/15 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/13 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/12 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/11 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/10 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/9 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/8 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/7 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/6 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/5 ===
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/4 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/3 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/2 ===
+[2026-04-29 05:07:48] === REQUEST: GET /paoman-batik/backend/public/api/produk/1 ===
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:07:48] Router initialized
+[2026-04-29 05:36:28] === REQUEST: GET /paoman-batik/backend/public/api/produk ===
+[2026-04-29 05:36:28] Router initialized
+[2026-04-29 05:36:28] === REQUEST: GET /paoman-batik/backend/public/api/produk/30 ===
+[2026-04-29 05:36:28] Router initialized
+[2026-04-29 05:36:28] === REQUEST: GET /paoman-batik/backend/public/api/produk/29 ===
+[2026-04-29 05:36:28] Router initialized
+[2026-04-29 05:36:28] === REQUEST: GET /paoman-batik/backend/public/api/produk/28 ===
+[2026-04-29 05:36:28] Router initialized
+[2026-04-29 05:36:28] === REQUEST: GET /paoman-batik/backend/public/api/produk/26 ===
+[2026-04-29 05:36:28] === REQUEST: GET /paoman-batik/backend/public/api/produk/27 ===
+[2026-04-29 05:36:28] === REQUEST: GET /paoman-batik/backend/public/api/produk/25 ===
+[2026-04-29 05:36:28] Router initialized
+[2026-04-29 05:36:28] === REQUEST: GET /paoman-batik/backend/public/api/produk/24 ===
+[2026-04-29 05:36:28] Router initialized
+[2026-04-29 05:36:28] Router initialized
+[2026-04-29 05:36:28] Router initialized
+[2026-04-29 05:36:28] === REQUEST: GET /paoman-batik/backend/public/api/produk/23 ===
+[2026-04-29 05:36:28] Router initialized
+[2026-04-29 05:36:28] === REQUEST: GET /paoman-batik/backend/public/api/produk/22 ===
+[2026-04-29 05:36:28] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/21 ===
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/20 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/19 ===
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/18 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/17 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/16 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/15 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/14 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/13 ===
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/12 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/11 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/10 ===
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/9 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/8 ===
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/7 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/6 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/5 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/4 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/3 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/2 ===
+[2026-04-29 05:36:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/1 ===
+[2026-04-29 05:36:29] Router initialized
+[2026-04-29 06:32:28] === REQUEST: GET /paoman-batik/backend/public/api/produk ===
+[2026-04-29 06:32:28] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/30 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/29 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/28 ===
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/25 ===
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/26 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/27 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/24 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/23 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/22 ===
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/20 ===
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/19 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/18 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/17 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/16 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/15 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/14 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/13 ===
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/11 ===
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/12 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/10 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/9 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/8 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/6 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/7 ===
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/4 ===
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/5 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/3 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/2 ===
+[2026-04-29 06:32:29] === REQUEST: GET /paoman-batik/backend/public/api/produk/1 ===
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:29] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/30 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/29 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/28 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/25 ===
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/27 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/24 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/23 ===
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/22 ===
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/21 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/20 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/19 ===
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/18 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/17 ===
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/16 ===
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/15 ===
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/14 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/12 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/11 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/10 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/9 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/8 ===
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/7 ===
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/6 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/5 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/4 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/3 ===
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/2 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] === REQUEST: GET /paoman-batik/backend/public/api/produk/1 ===
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:49] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/30 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/29 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/28 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/26 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/27 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/25 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/24 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/23 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/22 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/21 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/19 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/17 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/18 ===
+[2026-04-29 06:32:59] === REQUEST: GET /p[2026-04-29 06:32:59] Router initialized
+===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/16 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/13 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/14 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/15 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/12 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/11 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/10 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/30 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/28 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/29 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/27 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/26 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/25 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/24 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/23 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/22 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/21 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/20 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/19 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/18 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/17 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/16 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/15 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/14 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/13 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/12 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/11 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/10 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/9 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/8 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/7 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/6 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/5 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/4 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/2 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/30 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/29 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/28 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/27 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/25 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/26 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/24 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/23 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/22 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/21 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/19 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/18 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/17 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/16 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/15 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/14 ===
+[2026-04-29 06:32:59] Router initialized
+aoman-batik/backend/public/api/produk/13 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/12 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/11 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/10 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/9 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/8 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/7 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/6 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/5 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/4 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/3 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/2 ===
+[2026-04-29 06:32:59] === REQUEST: GET /paoman-batik/backend/public/api/produk/1 ===
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 06:32:59] Router initialized
+[2026-04-29 14:04:41] === REQUEST: GET /paoman-batik/backend/public/api/admin/ambil-data-pelanggan?page=1 ===
+[2026-04-29 14:04:41] Router initialized
+[2026-04-29 14:10:39] === REQUEST: GET /paoman-batik/backend/public/api/admin/ambil-data-pelanggan?page=1 ===
+[2026-04-29 14:10:39] Router initialized
+[2026-04-29 14:11:45] === REQUEST: POST /paoman-batik/backend/public/api/admin/login ===
+[2026-04-29 14:11:45] Router initialized
+[2026-04-29 14:19:51] === REQUEST: GET /paoman-batik/backend/public/api/admin/ambil-data-pelanggan?page=1 ===
+[2026-04-29 14:19:51] Router initialized
+[2026-04-29 14:35:11] === REQUEST: GET /paoman-batik/backend/public/api/admin/ambil-data-pelanggan?page=1 ===
+[2026-04-29 14:35:11] Router initialized
+[2026-04-29 14:36:37] === REQUEST: POST /paoman-batik/backend/public/api/admin/login ===
+[2026-04-29 14:36:37] Router initialized
