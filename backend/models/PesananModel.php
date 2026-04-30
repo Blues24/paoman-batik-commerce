@@ -7,6 +7,7 @@ require_once __DIR__ . '/../config/database.php';
  */
 class PesananModel {
     private PDO $db;
+    private array $columnCache = [];
 
     public function __construct() {
         $this->db = Database::connect();
@@ -17,20 +18,66 @@ class PesananModel {
      */
     public function findVarianById(int $id): array|false {
         $stmt = $this->db->prepare(
-            'SELECT detail_batik_id, harga, stok FROM detail_batik WHERE detail_batik_id = ?'
+            'SELECT db.detail_batik_id, db.harga, db.stok, pr.nama_produk
+             FROM detail_batik db
+             JOIN produk pr ON pr.produk_id = db.produk_id
+             WHERE db.detail_batik_id = ?'
         );
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    private function columnExists(string $table, string $column): bool {
+        $key = "{$table}.{$column}";
+        if (array_key_exists($key, $this->columnCache)) {
+            return $this->columnCache[$key];
+        }
+
+        $stmt = $this->db->prepare(
+            'SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?'
+        );
+        $stmt->execute([$table, $column]);
+        $this->columnCache[$key] = ((int) $stmt->fetchColumn()) > 0;
+        return $this->columnCache[$key];
+    }
+
+    private function paymentStatusFor(string $metode): string {
+        return $metode === 'cod' ? 'bayar_di_tempat' : 'menunggu_konfirmasi';
+    }
+
     /**
      * Membuat pesanan baru.
      */
-    public function create(int $pelangganId, float $totalHarga): int {
+    public function create(int $pelangganId, float $totalHarga, string $metodePembayaran = 'qris', ?string $catatan = null): int {
+        $metodePembayaran = in_array($metodePembayaran, ['qris', 'ewallet', 'cod'], true) ? $metodePembayaran : 'qris';
+        $columns = ['pelanggan_id', 'total_harga'];
+        $placeholders = ['?', '?'];
+        $values = [$pelangganId, $totalHarga];
+
+        if ($this->columnExists('pesanan', 'metode_pembayaran')) {
+            $columns[] = 'metode_pembayaran';
+            $placeholders[] = '?';
+            $values[] = $metodePembayaran;
+        }
+
+        if ($this->columnExists('pesanan', 'payment_status')) {
+            $columns[] = 'payment_status';
+            $placeholders[] = '?';
+            $values[] = $this->paymentStatusFor($metodePembayaran);
+        }
+
+        if ($this->columnExists('pesanan', 'catatan')) {
+            $columns[] = 'catatan';
+            $placeholders[] = '?';
+            $values[] = $catatan;
+        }
+
         $stmt = $this->db->prepare(
-            'INSERT INTO pesanan (pelanggan_id, total_harga) VALUES (?, ?)'
+            'INSERT INTO pesanan (' . implode(', ', $columns) . ')
+             VALUES (' . implode(', ', $placeholders) . ')'
         );
-        $stmt->execute([$pelangganId, $totalHarga]);
+        $stmt->execute($values);
         return (int) $this->db->lastInsertId();
     }
 
@@ -38,11 +85,27 @@ class PesananModel {
      * Menambahkan item ke pesanan.
      */
     public function addItem(int $pesananId, array $item): void {
+        $columns = ['pesanan_id', 'detail_batik_id', 'jumlah', 'harga_saat_pesan'];
+        $placeholders = ['?', '?', '?', '?'];
+        $values = [$pesananId, $item['detail_batik_id'], $item['jumlah'], $item['harga_saat_pesan']];
+
+        if ($this->columnExists('detail_pesanan', 'opsi_pesanan')) {
+            $columns[] = 'opsi_pesanan';
+            $placeholders[] = '?';
+            $values[] = !empty($item['opsi_pesanan']) ? json_encode($item['opsi_pesanan'], JSON_UNESCAPED_UNICODE) : null;
+        }
+
+        if ($this->columnExists('detail_pesanan', 'catatan')) {
+            $columns[] = 'catatan';
+            $placeholders[] = '?';
+            $values[] = $item['catatan'] ?? null;
+        }
+
         $stmt = $this->db->prepare(
-            'INSERT INTO detail_pesanan (pesanan_id, detail_batik_id, jumlah, harga_saat_pesan)
-             VALUES (?, ?, ?, ?)'
+            'INSERT INTO detail_pesanan (' . implode(', ', $columns) . ')
+             VALUES (' . implode(', ', $placeholders) . ')'
         );
-        $stmt->execute([$pesananId, $item['detail_batik_id'], $item['jumlah'], $item['harga_saat_pesan']]);
+        $stmt->execute($values);
     }
 
     /**
@@ -59,9 +122,31 @@ class PesananModel {
      * Mendapatkan pesanan berdasarkan pelanggan.
      */
     public function getByPelanggan(int $pelangganId): array {
+        $paymentColumns = '';
+        if ($this->columnExists('pesanan', 'metode_pembayaran')) {
+            $paymentColumns .= ', p.metode_pembayaran';
+        }
+        if ($this->columnExists('pesanan', 'payment_status')) {
+            $paymentColumns .= ', p.payment_status';
+        }
+        if ($this->columnExists('pesanan', 'catatan')) {
+            $paymentColumns .= ', p.catatan';
+        }
+        $productImageColumn = $this->columnExists('produk', 'gambar_produk') ? ', MIN(pr.gambar_produk) AS gambar_produk' : '';
+
         $stmt = $this->db->prepare(
-            'SELECT pesanan_id, tanggal_pesanan, status_pesanan, total_harga
-             FROM pesanan WHERE pelanggan_id = ? ORDER BY tanggal_pesanan DESC'
+            'SELECT p.pesanan_id, p.tanggal_pesanan, p.status_pesanan, p.total_harga' . $paymentColumns . ',
+                    SUM(dp.jumlah) AS total_jumlah,
+                    MIN(pr.nama_produk) AS nama_produk,
+                    MIN(CASE WHEN LOWER(pr.nama_produk) LIKE "%kain%" THEN "Kain Batik" ELSE "Pakaian" END) AS kategori
+                    ' . $productImageColumn . '
+             FROM pesanan p
+             LEFT JOIN detail_pesanan dp ON dp.pesanan_id = p.pesanan_id
+             LEFT JOIN detail_batik db ON db.detail_batik_id = dp.detail_batik_id
+             LEFT JOIN produk pr ON pr.produk_id = db.produk_id
+             WHERE p.pelanggan_id = ?
+             GROUP BY p.pesanan_id, p.tanggal_pesanan, p.status_pesanan, p.total_harga' . $paymentColumns . '
+             ORDER BY p.tanggal_pesanan DESC'
         );
         $stmt->execute([$pelangganId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -82,9 +167,19 @@ class PesananModel {
      * Mendapatkan item-item dalam pesanan.
      */
     public function getItems(int $pesananId): array {
+        $optionalColumns = '';
+        if ($this->columnExists('detail_pesanan', 'opsi_pesanan')) {
+            $optionalColumns .= ', dp.opsi_pesanan';
+        }
+        if ($this->columnExists('detail_pesanan', 'catatan')) {
+            $optionalColumns .= ', dp.catatan';
+        }
+
         $stmt = $this->db->prepare(
             'SELECT dp.detail_id, dp.jumlah, dp.harga_saat_pesan, dp.subtotal,
-                    db.ukuran, db.warna, db.bahan, pr.nama_produk
+                    db.ukuran, db.warna, db.bahan, pr.produk_id, pr.nama_produk,
+                    CASE WHEN LOWER(pr.nama_produk) LIKE "%kain%" THEN "Kain Batik" ELSE "Pakaian" END AS kategori
+                    ' . $optionalColumns . '
              FROM detail_pesanan dp
              JOIN detail_batik db ON db.detail_batik_id = dp.detail_batik_id
              JOIN produk pr ON pr.produk_id = db.produk_id
@@ -171,15 +266,32 @@ class PesananModel {
      * Mendapatkan semua pesanan (admin).
      */
     public function getAll(?string $status = null): array {
+        $paymentColumns = '';
+        if ($this->columnExists('pesanan', 'metode_pembayaran')) {
+            $paymentColumns .= ', p.metode_pembayaran';
+        }
+        if ($this->columnExists('pesanan', 'payment_status')) {
+            $paymentColumns .= ', p.payment_status';
+        }
+        $productImageColumn = $this->columnExists('produk', 'gambar_produk') ? ', MIN(pr.gambar_produk) AS gambar_produk' : '';
+
         $sql    = 'SELECT p.pesanan_id, p.tanggal_pesanan, p.status_pesanan,
-                          p.total_harga, pl.nama AS nama_pelanggan
+                          p.total_harga, pl.nama AS nama_pelanggan' . $paymentColumns . ',
+                          SUM(dp.jumlah) AS total_jumlah,
+                          MIN(pr.nama_produk) AS nama_produk,
+                          MIN(CASE WHEN LOWER(pr.nama_produk) LIKE "%kain%" THEN "Kain Batik" ELSE "Pakaian" END) AS kategori
+                          ' . $productImageColumn . '
                    FROM pesanan p
-                   JOIN pelanggan pl ON pl.pelanggan_id = p.pelanggan_id';
+                   JOIN pelanggan pl ON pl.pelanggan_id = p.pelanggan_id
+                   LEFT JOIN detail_pesanan dp ON dp.pesanan_id = p.pesanan_id
+                   LEFT JOIN detail_batik db ON db.detail_batik_id = dp.detail_batik_id
+                   LEFT JOIN produk pr ON pr.produk_id = db.produk_id';
         $params = [];
         if ($status) {
             $sql     .= ' WHERE p.status_pesanan = ?';
             $params[] = $status;
         }
+        $sql .= ' GROUP BY p.pesanan_id, p.tanggal_pesanan, p.status_pesanan, p.total_harga, pl.nama' . $paymentColumns;
         $sql .= ' ORDER BY p.tanggal_pesanan DESC';
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);

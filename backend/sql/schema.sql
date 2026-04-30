@@ -44,6 +44,7 @@ CREATE TABLE produk (
     jenis_id    INT UNSIGNED NOT NULL,
     nama_produk VARCHAR(150) NOT NULL,
     deskripsi   TEXT,
+    gambar_produk VARCHAR(255),
     status      ENUM('aktif','nonaktif') NOT NULL DEFAULT 'aktif',
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_produk_jenis FOREIGN KEY (jenis_id) REFERENCES jenis_produk(jenis_id)
@@ -69,6 +70,9 @@ CREATE TABLE pesanan (
     pelanggan_id    INT UNSIGNED NOT NULL,
     tanggal_pesanan TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status_pesanan  ENUM('pending','dibayar','diproses','dikirim','selesai','dibatalkan') NOT NULL DEFAULT 'pending',
+    metode_pembayaran ENUM('qris','ewallet','cod') NOT NULL DEFAULT 'qris',
+    payment_status  ENUM('belum_dibayar','menunggu_konfirmasi','dibayar','bayar_di_tempat') NOT NULL DEFAULT 'belum_dibayar',
+    catatan         TEXT,
     total_harga     DECIMAL(14,2) NOT NULL DEFAULT 0,
     CONSTRAINT fk_pesanan_pelanggan FOREIGN KEY (pelanggan_id) REFERENCES pelanggan(pelanggan_id)
         ON UPDATE CASCADE ON DELETE RESTRICT
@@ -81,6 +85,8 @@ CREATE TABLE detail_pesanan (
     detail_batik_id  INT UNSIGNED NOT NULL,
     jumlah           INT UNSIGNED NOT NULL DEFAULT 1,
     harga_saat_pesan DECIMAL(12,2) NOT NULL,
+    opsi_pesanan     JSON,
+    catatan          TEXT,
     subtotal         DECIMAL(14,2) GENERATED ALWAYS AS (jumlah * harga_saat_pesan) STORED,
     CONSTRAINT fk_dp_pesanan      FOREIGN KEY (pesanan_id)      REFERENCES pesanan(pesanan_id)
         ON UPDATE CASCADE ON DELETE CASCADE,

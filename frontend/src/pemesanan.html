@@ -50,45 +50,13 @@
                             <div class="field-grid">
                                 <label class="field-group">
                                     <span>Warna</span>
-                                    <select>
+                                    <select id="kainWarna" name="warna">
                                         <option selected>Pilih warna</option>
                                         <option>Biru</option>
                                         <option>Cokelat</option>
                                         <option>Hitam</option>
                                         <option>Krem</option>
                                         <option>Custom warna</option>
-                                    </select>
-                                </label>
-
-                                <label class="field-group">
-                                    <span>Jenis Kain</span>
-                                    <select>
-                                        <option selected>Pilih jenis kain</option>
-                                        <option>Katun</option>
-                                        <option>Sutra</option>
-                                        <option>Rayon</option>
-                                        <option>Dobby</option>
-                                    </select>
-                                </label>
-
-                                <label class="field-group">
-                                    <span>Panjang Kain</span>
-                                    <select>
-                                        <option selected>Pilih panjang</option>
-                                        <option>2 meter</option>
-                                        <option>2.5 meter</option>
-                                        <option>3 meter</option>
-                                        <option>Custom meteran</option>
-                                    </select>
-                                </label>
-
-                                <label class="field-group">
-                                    <span>Finishing</span>
-                                    <select>
-                                        <option selected>Pilih finishing</option>
-                                        <option>Bahan mentah</option>
-                                        <option>Siap jahit</option>
-                                        <option>Premium wash</option>
                                     </select>
                                 </label>
                             </div>
@@ -99,20 +67,23 @@
                             <div class="field-grid">
                                 <label class="field-group">
                                     <span>Ukuran</span>
-                                    <select>
+                                    <select id="pakaianUkuran" name="ukuran">
                                         <option selected>Pilih ukuran</option>
-                                        <option>S</option>
-                                        <option>M</option>
-                                        <option>L</option>
-                                        <option>XL</option>
-                                        <option>XXL</option>
+                                        <option value="Anak S" data-min="20">Anak S</option>
+                                        <option value="Anak M" data-min="20">Anak M</option>
+                                        <option value="Anak L" data-min="20">Anak L</option>
+                                        <option value="Dewasa S" data-min="5">Dewasa S</option>
+                                        <option value="Dewasa M" data-min="5">Dewasa M</option>
+                                        <option value="Dewasa L" data-min="5">Dewasa L</option>
+                                        <option value="Dewasa XL" data-min="5">Dewasa XL</option>
+                                        <option value="Dewasa XXL" data-min="5">Dewasa XXL</option>
                                     </select>
                                 </label>
 
                                 <label class="field-group">
-                                    <span>Laki-laki/Perempuan</span>
-                                    <select>
-                                        <option selected>Pilih kategori</option>
+                                    <span>Gender</span>
+                                    <select id="pakaianGender" name="gender">
+                                        <option selected>Pilih gender</option>
                                         <option>Laki-laki</option>
                                         <option>Perempuan</option>
                                     </select>
@@ -120,7 +91,7 @@
 
                                 <label class="field-group">
                                     <span>Warna</span>
-                                    <select>
+                                    <select id="pakaianWarna" name="warna">
                                         <option selected>Pilih warna</option>
                                         <option>Biru</option>
                                         <option>Cokelat</option>
@@ -129,18 +100,8 @@
                                         <option>Custom warna</option>
                                     </select>
                                 </label>
-
-                                <label class="field-group">
-                                    <span>Jenis Pakaian</span>
-                                    <select>
-                                        <option selected>Pilih jenis</option>
-                                        <option>Kemeja</option>
-                                        <option>Tunik</option>
-                                        <option>Outer</option>
-                                        <option>Custom pakaian</option>
-                                    </select>
-                                </label>
                             </div>
+                            <p id="pakaianMinimumInfo" class="minimum-info">Minimal pemesanan: anak 20 pcs, dewasa 5 pcs.</p>
                         </div>
 
                         <label class="field-group notes-field">
@@ -154,6 +115,24 @@
                                 <button id="qtyMinus" type="button" class="qty-btn">-</button>
                                 <input id="qtyInput" type="number" min="1" value="1">
                                 <button id="qtyPlus" type="button" class="qty-btn">+</button>
+                            </div>
+                        </div>
+
+                        <div class="payment-section">
+                            <span>Sistem Pembayaran</span>
+                            <div class="payment-options" role="radiogroup" aria-label="Sistem pembayaran">
+                                <label class="payment-option">
+                                    <input type="radio" name="metodePembayaran" value="qris" checked>
+                                    <span><i class="bi bi-qr-code"></i> QRIS</span>
+                                </label>
+                                <label class="payment-option">
+                                    <input type="radio" name="metodePembayaran" value="ewallet">
+                                    <span><i class="bi bi-wallet2"></i> E-Wallet</span>
+                                </label>
+                                <label class="payment-option">
+                                    <input type="radio" name="metodePembayaran" value="cod">
+                                    <span><i class="bi bi-cash-coin"></i> COD</span>
+                                </label>
                             </div>
                         </div>
 

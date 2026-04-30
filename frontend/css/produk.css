@@ -298,3 +298,19 @@ body {
 @media (max-width: 768px) {
     .product-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+.product-meta {
+    margin-bottom: 8px;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.empty-products {
+    grid-column: 1 / -1;
+    padding: 24px;
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--text-muted);
+    text-align: center;
+}

@@ -61,7 +61,37 @@ function getOrderStatusClass(status) {
 }
 
 function getPaymentStatusClass(status) {
-    return (status || "").toLowerCase() === "dibayar" ? "paid" : "unpaid";
+    const normalizedStatus = (status || "").toLowerCase();
+    return normalizedStatus === "dibayar" || normalizedStatus === "bayar_di_tempat" ? "paid" : "unpaid";
+}
+
+function formatPaymentStatus(status, method) {
+    const normalizedStatus = String(status || "").toLowerCase();
+    const normalizedMethod = String(method || "").toLowerCase();
+
+    if (normalizedStatus === "bayar_di_tempat" || normalizedMethod === "cod") {
+        return "COD";
+    }
+
+    if (normalizedStatus === "menunggu_konfirmasi") {
+        return "Menunggu Konfirmasi";
+    }
+
+    if (normalizedStatus === "dibayar") {
+        return "Dibayar";
+    }
+
+    return "Belum Dibayar";
+}
+
+function formatPaymentMethod(method) {
+    const map = {
+        qris: "QRIS",
+        ewallet: "E-Wallet",
+        cod: "COD"
+    };
+
+    return map[String(method || "").toLowerCase()] || "QRIS";
 }
 
 function requireLoggedInUser() {
@@ -81,24 +111,37 @@ function getOrderItemCount(order) {
 
 const orderImageByName = {
     "Kain Batik Motif Biru Pesisir": "../img/batik1.jpg",
+    "Kain Batik Motif Ganggeng Pesisir": "../img/batik1.jpg",
     "Kain Batik Motif Godong Asem": "../img/batik2.jpg",
+    "Kain Batik Motif Jarot Asem": "../img/batik2.jpg",
     "Baju Batik Motif Kentangan": "../img/baju1.png",
+    "Baju Batik Motif Kembang Kapas": "../img/baju1.png",
     "Kain Batik Motif Mangga Bambu": "../img/batik4.jpg",
+    "Kain Batik Motif Kapal Kandas": "../img/batik4.jpg",
     "Kain Batik Motif Kembang Gunda": "../img/batik5.jpg",
     "Kemeja Batik Motif Kembang Paoman": "../img/baju2.png",
+    "Kemeja Batik Motif Iwak Etong": "../img/baju2.png",
     "Kain Batik Motif Lereng Paoman": "../img/batik7.jpg",
+    "Kain Batik Motif Banji Tepak": "../img/batik7.jpg",
     "Blus Batik Motif Pesisir Laut": "../img/baju3.png",
+    "Blus Batik Motif Kembang Karang": "../img/baju3.png",
     "Kain Batik Motif Daun Nila": "../img/batik9.jpg",
+    "Kain Batik Motif Lokcan": "../img/batik9.jpg",
     "Kemeja Batik Motif Kawung Laut": "../img/baju4.png",
+    "Kemeja Batik Motif Kapal Laju": "../img/baju4.png",
     "Kain Batik Motif Biru Pesisir Premium": "../img/batik1.jpg",
+    "Kain Batik Motif Lasem Urang": "../img/batik10.jpg",
     "Outer Batik Motif Godong Asem": "../img/baju5.png",
+    "Outer Batik Motif Jarot Asem": "../img/baju5.png",
     "Tunik Batik Motif Kentangan": "../img/baju6.png",
+    "Tunik Batik Motif Kembang Kapas": "../img/baju6.png",
     "Dress Batik Motif Mangga Bambu": "../img/baju7.png",
+    "Dress Batik Motif Kapal Kandas": "../img/baju7.png",
     "Kain Batik Motif Kembang Gunda Premium": "../img/batik5.jpg"
 };
 
 function getOrderPrimaryImage(order) {
-    const explicit = order.productImage || order.items?.[0]?.image || order.items?.[0]?.gambar_produk || "";
+    const explicit = order.productImage || order.gambar_produk || order.items?.[0]?.image || order.items?.[0]?.gambar_produk || "";
     if (explicit) return explicit;
 
     const name = getOrderPrimaryName(order);
@@ -106,11 +149,11 @@ function getOrderPrimaryImage(order) {
 }
 
 function getOrderPrimaryName(order) {
-    return order.productName || order.items?.[0]?.nama_produk || "Pesanan";
+    return order.productName || order.nama_produk || order.items?.[0]?.nama_produk || "Pesanan";
 }
 
 function getOrderPrimaryCategory(order) {
-    return order.productCategory || order.items?.[0]?.kategori || "Produk Batik";
+    return order.productCategory || order.kategori || order.items?.[0]?.kategori || "Produk Batik";
 }
 
 let selectedProductForReview = null;
@@ -141,6 +184,7 @@ async function renderOrderHistory() {
     orders.forEach((order) => {
         const orderStatus = order.status_pesanan || order.orderStatus || "Menunggu";
         const paymentStatus = order.payment_status || order.paymentStatus || "Belum Dibayar";
+        const paymentMethod = order.metode_pembayaran || order.paymentMethod || "";
         const orderId = order.pesanan_id || order.id;
         const image = getOrderPrimaryImage(order);
         const isCompleted = ["selesai", "siap diambil"].includes(String(orderStatus).toLowerCase());
@@ -160,9 +204,10 @@ async function renderOrderHistory() {
                         <span class="status-pill ${getOrderStatusClass(orderStatus)}">${orderStatus}</span>
                     </div>
                     <p class="order-meta">${getOrderPrimaryCategory(order)} | ${getOrderItemCount(order)} item | ${formatDate(order.tanggal_pesanan || order.createdAt)}</p>
+                    <p class="order-meta">Pembayaran: ${formatPaymentMethod(paymentMethod)}</p>
                     <div class="order-item-bottom">
                         <strong>${formatRupiah(order.total_harga || order.totalPrice)}</strong>
-                        <span class="payment-pill ${getPaymentStatusClass(paymentStatus)}">${paymentStatus}</span>
+                        <span class="payment-pill ${getPaymentStatusClass(paymentStatus)}">${formatPaymentStatus(paymentStatus, paymentMethod)}</span>
                         ${isCompleted ? `<button type="button" class="review-btn" onclick="openReviewModal(${orderId})">
                             <i class="bi bi-star-fill"></i> Beri Ulasan
                         </button>` : ""}

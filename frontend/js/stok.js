@@ -1,16 +1,73 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. DATA SUMBER
-    let produkData = [
-        { id: 1, nama: "Tangga Istana", kode: "BT-TI-26", kategori: "Batik", stok: 21, satuan: "Pasang", img: "../../img/batik7.jpg" },
-        { id: 2, nama: "Godong Asem", kode: "BT-GA-26", kategori: "Batik", stok: 6, satuan: "Pasang", img: "../../img/batik3.jpg" },
-        { id: 3, nama: "Kembang Kapas", kode: "BT-KK-26", kategori: "Batik", stok: 0, satuan: "Pasang", img: "../../img/batik3.jpg" },
-        { id: 4, nama: "Sido Mukti", kode: "BT-SM-26", kategori: "Batik", stok: 15, satuan: "Pasang", img: "../../img/batik7.jpg" },
-    ];
-
+    const API_URL = window.API_URL || 'http://localhost/paoman-batik/backend/public/api';
+    let produkData = [];
     let currentFilter = 'Semua';
+
     const tableBody = document.getElementById('stokTableBody');
     const filterBtns = document.querySelectorAll('.filter-btn');
     const modalEdit = document.getElementById('modalEdit');
+
+    function getImage(path) {
+        if (!path) return '../../img/batik1.jpg';
+        return path.replace('../img/', '../../img/');
+    }
+
+    async function apiFetch(endpoint, options = {}) {
+        const response = await fetch(`${API_URL}${endpoint}`, {
+            credentials: 'include',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': sessionStorage.getItem('csrf_token') || localStorage.getItem('csrf_token') || '',
+                ...(options.headers || {})
+            }
+        });
+        const data = await response.json().catch(() => null);
+        return { response, data };
+    }
+
+    async function loadProduk() {
+        if (!tableBody) return;
+        tableBody.innerHTML = '<tr><td colspan="7">Memuat stok produk...</td></tr>';
+
+        try {
+            const { response, data } = await apiFetch('/produk');
+            if (!response.ok || !data?.success) {
+                throw new Error(data?.message || 'Stok belum bisa dimuat.');
+            }
+
+            const detailResults = await Promise.allSettled(
+                data.data.map((product) => apiFetch(`/produk/${product.produk_id}`))
+            );
+
+            produkData = data.data.map((product, index) => {
+                const detail = detailResults[index];
+                const detailData = detail.status === 'fulfilled' && detail.value.data?.success
+                    ? detail.value.data.data
+                    : null;
+                const varian = Array.isArray(detailData?.varian) ? detailData.varian : [];
+                const stok = varian.reduce((sum, item) => sum + (Number(item.stok) || 0), 0);
+
+                return {
+                    id: Number(product.produk_id),
+                    varianId: Number(varian[0]?.detail_batik_id || 0),
+                    nama: product.nama_produk,
+                    kode: `PB-${String(index + 1).padStart(3, '0')}`,
+                    stok,
+                    satuan: product.nama_produk.startsWith('Kain') ? 'Lembar' : 'Pcs',
+                    img: getImage(product.gambar_produk),
+                    ukuran: varian[0]?.ukuran || (product.nama_produk.startsWith('Kain') ? '2m' : 'Dewasa M'),
+                    warna: varian[0]?.warna || 'Biru',
+                    bahan: varian[0]?.bahan || 'Katun',
+                    harga: Number(varian[0]?.harga || product.harga_mulai || 0)
+                };
+            });
+
+            renderApp();
+        } catch (error) {
+            tableBody.innerHTML = `<tr><td colspan="7">${error.message}</td></tr>`;
+        }
+    }
 
     function renderApp() {
         renderTable();
@@ -21,38 +78,35 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!tableBody) return;
         tableBody.innerHTML = '';
 
-        // 2. LOGIKA FILTER
-        let displayData = produkData.filter(item => {
+        const displayData = produkData.filter(item => {
             if (currentFilter === 'Stock Banyak') return item.stok > 10;
             if (currentFilter === 'Stock Sedikit') return item.stok > 0 && item.stok <= 10;
             if (currentFilter === 'Stock Habis') return item.stok === 0;
-            return true; 
+            return true;
         });
 
-        // 3. LOGIKA SORTING (Terbanyak ke Terkecil)
-        displayData.sort((a, b) => b.stok - a.stok);
+        if (displayData.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="7">Tidak ada produk untuk filter ini.</td></tr>';
+        }
 
         displayData.forEach(p => {
             const status = getStatusLabel(p.stok);
             const row = `
                 <tr>
-                    <td><img src="${p.img}" alt="Batik" class="img-product"></td>
+                    <td><img src="${p.img}" alt="${p.nama}" class="img-product"></td>
                     <td>${p.nama}</td>
                     <td class="text-muted">${p.kode}</td>
-                    <td>${p.kategori}</td>
                     <td class="${p.stok === 0 ? 'text-danger' : ''}"><strong>${p.stok}</strong></td>
                     <td>${p.satuan}</td>
                     <td><span class="badge ${status.color}">${status.text}</span></td>
                     <td>
                         <button class="btn-icon btn-edit" data-id="${p.id}"><i data-lucide="pencil"></i></button>
-                        <button class="btn-icon btn-delete" data-id="${p.id}"><i data-lucide="trash-2"></i></button>
                     </td>
                 </tr>
             `;
             tableBody.insertAdjacentHTML('beforeend', row);
         });
 
-        // Update Pagination Info
         const info = document.getElementById('paginationInfo');
         if (info) info.textContent = `Menampilkan ${displayData.length} dari ${produkData.length} Produk`;
 
@@ -83,40 +137,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function attachActionEvents() {
-        document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.onclick = () => {
-                const id = parseInt(btn.dataset.id);
-                if (confirm('Hapus produk ini dari daftar stok?')) {
-                    produkData = produkData.filter(p => p.id !== id);
-                    renderApp();
-                }
-            };
-        });
-
         document.querySelectorAll('.btn-edit').forEach(btn => {
             btn.onclick = () => {
-                const id = parseInt(btn.dataset.id);
-                const item = produkData.find(p => p.id === id);
-                if (item) {
-                    document.getElementById('editIndex').value = item.id;
-                    document.getElementById('editNama').value = item.nama;
-                    document.getElementById('editStokValue').value = item.stok;
-                    modalEdit.style.display = 'flex';
-                }
+                const item = produkData.find(p => p.id === Number(btn.dataset.id));
+                if (!item) return;
+
+                document.getElementById('editIndex').value = item.id;
+                document.getElementById('editNama').value = item.nama;
+                document.getElementById('editStokValue').value = item.stok;
+                modalEdit.style.display = 'flex';
             };
         });
     }
 
-    // Modal Close Logic
     document.querySelectorAll('.close-modal').forEach(btn => {
         btn.onclick = () => modalEdit.style.display = 'none';
     });
 
     window.onclick = (event) => {
-        if (event.target == modalEdit) modalEdit.style.display = 'none';
+        if (event.target === modalEdit) modalEdit.style.display = 'none';
     };
 
-    // Filter Logic
     filterBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             filterBtns.forEach(b => b.classList.remove('active'));
@@ -126,22 +167,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Form Edit Submit
     const formEdit = document.getElementById('formEditStok');
     if (formEdit) {
-        formEdit.onsubmit = (e) => {
-            e.preventDefault();
-            const id = parseInt(document.getElementById('editIndex').value);
-            const newStok = parseInt(document.getElementById('editStokValue').value);
-            const index = produkData.findIndex(p => p.id === id);
-            
-            if (index !== -1) {
-                produkData[index].stok = newStok;
-                modalEdit.style.display = 'none';
-                renderApp();
+        formEdit.onsubmit = async (event) => {
+            event.preventDefault();
+            const id = Number(document.getElementById('editIndex').value);
+            const newStok = Number(document.getElementById('editStokValue').value);
+            const item = produkData.find(p => p.id === id);
+
+            if (!item) return;
+            item.stok = newStok;
+            modalEdit.style.display = 'none';
+            renderApp();
+
+            const currentUser = window.UserSession?.getCurrentUser?.();
+            if (currentUser?.admin_id && item.varianId) {
+                await apiFetch(`/varian/${item.varianId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        admin_id: currentUser.admin_id,
+                        ukuran: item.ukuran,
+                        warna: item.warna,
+                        bahan: item.bahan,
+                        harga: item.harga,
+                        stok: newStok
+                    })
+                });
             }
         };
     }
 
-    renderApp();
+    loadProduk();
 });

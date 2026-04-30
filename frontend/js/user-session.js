@@ -244,13 +244,15 @@ async function requestPasswordReset(identifier) {
     return { success: response.ok && data?.success, message: data?.message || 'Gagal request reset password.' };
 }
 
-async function createOrder(items) {
+async function createOrder(items, orderOptions = {}) {
     const user = getStoredUser();
     const { response, data } = await apiFetch('/pesanan', {
         method: 'POST',
         body: JSON.stringify({ 
             akun_id: user.akun_id,
-            items: items
+            items: items,
+            metode_pembayaran: orderOptions.metode_pembayaran || orderOptions.metodePembayaran || 'qris',
+            catatan: orderOptions.catatan || ''
          })
     });
 

@@ -1,74 +1,194 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. DATA SUMBER (Data awal)
-    let dataProduk = [
-        { id: 1, nama: "Tangga Istana", harga: 150000, stok: 21, img: "../../img/batik7.jpg" },
-        { id: 2, nama: "Godong Asem", harga: 135000, stok: 6, img: "../../img/batik3.jpg" },
-        { id: 3, nama: "Kembang Kapas", harga: 120000, stok: 0, img: "../../img/batik3.jpg" },
-        { id: 4, nama: "Sido Mukti", harga: 160000, stok: 15, img: "../../img/batik7.jpg" },
+    const API_URL = window.API_URL || 'http://localhost/paoman-batik/backend/public/api';
+    const fallbackImages = [
+        '../../img/batik1.jpg',
+        '../../img/batik2.jpg',
+        '../../img/batik3.jpg',
+        '../../img/batik4.jpg',
+        '../../img/batik5.jpg',
+        '../../img/batik6.jpg',
+        '../../img/batik7.jpg',
+        '../../img/batik8.jpg',
+        '../../img/batik9.jpg',
+        '../../img/batik10.jpg',
+        '../../img/baju1.png',
+        '../../img/baju2.png',
+        '../../img/baju3.png',
+        '../../img/baju4.png',
+        '../../img/baju5.png',
+        '../../img/baju6.png',
+        '../../img/baju7.png'
     ];
+    const canonicalCatalog = [
+        { nama: 'Kain Batik Motif Tangga Istana', image: '../../img/batik1.jpg' },
+        { nama: 'Kain Batik Motif Godong Asem', image: '../../img/batik2.jpg' },
+        { nama: 'Kain Batik Motif Kembang Gunda', image: '../../img/batik3.jpg' },
+        { nama: 'Kain Batik Motif Ganggeng Manuk', image: '../../img/batik4.jpg' },
+        { nama: 'Kain Batik Motif Srempang Kandang', image: '../../img/batik5.jpg' },
+        { nama: 'Kain Batik Motif Lasemurang', image: '../../img/batik6.jpg' },
+        { nama: 'Kain Batik Motif Kembang Kapas', image: '../../img/batik7.jpg' },
+        { nama: 'Kain Batik Motif Mangga Bambu', image: '../../img/batik8.jpg' },
+        { nama: 'Kain Batik Motif Cuiri', image: '../../img/batik9.jpg' },
+        { nama: 'Kain Batik Motif Sekar Niem', image: '../../img/batik10.jpg' },
+        { nama: 'Baju Batik Motif Godong Asem', image: '../../img/baju1.png' },
+        { nama: 'Kemeja Batik Motif Kentangan', image: '../../img/baju2.png' },
+        { nama: 'Kemeja Batik Motif Sekar Niem', image: '../../img/baju3.png' },
+        { nama: 'Kemeja Batik Motif Lasemurang', image: '../../img/baju4.png' },
+        { nama: 'Baju Batik Motif Kentangan', image: '../../img/baju5.png' },
+        { nama: 'Baju Batik Motif Sekar Niem', image: '../../img/baju6.png' },
+        { nama: 'Baju Batik Motif Liris atau Parang', image: '../../img/baju7.png' }
+    ];
+    const canonicalByName = new Map(canonicalCatalog.map((item, index) => [item.nama, { ...item, order: index + 1 }]));
+
+    let dataProduk = [];
 
     const productGrid = document.getElementById('productGrid');
     const modal = document.getElementById('modalProduk');
-    const btnTambah = document.getElementById('btnTambahProduk');
+    const btnTambahList = Array.from(document.querySelectorAll('#btnTambahProduk'));
     const btnClose = document.querySelector('.close-modal');
     const formProduk = document.getElementById('formProduk');
 
-    // --- Logika Buka/Tutup Modal ---
-    if (btnTambah) {
-        btnTambah.onclick = () => { modal.style.display = "block"; };
+    function getAdmin() {
+        return window.UserSession?.getCurrentUser?.() || null;
     }
 
-    btnClose.onclick = () => { modal.style.display = "none"; };
+    function showMessage(message, type = 'info') {
+        if (window.Swal) {
+            Swal.fire({
+                title: type === 'error' ? 'Gagal' : 'Informasi',
+                text: message,
+                icon: type
+            });
+            return;
+        }
 
-    window.onclick = (event) => {
-        if (event.target == modal) modal.style.display = "none";
-    };
+        alert(message);
+    }
 
-    // --- Logika Tambah Data ---
-    formProduk.onsubmit = (e) => {
-        e.preventDefault();
-
-        const baru = {
-            id: Date.now(), // Gunakan timestamp sebagai ID unik
-            nama: document.getElementById('namaProduk').value,
-            harga: parseInt(document.getElementById('hargaProduk').value),
-            stok: parseInt(document.getElementById('stokProduk').value),
-            img: document.getElementById('imgProduk').value
+    async function apiFetch(endpoint, options = {}) {
+        const admin = getAdmin();
+        const headers = {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': sessionStorage.getItem('csrf_token') || localStorage.getItem('csrf_token') || '',
+            ...(options.headers || {})
         };
 
-        // Masukkan data baru ke array utama
-        dataProduk.push(baru);
+        const response = await fetch(`${API_URL}${endpoint}`, {
+            credentials: 'include',
+            ...options,
+            headers
+        });
+        const data = await response.json().catch(() => null);
+        return { response, data, admin };
+    }
 
-        // Jalankan ulang fungsi render untuk memperbarui tampilan
-        renderProduk(); 
-        
-        // Bersihkan form dan tutup modal
+    function formatHarga(value) {
+        return `Rp ${Number(value || 0).toLocaleString('id-ID')}`;
+    }
+
+    function getProductImage(product, index = 0) {
+        const source = product.gambar_produk || product.img || canonicalByName.get(product.nama_produk)?.image || fallbackImages[index % fallbackImages.length];
+        if (source.startsWith('../img/')) {
+            return source.replace('../img/', '../../img/');
+        }
+        return source;
+    }
+
+    function getProductStock(product) {
+        if (product.stok != null) {
+            return Number(product.stok) || 0;
+        }
+
+        return Number(product.varian?.[0]?.stok || product.total_stok || 0);
+    }
+
+    function openModal() {
         formProduk.reset();
-        modal.style.display = "none";
-    };
+        document.getElementById('imgProduk').value = '../../img/batik1.jpg';
+        modal.style.display = 'block';
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+
+    async function loadProduk() {
+        if (!productGrid) return;
+        productGrid.innerHTML = '<div class="empty-products">Memuat produk...</div>';
+
+        try {
+            const { response, data } = await apiFetch('/produk');
+            if (!response.ok || !data?.success) {
+                throw new Error(data?.message || 'Produk belum bisa dimuat.');
+            }
+
+            const detailResults = await Promise.allSettled(
+                data.data.map((product) => apiFetch(`/produk/${product.produk_id}`))
+            );
+
+            const mapped = data.data.map((product, index) => {
+                const detail = detailResults[index];
+                const detailData = detail.status === 'fulfilled' && detail.value.data?.success
+                    ? detail.value.data.data
+                    : null;
+                const varian = Array.isArray(detailData?.varian) ? detailData.varian : [];
+                const stok = varian.reduce((sum, item) => sum + (Number(item.stok) || 0), 0);
+
+                return {
+                    ...product,
+                    varian,
+                    stok,
+                    harga_mulai: product.harga_mulai || varian[0]?.harga || 0,
+                    gambar_produk: canonicalByName.get(product.nama_produk)?.image || product.gambar_produk
+                };
+            });
+            const uniqueByName = new Map();
+            mapped.forEach((product) => {
+                if (!uniqueByName.has(product.nama_produk)) {
+                    uniqueByName.set(product.nama_produk, product);
+                }
+            });
+
+            dataProduk = Array.from(uniqueByName.values()).sort((a, b) => {
+                const orderA = canonicalByName.get(a.nama_produk)?.order || 999;
+                const orderB = canonicalByName.get(b.nama_produk)?.order || 999;
+                return orderA - orderB;
+            });
+
+            renderProduk();
+        } catch (error) {
+            productGrid.innerHTML = `<div class="empty-products">${error.message}</div>`;
+        }
+    }
 
     function renderProduk() {
         if (!productGrid) return;
         productGrid.innerHTML = '';
 
-        dataProduk.forEach(p => {
-            const statusText = p.stok > 0 ? "TERSEDIA" : "HABIS";
-            const statusClass = p.stok > 0 ? "badge-tersedia" : "badge-habis";
-            const formatHarga = `Rp ${p.harga.toLocaleString('id-ID')}`;
+        if (dataProduk.length === 0) {
+            productGrid.innerHTML = '<div class="empty-products">Belum ada produk di database.</div>';
+            return;
+        }
+
+        dataProduk.forEach((product, index) => {
+            const stok = getProductStock(product);
+            const statusText = stok > 0 ? 'TERSEDIA' : 'HABIS';
+            const statusClass = stok > 0 ? 'badge-tersedia' : 'badge-habis';
+            const image = getProductImage(product, index);
 
             const productCard = `
                 <div class="product-card">
                     <div class="image-container">
                         <span class="badge-status ${statusClass}">${statusText}</span>
-                        <img src="${p.img}" alt="${p.nama}">
+                        <img src="${image}" alt="${product.nama_produk}">
                     </div>
                     <div class="product-info">
-                        <h4>${p.nama}</h4>
-                        <p class="price">${formatHarga}</p>
+                        <h4 title="${product.nama_produk}">${product.nama_produk}</h4>
+                        <p class="product-meta">Stok ${stok}</p>
+                        <p class="price">${formatHarga(product.harga_mulai)}</p>
                         <div class="action-buttons">
-                            <button class="btn-icon outline btn-edit" data-id="${p.id}"><i data-lucide="pencil"></i></button>
-                            <button class="btn-icon outline btn-delete" data-id="${p.id}"><i data-lucide="trash-2"></i></button>
-                            <button class="btn-view" data-id="${p.id}"><i data-lucide="eye"></i></button>
+                            <button class="btn-icon outline btn-delete" data-id="${product.produk_id}" title="Nonaktifkan produk"><i data-lucide="trash-2"></i></button>
+                            <button class="btn-view" data-id="${product.produk_id}"><i data-lucide="eye"></i> Detail</button>
                         </div>
                     </div>
                 </div>
@@ -80,18 +200,97 @@ document.addEventListener('DOMContentLoaded', () => {
         attachEventListeners();
     }
 
+    async function createProduk(event) {
+        event.preventDefault();
+
+        const admin = getAdmin();
+        if (!admin?.admin_id) {
+            showMessage('Login admin dulu sebelum menambah produk.', 'warning');
+            return;
+        }
+
+        const namaProduk = document.getElementById('namaProduk').value.trim();
+        const harga = Number(document.getElementById('hargaProduk').value);
+        const stok = Number(document.getElementById('stokProduk').value);
+        const gambarProduk = document.getElementById('imgProduk').value.trim();
+        const isPakaian = /baju|kemeja|blus|outer|tunik|dress/i.test(namaProduk);
+
+        const { response, data } = await apiFetch('/produk', {
+            method: 'POST',
+            body: JSON.stringify({
+                admin_id: admin.admin_id,
+                jenis_id: 1,
+                nama_produk: namaProduk,
+                deskripsi: `${namaProduk} khas Batik Paoman Indramayu.`,
+                gambar_produk: gambarProduk,
+                status: 'aktif'
+            })
+        });
+
+        if (!response.ok || !data?.success) {
+            showMessage(data?.message || 'Produk gagal ditambahkan.', 'error');
+            return;
+        }
+
+        await apiFetch(`/produk/${data.data.produk_id}/varian`, {
+            method: 'POST',
+            body: JSON.stringify({
+                admin_id: admin.admin_id,
+                ukuran: isPakaian ? 'Dewasa M' : '2m',
+                warna: 'Biru',
+                bahan: 'Katun',
+                harga,
+                stok
+            })
+        });
+
+        closeModal();
+        await loadProduk();
+        showMessage('Produk berhasil ditambahkan.', 'success');
+    }
+
     function attachEventListeners() {
         document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.onclick = () => {
-                const id = Number(btn.dataset.id);
-                if (confirm('Apakah Anda yakin ingin menghapus produk ini?')) {
-                    dataProduk = dataProduk.filter(p => p.id !== id);
-                    renderProduk();
+            btn.onclick = async () => {
+                const admin = getAdmin();
+                if (!admin?.admin_id) {
+                    showMessage('Login admin dulu sebelum mengubah produk.', 'warning');
+                    return;
                 }
+
+                const ok = confirm('Nonaktifkan produk ini dari katalog?');
+                if (!ok) return;
+
+                const { response, data } = await apiFetch(`/produk/${btn.dataset.id}`, {
+                    method: 'DELETE',
+                    body: JSON.stringify({ admin_id: admin.admin_id })
+                });
+
+                if (!response.ok || !data?.success) {
+                    showMessage(data?.message || 'Produk gagal dinonaktifkan.', 'error');
+                    return;
+                }
+
+                await loadProduk();
             };
         });
     }
 
-    // Jalankan render pertama kali saat halaman dimuat
-    renderProduk();
+    btnTambahList.forEach((button) => {
+        button.onclick = openModal;
+    });
+
+    if (btnClose) {
+        btnClose.onclick = closeModal;
+    }
+
+    window.onclick = (event) => {
+        if (event.target === modal) closeModal();
+    };
+
+    if (formProduk) {
+        formProduk.onsubmit = createProduk;
+    }
+
+    loadProduk();
 });

@@ -32,6 +32,11 @@ const submitButton = document.querySelector(".submit-btn");
 const orderForm = document.querySelector(".order-form");
 const kainFields = document.getElementById("kainFields");
 const pakaianFields = document.getElementById("pakaianFields");
+const kainWarna = document.getElementById("kainWarna");
+const pakaianUkuran = document.getElementById("pakaianUkuran");
+const pakaianGender = document.getElementById("pakaianGender");
+const pakaianWarna = document.getElementById("pakaianWarna");
+const pakaianMinimumInfo = document.getElementById("pakaianMinimumInfo");
 const orderNoticeOverlay = document.getElementById("orderNoticeOverlay");
 const orderNoticeIcon = document.getElementById("orderNoticeIcon");
 const orderNoticeTitle = document.getElementById("orderNoticeTitle");
@@ -41,6 +46,7 @@ const orderNoticePrimary = document.getElementById("orderNoticePrimary");
 const orderNoticeSecondary = document.getElementById("orderNoticeSecondary");
 let noticePrimaryHandler = null;
 let noticeSecondaryHandler = null;
+let activeProductCategory = "";
 
 function formatRupiah(value) {
     return `Rp.${Number(value).toLocaleString("id-ID")}`;
@@ -114,9 +120,11 @@ function updateCartCount() {
 function updateFormByCategory(category) {
     // Form kain dan pakaian dibedakan supaya field yang tampil lebih relevan.
     const isKain = category.toLowerCase().includes("kain");
+    activeProductCategory = isKain ? "kain" : "pakaian";
 
     kainFields.classList.toggle("d-none", !isKain);
     pakaianFields.classList.toggle("d-none", isKain);
+    applyQuantityMinimum();
 }
 
 function updatePreviewImage(image, productName) {
@@ -258,9 +266,98 @@ function getActiveProductButton() {
     return document.querySelector(".product-option.active");
 }
 
+function getSelectedOptionValue(select) {
+    if (!select || select.selectedIndex < 0) {
+        return "";
+    }
+
+    const option = select.options[select.selectedIndex];
+    if (!option || option.disabled || option.index === 0) {
+        return "";
+    }
+
+    return option.value || option.textContent.trim();
+}
+
+function getPakaianMinimum() {
+    if (activeProductCategory !== "pakaian" || !pakaianUkuran) {
+        return 1;
+    }
+
+    const selectedOption = pakaianUkuran.options[pakaianUkuran.selectedIndex];
+    return Number(selectedOption?.dataset?.min || 5);
+}
+
+function applyQuantityMinimum() {
+    if (!qtyInput) {
+        return;
+    }
+
+    const minimum = getPakaianMinimum();
+    qtyInput.min = String(minimum);
+
+    if (Number(qtyInput.value) < minimum) {
+        qtyInput.value = minimum;
+    }
+
+    if (pakaianMinimumInfo && activeProductCategory === "pakaian") {
+        pakaianMinimumInfo.textContent = minimum === 20
+            ? "Minimal pemesanan baju anak adalah 20 pcs."
+            : "Minimal pemesanan baju dewasa adalah 5 pcs.";
+    }
+}
+
+function getSelectedPaymentMethod() {
+    return document.querySelector('input[name="metodePembayaran"]:checked')?.value || "qris";
+}
+
+function buildOrderOptions() {
+    if (activeProductCategory === "kain") {
+        return {
+            warna: getSelectedOptionValue(kainWarna)
+        };
+    }
+
+    return {
+        ukuran: getSelectedOptionValue(pakaianUkuran),
+        gender: getSelectedOptionValue(pakaianGender),
+        warna: getSelectedOptionValue(pakaianWarna)
+    };
+}
+
+function validateOrderOptions() {
+    if (activeProductCategory === "kain") {
+        if (!getSelectedOptionValue(kainWarna)) {
+            return "Pilih warna kain batik dulu.";
+        }
+        return "";
+    }
+
+    if (!getSelectedOptionValue(pakaianUkuran)) {
+        return "Pilih ukuran baju dulu.";
+    }
+
+    if (!getSelectedOptionValue(pakaianGender)) {
+        return "Pilih gender baju dulu.";
+    }
+
+    if (!getSelectedOptionValue(pakaianWarna)) {
+        return "Pilih warna baju dulu.";
+    }
+
+    const minimum = getPakaianMinimum();
+    if (Number(qtyInput.value) < minimum) {
+        return minimum === 20
+            ? "Jumlah baju anak minimal 20 pcs."
+            : "Jumlah baju dewasa minimal 5 pcs.";
+    }
+
+    return "";
+}
+
 qtyMinus.addEventListener("click", () => {
     const currentValue = Number(qtyInput.value) || 1;
-    qtyInput.value = Math.max(1, currentValue - 1);
+    qtyInput.value = Math.max(getPakaianMinimum(), currentValue - 1);
 });
 
 qtyPlus.addEventListener("click", () => {
@@ -270,11 +367,16 @@ qtyPlus.addEventListener("click", () => {
 
 qtyInput.addEventListener("input", () => {
     const currentValue = Number(qtyInput.value);
+    const minimum = getPakaianMinimum();
 
-    if (!currentValue || currentValue < 1) {
-        qtyInput.value = 1;
+    if (!currentValue || currentValue < minimum) {
+        qtyInput.value = minimum;
     }
 });
+
+if (pakaianUkuran) {
+    pakaianUkuran.addEventListener("change", applyQuantityMinimum);
+}
 
 orderForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -306,7 +408,18 @@ orderForm.addEventListener("submit", async (event) => {
         return;
     }
 
-    const quantity = Math.max(1, Number(qtyInput.value) || 1);
+    const validationMessage = validateOrderOptions();
+    if (validationMessage) {
+        showOrderNotice({
+            title: "Lengkapi Detail",
+            message: validationMessage,
+            type: "warning",
+            hideSecondary: true
+        });
+        return;
+    }
+
+    const quantity = Math.max(getPakaianMinimum(), Number(qtyInput.value) || 1);
     const notesField = document.querySelector(".notes-field textarea");
     const activeProductId = Number(activeProduct.dataset.id);
     const cartItems = getCartItems();
@@ -328,10 +441,16 @@ orderForm.addEventListener("submit", async (event) => {
 
     const items = [{
         detail_batik_id: selectedCartItem.detail_batik_id || selectedCartItem.id,
-        jumlah: quantity
+        jumlah: quantity,
+        kategori: activeProductCategory,
+        opsi_pesanan: buildOrderOptions(),
+        catatan: notesField?.value?.trim() || ""
     }];
 
-    const result = await window.UserSession.createOrder(items);
+    const result = await window.UserSession.createOrder(items, {
+        metode_pembayaran: getSelectedPaymentMethod(),
+        catatan: notesField?.value?.trim() || ""
+    });
 
     if (!result.success) {
         showOrderNotice({
@@ -356,7 +475,7 @@ orderForm.addEventListener("submit", async (event) => {
     updateCartAfterOrder(activeProductId, quantity);
     renderCartProducts();
     orderForm.reset();
-    qtyInput.value = 1;
+    qtyInput.value = getPakaianMinimum();
 
     if (notesField) {
         notesField.value = "";

@@ -107,12 +107,22 @@
             <span class="close-modal">&times;</span>
         </div>
         <div class="modal-body">
+            <div class="modal-product-preview">
+                <img id="modalProductImage" src="../../img/batik1.jpg" alt="Gambar produk pesanan">
+                <div>
+                    <strong id="modalProductName">Produk Batik</strong>
+                    <span id="modalProductMeta">Detail produk</span>
+                </div>
+            </div>
             <p><strong>ID Pesanan:</strong> <span id="modalOrderId"></span></p>
             <p><strong>Pelanggan:</strong> <span id="modalCustomer"></span></p>
             <hr>
             <div class="form-group">
                 <label>Status Pembayaran:</label>
                 <select id="updateBayar">
+                    <option value="QRIS">QRIS</option>
+                    <option value="E-Wallet">E-Wallet</option>
+                    <option value="COD">COD</option>
                     <option value="Lunas">Lunas</option>
                     <option value="Belum Bayar">Belum Bayar</option>
                 </select>

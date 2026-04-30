@@ -73,6 +73,30 @@ class PesananController {
         return $adminId;
     }
 
+    private function validMetodePembayaran(string $metode): string {
+        return in_array($metode, ['qris', 'ewallet', 'cod'], true) ? $metode : 'qris';
+    }
+
+    private function minimumJumlahUntukItem(array $item, array $varian): int {
+        $namaProduk = strtolower((string)($varian['nama_produk'] ?? ''));
+        $kategori = strtolower((string)($item['kategori'] ?? ''));
+        $isPakaian = str_contains($namaProduk, 'baju')
+            || str_contains($namaProduk, 'kemeja')
+            || str_contains($namaProduk, 'blus')
+            || str_contains($namaProduk, 'outer')
+            || str_contains($namaProduk, 'tunik')
+            || str_contains($namaProduk, 'dress')
+            || $kategori === 'pakaian';
+
+        if (!$isPakaian) {
+            return 1;
+        }
+
+        $opsi = is_array($item['opsi_pesanan'] ?? null) ? $item['opsi_pesanan'] : [];
+        $ukuran = strtolower((string)($opsi['ukuran'] ?? ''));
+        return str_contains($ukuran, 'anak') ? 20 : 5;
+    }
+
     /**
      * Membuat pesanan baru.
      */
@@ -108,18 +132,26 @@ class PesananController {
                 $varian = $model->findVarianById((int)$item['detail_batik_id']);
                 if (!$varian)
                     throw new Exception("Varian ID {$item['detail_batik_id']} tidak ditemukan");
-                if ($varian['stok'] < (int)$item['jumlah'])
+                $jumlah = (int)$item['jumlah'];
+                $minimumJumlah = $this->minimumJumlahUntukItem($item, $varian);
+                if ($jumlah < $minimumJumlah)
+                    throw new Exception("Jumlah minimal untuk item ini adalah {$minimumJumlah}");
+                if ($varian['stok'] < $jumlah)
                     throw new Exception("Stok varian ID {$item['detail_batik_id']} tidak cukup");
 
-                $totalHarga += $varian['harga'] * (int)$item['jumlah'];
+                $totalHarga += $varian['harga'] * $jumlah;
                 $resolved[]  = [
                     'detail_batik_id'  => $varian['detail_batik_id'],
-                    'jumlah'           => (int)$item['jumlah'],
+                    'jumlah'           => $jumlah,
                     'harga_saat_pesan' => $varian['harga'],
+                    'opsi_pesanan'     => is_array($item['opsi_pesanan'] ?? null) ? $item['opsi_pesanan'] : null,
+                    'catatan'          => trim((string)($item['catatan'] ?? '')) ?: null,
                 ];
             }
 
-            $pesananId = $model->create($pelangganId, $totalHarga);
+            $metodePembayaran = $this->validMetodePembayaran((string)($body['metode_pembayaran'] ?? 'qris'));
+            $catatan = trim((string)($body['catatan'] ?? '')) ?: null;
+            $pesananId = $model->create($pelangganId, $totalHarga, $metodePembayaran, $catatan);
             foreach ($resolved as $r) {
                 $model->addItem($pesananId, $r);
                 $model->kurangiStok($r['detail_batik_id'], $r['jumlah']);
@@ -237,7 +269,7 @@ class PesananController {
      */
     public function adminIndex(): void {
         $body = $this->body();
-        $adminId = (int) ($body['admin_id'] ?? 0);
+        $adminId = (int) ($body['admin_id'] ?? ($_GET['admin_id'] ?? 0));
         
         if ($adminId <= 0) {
             $this->respond(false, null, 'admin_id wajib diisi (admin only)', 422);

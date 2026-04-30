@@ -356,6 +356,13 @@ a {
     outline: 0;
 }
 
+.minimum-info {
+    margin: 14px 0 0;
+    color: #5f6980;
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
 .notes-field {
     margin-top: 4px;
 }
@@ -400,6 +407,51 @@ a {
 
 .qty-btn:hover {
     background: var(--primary-dark);
+}
+
+.payment-section {
+    display: grid;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.payment-section > span {
+    color: #31405e;
+    font-weight: 700;
+}
+
+.payment-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.payment-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.payment-option span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 50px;
+    padding: 0 12px;
+    border: 1px solid #d8dfec;
+    border-radius: 14px;
+    background: #fff;
+    color: #31405e;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.payment-option input:checked + span {
+    border-color: var(--primary);
+    background: #eef3ff;
+    color: var(--primary);
+    box-shadow: 0 10px 24px rgba(46, 79, 194, 0.12);
 }
 
 .submit-btn {
@@ -549,6 +601,10 @@ a {
         flex-direction: column;
         align-items: flex-start;
         gap: 14px;
+    }
+
+    .payment-options {
+        grid-template-columns: 1fr;
     }
 
     .order-notice-box {
