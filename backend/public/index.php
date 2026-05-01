@@ -122,6 +122,9 @@ try {
     $router->get ('/api/admin/pesanan',          ['PesananController', 'adminIndex']);
     $router->put ('/api/pesanan/:id/status',     ['PesananController', 'updateStatus']);
 
+    // Laporan penjualan (admin)
+    $router->get ('/api/admin/laporan-penjualan', ['PesananController', 'reportSales']);
+
     // ===== Ulasan Endpoints =====
     $router->post('/api/ulasan',                 ['UlasanController', 'store']);
     $router->get ('/api/produk/:id/ulasan',      ['UlasanController', 'byProduk']);

@@ -278,4 +278,24 @@ class PesananController {
         $model = new PesananModel();
         $this->respond(true, $model->getAll($_GET['status'] ?? null), '', 200);
     }
+
+    /**
+     * Endpoint untuk laporan penjualan (admin only).
+     * Query params: admin_id, from (YYYY-MM-DD), to (YYYY-MM-DD)
+     */
+    public function reportSales(): void {
+        $body = $this->body();
+        $adminId = (int) ($body['admin_id'] ?? ($_GET['admin_id'] ?? 0));
+
+        if ($adminId <= 0) {
+            $this->respond(false, null, 'admin_id wajib diisi (admin only)', 422);
+        }
+
+        $from = isset($_GET['from']) ? trim($_GET['from']) : null;
+        $to   = isset($_GET['to']) ? trim($_GET['to']) : null;
+
+        $model = new PesananModel();
+        $report = $model->getSalesReport($from, $to);
+        $this->respond(true, $report, '', 200);
+    }
 }

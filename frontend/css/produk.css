@@ -33,15 +33,13 @@ body {
     padding: 25px; 
 }
 
-/* TOP BAR KONSISTEN */
+/* TOP BAR (delegated to navadmin.css) - minimal placeholder */
 .top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--white);
     padding: 15px 25px;
-    margin: -25px -25px 25px -25px; /* Full width di bagian atas */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin: -25px -25px 25px -25px;
 }
 
 .header-left h1 {

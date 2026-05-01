@@ -22,7 +22,7 @@
 
 /* Sidebar */
 .sidebar {
-    width: 250px;
+    width: 240px;
     background: var(--sidebar-color);
     border-right: 1px solid #ccc;
     display: flex;
@@ -32,28 +32,45 @@
 }
 
 .sidebar-header {
-    padding: 2rem 1.5rem;
+    padding: 1.5rem 1.25rem;
     color: var(--primary-blue);
 }
 
 .nav-menu {
     flex-grow: 1;
+    overflow-y: auto; /* pastikan daftar menu tidak merusak layout */
 }
 
 .nav-item {
     display: flex;
     align-items: center;
-    padding: 12px 20px;
+    height: 48px;              /* konsistenkan tinggi item */
+    padding: 0 18px;          /* horizontal padding */
     text-decoration: none;
     color: #444;
-    gap: 15px;
-    transition: 0.3s;
+    gap: 12px;
+    transition: background-color 0.18s ease, color 0.18s ease;
     border-bottom: 1px solid #eee;
+    font-size: 15px;
 }
 
 .nav-item:hover, .nav-item.active {
     background-color: var(--primary-blue);
     color: white !important;
+}
+
+/* Pastikan ikon Lucide di nav konsisten ukurannya */
+.nav-item svg, .nav-item i {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+}
+
+/* Text wrapping dan alignment */
+.nav-item > span, .nav-item > p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .sidebar-footer {
@@ -63,7 +80,245 @@
 /* Area Konten Utama */
 .main-content {
     flex-grow: 1;
-    margin-left: 250px; /* Harus sama dengan lebar sidebar */
+    margin-left: 240px; /* Harus sama dengan lebar sidebar */
     padding: 30px;
     min-height: 100vh;
 }
+
+/* Responsiveness: collapse sidebar on very small screens */
+@media (max-width: 800px) {
+    .sidebar { position: relative; width: 100%; height: auto; }
+    .main-content { margin-left: 0; padding: 16px; }
+    .nav-item { height: 44px; font-size: 14px; }
+}
+
+/* Stronger rules to prevent overrides from other CSS files (bootstrap or page-specific) */
+.sidebar .nav-menu .nav-item {
+    height: 48px !important;
+    padding: 0 18px !important;
+    font-size: 15px !important;
+}
+.sidebar .nav-menu .nav-item svg,
+.sidebar .nav-menu .nav-item i {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+/* If some pages included .nav-link styles from other css, ensure nav-item takes precedence */
+.sidebar .nav-menu .nav-link, .sidebar .nav-menu .nav-item {
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* TOP NAVBAR (override page-specific rules) */
+/* Use high-specificity selectors and !important to ensure consistency across admin pages */
+body .main-content .top-bar,
+body .main-content header.top-bar,
+body .main-content .top-bar.container,
+body .main-content header.top-bar.container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    background: var(--sidebar-color, #fff) !important;
+    padding: 15px 25px !important; /* consistent padding */
+    margin: -25px -25px 25px -25px !important; /* full width inside main-content */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    font-size: 15px !important; /* base font-size */
+    line-height: 1 !important;
+}
+
+/* Page title / header on top-bar */
+body .main-content .top-bar h1,
+body .main-content .top-bar #page-title,
+body .main-content .top-bar .header-left h1 {
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    margin: 0 !important;
+}
+
+/* Subtitle / small text in header */
+body .main-content .top-bar p,
+body .main-content .top-bar .header-left p {
+    font-size: 13px !important;
+    color: var(--text-muted, #888) !important;
+    margin: 0 !important;
+}
+
+/* User profile area (right side) */
+body .main-content .top-bar .user-profile {
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+}
+
+body .main-content .top-bar .profile-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    border-left: 1px solid #e5e7eb !important;
+    padding-left: 15px !important;
+}
+
+body .main-content .top-bar .text-profile {
+    display: flex !important;
+    flex-direction: column !important;
+    text-align: right !important;
+}
+
+body .main-content .top-bar .text-profile .name {
+    font-weight: 700 !important;
+    font-size: 13px !important;
+}
+
+body .main-content .top-bar .text-profile .role {
+    font-size: 11px !important;
+    color: var(--text-muted, #888) !important;
+}
+
+/* Icons inside top-bar (notif/avatar) */
+body .main-content .top-bar .notif-icon i,
+body .main-content .top-bar .notif-icon svg,
+body .main-content .top-bar .avatar i,
+body .main-content .top-bar .avatar svg {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+@media (max-width: 800px) {
+    body .main-content .top-bar { padding: 12px 16px !important; }
+    body .main-content .top-bar h1 { font-size: 18px !important; }
+    body .main-content .top-bar .text-profile .name { font-size: 12px !important; }
+    body .main-content .top-bar .text-profile .role { font-size: 10px !important; }
+}
+
+/* HEADER CONTAINER NORMALIZATION
+   Ensures .top-bar child containers (.header-left, .header-right, .filter-pills, etc.)
+   have consistent sizes and alignment across different pages. Overrides inline styles. */
+body .main-content .top-bar > .header-left,
+body .main-content .top-bar > .header-right,
+body .main-content .top-bar > .filter-pills,
+body .main-content .top-bar > .header-center,
+body .main-content .top-bar > h1,
+body .main-content .top-bar > .user-profile {
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Make left area flexible but allow truncation */
+body .main-content .top-bar > .header-left,
+body .main-content .top-bar > h1,
+body .main-content .top-bar > .header-center {
+    flex: 1 1 auto !important;
+    min-width: 0 !important; /* allow ellipsis */
+}
+
+/* Right area should not grow; keep controls and profile aligned */
+body .main-content .top-bar > .header-right,
+body .main-content .top-bar > .user-profile {
+    flex: 0 0 auto !important;
+    gap: 20px !important;
+}
+
+/* If pages used inline styles for header-right, override them */
+body .main-content .top-bar .header-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+}
+
+/* Filter pills (used on List Pesanan) - keep consistent spacing and vertical centering */
+body .main-content .top-bar .filter-pills {
+    display: flex !important;
+    gap: 8px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 1 1 auto !important;
+}
+
+/* Ensure the title doesn't push other elements out of alignment */
+body .main-content .top-bar h1#page-title,
+body .main-content .top-bar .header-left h1 {
+    margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+/* Small screens: stack if necessary but keep spacing consistent */
+@media (max-width: 640px) {
+    body .main-content .top-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+    body .main-content .top-bar > .header-right,
+    body .main-content .top-bar > .user-profile { align-self: stretch !important; justify-content: flex-end !important; }
+}
+
+/* Additional responsive normalization for consistent header heights and controls */
+:root {
+    --topbar-desktop-height: 64px;
+    --topbar-tablet-height: 56px;
+    --topbar-mobile-height: 54px;
+    --topbar-gap: 20px;
+}
+
+/* Force a consistent minimum height so header containers across pages match visually */
+body .main-content .top-bar {
+    min-height: var(--topbar-desktop-height) !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+}
+
+/* Ensure header children vertically center and respect available space */
+body .main-content .top-bar > * { align-self: center !important; }
+
+/* Normalize primary/secondary buttons in header-right */
+body .main-content .top-bar .btn-primary,
+body .main-content .top-bar .btn-secondary,
+body .main-content .top-bar .btn-icon {
+    font-size: 14px !important;
+    padding: 8px 12px !important;
+    height: 36px !important;
+    line-height: 20px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    border-radius: 8px !important;
+}
+
+/* Make sure pills have consistent touch targets */
+body .main-content .top-bar .pill {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    border-radius: 999px !important;
+}
+
+/* If header has many controls (small screens) allow horizontal scroll for controls but keep height */
+body .main-content .top-bar {
+    overflow: visible !important;
+}
+body .main-content .top-bar > .header-right {
+    max-width: 60% !important;
+}
+body .main-content .top-bar > .filter-pills {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/* Tablet breakpoint adjustments */
+@media (max-width: 1024px) {
+    body .main-content .top-bar { min-height: var(--topbar-tablet-height) !important; padding: 10px 18px !important; }
+    body .main-content .top-bar .btn-primary,
+    body .main-content .top-bar .btn-secondary { padding: 7px 10px !important; font-size: 13px !important; }
+}
+
+/* Mobile breakpoint: stack and reduce spacing but keep touchable targets */
+@media (max-width: 640px) {
+    body .main-content .top-bar { min-height: var(--topbar-mobile-height) !important; padding: 10px 12px !important; }
+    body .main-content .top-bar > .header-left,
+    body .main-content .top-bar > .filter-pills { width: 100% !important; }
+    body .main-content .top-bar > .header-right,
+    body .main-content .top-bar > .user-profile { width: 100% !important; justify-content: space-between !important; }
+    body .main-content .top-bar .btn-primary,
+    body .main-content .top-bar .btn-secondary { width: auto !important; height: 40px !important; }
+}
+
+/* Final safety: if any page uses inline font-size or height on .top-bar children, override with important rules */
+body .main-content .top-bar * { font-size: inherit !important; box-sizing: border-box !important; }

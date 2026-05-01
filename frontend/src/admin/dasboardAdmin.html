@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="../../css/dasboardAdmin.css">
-    <link rel="stylesheet" href="../../css/navadmin.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- SweetAlert2 CSS & JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../../css/navadmin.css?v=20260501">
+
 </head>
 <body>
 
@@ -60,22 +58,22 @@
                 <div class="stat-card">
                     <div class="stat-icon blue-bg"><i data-lucide="clipboard-list"></i></div>
                     <p>Total Produk</p>
-                    <h3>10</h3>
+                    <h3 id="stat-total-produk">10</h3>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon purple-bg"><i data-lucide="shapes"></i></div>
                     <p>Produk Aktif</p>
-                    <h3>10</h3>
+                    <h3 id="stat-produk-aktif">10</h3>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon orange-bg"><i data-lucide="truck"></i></div>
                     <p>Total Pesanan</p>
-                    <h3>0</h3>
+                    <h3 id="stat-total-pesanan">0</h3>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon green-bg"><i data-lucide="user-plus"></i></div>
                     <p>Total User</p>
-                    <h3>0</h3>
+                    <h3 id="stat-total-user">0</h3>
                 </div>
             </section>
 
@@ -166,8 +164,194 @@
         </main>
     </div>
 <!-- Script di akhir body -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../../js/user-session.js"></script>
     <script src="../../js/navigasiAdmin.js"></script> <!-- Pastikan ini di bawah SweetAlert -->
+    <script>
+    // Fetch dashboard statistics and sales report, then render on the page.
+    (function () {
+        const adminId = 1; // TODO: replace with real admin/session value when available
+
+        // Build backend base URL dynamically so it works in subfolder setups
+        const parts = location.pathname.split('/');
+        const projectRoot = parts.length > 1 ? '/' + parts[1] : '';
+        const base = location.origin + projectRoot + '/backend/public';
+
+        async function fetchStats() {
+            try {
+                const res = await fetch(base + '/api/admin/statistik-dashboard?admin_id=' + adminId);
+                if (!res.ok) {
+                    console.error('Gagal mengambil statistik', res.status);
+                    return;
+                }
+                const payload = await res.json();
+                if (!payload.success) {
+                    console.error('API error', payload.message);
+                    return;
+                }
+
+                const stats = payload.data || {};
+                document.getElementById('stat-total-produk').textContent = stats.total_produk ?? '0';
+                document.getElementById('stat-produk-aktif').textContent = stats.total_produk ?? '0';
+                document.getElementById('stat-total-pesanan').textContent = stats.total_pesanan ?? '0';
+                document.getElementById('stat-total-user').textContent = stats.total_pelanggan ?? '0';
+
+                // If backend already returns total_terbeli include it, otherwise fetch sales report
+                if (typeof stats.total_terbeli !== 'undefined') {
+                    insertTerbeliCard(stats.total_terbeli);
+                }
+
+                // Always fetch the detailed sales report to populate the "Laporan Penjualan" card
+                await fetchSalesReport();
+
+            } catch (err) {
+                console.error('Error fetching stats', err);
+            }
+        }
+
+        async function fetchSalesReport(from = null, to = null) {
+            try {
+                let url = base + '/api/admin/laporan-penjualan?admin_id=' + adminId;
+                if (from) url += '&from=' + encodeURIComponent(from);
+                if (to) url += '&to=' + encodeURIComponent(to);
+
+                const res = await fetch(url);
+                if (!res.ok) {
+                    console.error('Gagal mengambil laporan penjualan', res.status);
+                    renderSalesReport([]);
+                    return;
+                }
+
+                const payload = await res.json();
+                if (!payload.success) {
+                    console.error('API error laporan penjualan', payload.message);
+                    renderSalesReport([]);
+                    return;
+                }
+
+                const rows = payload.data || [];
+                renderSalesReport(rows);
+
+                // compute total terbeli and ensure stat card exists
+                let totalTerbeli = 0;
+                rows.forEach(r => totalTerbeli += parseInt(r.total_terjual || 0, 10));
+                insertTerbeliCard(totalTerbeli);
+
+            } catch (e) {
+                console.error('Error fetching sales report', e);
+                renderSalesReport([]);
+            }
+        }
+
+        function insertTerbeliCard(value) {
+            let existing = document.getElementById('stat-total-terbeli');
+            if (existing) {
+                existing.textContent = value;
+                return;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'stat-card';
+            card.innerHTML = '<div class="stat-icon teal-bg"><i data-lucide="shopping-cart"></i></div>' +
+                             '<p>Total Jumlah Terbeli</p>' +
+                             '<h3 id="stat-total-terbeli">' + value + '</h3>';
+
+            const statsGrid = document.querySelector('.stats-grid');
+            if (statsGrid) statsGrid.appendChild(card);
+            lucide.createIcons();
+        }
+
+        function renderSalesReport(rows) {
+            const card = document.querySelector('.chart-card');
+            if (!card) return;
+
+            let container = card.querySelector('.sales-report');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'sales-report';
+                container.style.marginTop = '12px';
+                card.appendChild(container);
+            }
+
+            if (!rows || rows.length === 0) {
+                container.innerHTML = '<p style="color:#6b7280">Tidak ada data penjualan untuk periode ini.</p>';
+                renderBarChart([]);
+                return;
+            }
+
+            // Build a small table with last sale time
+            let html = '<div style="overflow:auto"><table class="sales-table" style="width:100%;border-collapse:collapse">';
+            html += '<thead><tr style="text-align:left;color:#6b7280;font-size:12px"><th>Produk</th><th>Terjual</th><th>Pendapatan (Rp)</th><th>Terakhir Terjual</th></tr></thead><tbody>';
+            rows.forEach(r => {
+                const nama = escapeHtml(r.nama_produk || 'N/A');
+                const terjual = Number(r.total_terjual || 0).toLocaleString();
+                const pendapatan = Number(r.total_pendapatan || 0).toLocaleString();
+                const last = r.last_terjual ? formatTimestampLocal(r.last_terjual) : '-';
+                html += `<tr style="border-bottom:1px solid #f3f4f6"><td style="padding:8px 6px">${nama}</td><td style="padding:8px 6px">${terjual}</td><td style="padding:8px 6px">${pendapatan}</td><td style="padding:8px 6px">${last}</td></tr>`;
+            });
+            html += '</tbody></table></div>';
+
+            container.innerHTML = html;
+            // Also render bar chart for top products
+            renderBarChart(rows);
+        }
+
+        function renderBarChart(rows) {
+            // rows: array of { nama_produk, total_terjual }
+            const chartPlaceholder = document.querySelector('.chart-placeholder');
+            if (!chartPlaceholder) return;
+
+            // Take top 7 products
+            const top = (rows || []).slice(0, 7);
+            if (top.length === 0) {
+                chartPlaceholder.innerHTML = '<div style="color:#6b7280">Tidak ada data chart</div>';
+                return;
+            }
+
+            const max = Math.max(...top.map(r => Number(r.total_terjual || 0)), 1);
+            // Build bars
+            let html = '<div style="display:flex;align-items:flex-end;gap:10px;height:140px;padding:8px 6px">';
+            top.forEach(r => {
+                const count = Number(r.total_terjual || 0);
+                const h = Math.round((count / max) * 100); // percent
+                const label = escapeHtml((r.nama_produk || '').substring(0, 10));
+                html += `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">`;
+                html += `<div title="${label} - ${count}" style="width:100%;background:#E5E7EB;border-radius:6px;display:flex;align-items:flex-end;justify-content:center">`;
+                html += `<div style="width:80%;background:#2B4DBB;height:${h}% ;border-radius:6px 6px 0 0;display:flex;align-items:flex-end;justify-content:center;color:white;font-size:12px;padding:4px 0">${count}</div>`;
+                html += `</div>`;
+                html += `<div style="font-size:11px;color:#374151;word-break:break-word;text-align:center;margin-top:6px">${label}</div>`;
+                html += `</div>`;
+            });
+            html += '</div>';
+
+            chartPlaceholder.innerHTML = html;
+        }
+
+        function escapeHtml(unsafe) {
+            return String(unsafe)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function formatTimestampLocal(ts) {
+            // Expecting ts in ISO or MySQL DATETIME. Create Date and format to local string.
+            try {
+                // Normalize space-separated MySQL DATETIME to 'T' for Date parsing if needed
+                const normalized = String(ts).replace(' ', 'T');
+                const d = new Date(normalized);
+                if (isNaN(d.getTime())) return '-';
+                return d.toLocaleString();
+            } catch (e) {
+                return '-';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchStats);
+    })();
+    </script>
     <script>lucide.createIcons();</script></body>
 </html>

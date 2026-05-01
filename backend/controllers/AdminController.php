@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../models/AkunModel.php';
+require_once __DIR__ . '/../models/PesananModel.php';
 
 class AdminController {
 
@@ -73,13 +74,23 @@ class AdminController {
      * Mengambil statistik ringkas untuk dashboard
      */
     public function getStats(): void {
-        $model = new AkunModel();
+        $akunModel = new AkunModel();
+        $pesananModel = new PesananModel();
         try {
+            // Ambil ringkasan penjualan untuk menghitung total jumlah terbeli
+            $sales = $pesananModel->getSalesReport(null, null);
+            $totalTerbeli = 0;
+            foreach ($sales as $row) {
+                $totalTerbeli += (int)($row['total_terjual'] ?? 0);
+            }
+
             $stats = [
-                'total_produk' => $model->countProduk(),
-                'total_pesanan' => $model->countPesanan(),
-                'total_pelanggan' => $model->countPelanggan()
+                'total_produk' => $akunModel->countProduk(),
+                'total_pesanan' => $akunModel->countPesanan(),
+                'total_pelanggan' => $akunModel->countPelanggan(),
+                'total_terbeli' => $totalTerbeli
             ];
+
             $this->respond(true, $stats, 'Statistik berhasil dimuat', 200);
         } catch (Exception $e) {
             $this->respond(false, null, 'Gagal memuat statistik', 500);
