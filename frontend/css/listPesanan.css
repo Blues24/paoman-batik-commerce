@@ -34,13 +34,25 @@ body {
     padding: 25px; /* Jarak standar konten dari tepi */
 }
 
-/* TOP BAR (delegated to navadmin.css) - minimal placeholder */
+/* TOP BAR KONSISTEN */
+/* TOP BAR KONSISTEN */
+
 .top-bar {
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
+
+    background: var(--white);
+
     padding: 15px 25px;
-    margin: -25px -25px 25px -25px; /* keeps full-width layout but size is controlled by navadmin.css */
+
+    margin: -25px -25px 25px -25px; /* Menutup padding main agar full width di atas */
+
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
 }
 
 

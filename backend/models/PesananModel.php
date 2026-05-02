@@ -299,42 +299,6 @@ class PesananModel {
     }
 
     /**
-     * Menghasilkan laporan penjualan (admin).
-     * Mengembalikan ringkasan jumlah terjual dan pendapatan per produk.
-     * Opsional filter tanggal: $from, $to (YYYY-MM-DD). Jika kosong, ambil semua.
-     */
-    public function getSalesReport(?string $from = null, ?string $to = null): array {
-        $params = [];
-        $where = 'WHERE p.status_pesanan NOT IN ("dibatalkan")';
-
-        if ($from) {
-            $where .= ' AND DATE(p.tanggal_pesanan) >= ?';
-            $params[] = $from;
-        }
-        if ($to) {
-            $where .= ' AND DATE(p.tanggal_pesanan) <= ?';
-            $params[] = $to;
-        }
-
-    $sql = 'SELECT pr.produk_id, pr.nama_produk,
-               SUM(dp.jumlah) AS total_terjual,
-               SUM(dp.jumlah * dp.harga_saat_pesan) AS total_pendapatan,
-               MIN(p.tanggal_pesanan) AS first_terjual,
-               MAX(p.tanggal_pesanan) AS last_terjual
-        FROM detail_pesanan dp
-        JOIN pesanan p ON p.pesanan_id = dp.pesanan_id
-        JOIN detail_batik db ON db.detail_batik_id = dp.detail_batik_id
-        JOIN produk pr ON pr.produk_id = db.produk_id
-        ' . $where . '
-        GROUP BY pr.produk_id, pr.nama_produk
-        ORDER BY total_terjual DESC';
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    /**
      * Memulai transaksi database.
      */
     public function beginTransaction(): void { $this->db->beginTransaction(); }
