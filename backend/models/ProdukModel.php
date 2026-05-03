@@ -69,18 +69,19 @@ class ProdukModel {
             ELSE 999
         END';
 
-        $sql  = 'SELECT MIN(p.produk_id) AS produk_id,
-                        p.nama_produk,
-                        MIN(p.deskripsi) AS deskripsi' . $imageSelect . ',
-                        MIN(j.nama_jenis) AS nama_jenis,
-                        MIN(db.harga) AS harga_mulai,
-                        ' . $orderCase . ' AS urutan_katalog
-                 FROM produk p
-                 JOIN jenis_produk j ON j.jenis_id = p.jenis_id
-                 LEFT JOIN detail_batik db ON db.produk_id = p.produk_id
-                 WHERE ' . implode(' AND ', $where) . '
-                 GROUP BY p.nama_produk
-                 ORDER BY urutan_katalog, MIN(p.produk_id)';
+       $sql  = 'SELECT MIN(p.produk_id) AS produk_id,
+                p.nama_produk,
+                MIN(p.deskripsi) AS deskripsi' . $imageSelect . ',
+                MIN(j.nama_jenis) AS nama_jenis,
+                MIN(db.harga) AS harga_mulai,
+                SUM(db.stok) AS total_stok, -- TAMBAHKAN BARIS INI
+                ' . $orderCase . ' AS urutan_katalog
+         FROM produk p
+         JOIN jenis_produk j ON j.jenis_id = p.jenis_id
+         LEFT JOIN detail_batik db ON db.produk_id = p.produk_id
+         WHERE ' . implode(' AND ', $where) . '
+         GROUP BY p.nama_produk
+         ORDER BY urutan_katalog, MIN(p.produk_id)';
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
@@ -90,15 +91,18 @@ class ProdukModel {
     /**
      * Mencari produk berdasarkan ID.
      */
-    public function findById(int $id): array|false {
-        $stmt = $this->db->prepare(
-            'SELECT p.*, j.nama_jenis FROM produk p
-             JOIN jenis_produk j ON j.jenis_id = p.jenis_id
-             WHERE p.produk_id = ? AND p.status = "aktif"'
-        );
-        $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
+   public function findById(int $id): array|false {
+    $stmt = $this->db->prepare(
+        'SELECT p.*, j.nama_jenis, SUM(db.stok) as total_stok 
+         FROM produk p
+         JOIN jenis_produk j ON j.jenis_id = p.jenis_id
+         LEFT JOIN detail_batik db ON db.produk_id = p.produk_id
+         WHERE p.produk_id = ? AND p.status = "aktif"
+         GROUP BY p.produk_id'
+    );
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
     /**
      * Mendapatkan varian produk.
@@ -143,6 +147,36 @@ class ProdukModel {
         );
         $stmt->execute($values);
         return (int) $this->db->lastInsertId();
+    }
+
+    /**
+     * Alias atau fungsi khusus untuk insert produk dari AdminController.
+     */
+    public function insertProduk(string $nama, string $gambar, int $jenisId, string $deskripsi = ''): int {
+        $data = [
+            'nama_produk' => $nama,
+            'gambar_produk' => $gambar,
+            'jenis_id' => $jenisId,
+            'deskripsi' => $deskripsi,
+            'status' => 'aktif'
+        ];
+        return $this->create($data); // Memanfaatkan fungsi create() yang sudah ada
+    }
+
+    /**
+     * Alias untuk insert varian dari AdminController.
+     */
+    public function insertVarian(int $produkId, float $harga, int $stok): int {
+        // Karena insertVarian di controller mungkin hanya kirim harga & stok,
+        // kita beri nilai default untuk kolom lain (ukuran, warna, bahan)
+        $data = [
+            'ukuran' => 'All Size',
+            'warna' => 'Default',
+            'bahan' => 'Katun',
+            'harga' => $harga,
+            'stok' => $stok
+        ];
+        return $this->createVarian($produkId, $data); // Memanfaatkan createVarian()
     }
 
     /**
