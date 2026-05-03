@@ -65,64 +65,85 @@ async function apiGetJson(endpoint) {
     return { response, data };
 }
 
-async function loadProdukFromApi() {
-    const { response, data } = await apiGetJson("/produk");
-    if (!response.ok || !data?.success || !Array.isArray(data.data)) {
-        throw new Error(data?.message || "Gagal memuat produk dari API.");
-    }
+    async function loadProdukFromApi() {
+        const { response, data } = await apiGetJson("/produk");
+        if (!response.ok || !data?.success || !Array.isArray(data.data)) {
+            throw new Error(data?.message || "Gagal memuat produk dari API.");
+        }
 
-    const list = data.data;
+        const list = data.data;
 
-    const detailResults = await Promise.allSettled(
-        list.map((produk) => apiGetJson(`/produk/${produk.produk_id}`))
-    );
+        // Ambil detail untuk mendapatkan varian/harga terbaru
+        const detailResults = await Promise.allSettled(
+            list.map((produk) => apiGetJson(`/produk/${produk.produk_id}`))
+        );
 
-    const mapped = list.map((produk, idx) => {
-        const detail = detailResults[idx];
-        const detailData =
-            detail?.status === "fulfilled" && detail.value?.data?.success
+        const mapped = list.map((produk, idx) => {
+            const detail = detailResults[idx];
+            const detailData = detail?.status === "fulfilled" && detail.value?.data?.success
                 ? detail.value.data.data
                 : null;
 
-        const varian = Array.isArray(detailData?.varian) ? detailData.varian : [];
-        const defaultVarian = varian[0] || null;
+            const varian = Array.isArray(detailData?.varian) ? detailData.varian : [];
+            const defaultVarian = varian[0] || null;
 
-        const harga =
-            defaultVarian?.harga != null
+            // Penentuan Harga
+            const harga = defaultVarian?.harga != null
                 ? Number(defaultVarian.harga)
                 : Number(produk.harga_mulai || 0);
 
-        const canonical = canonicalProductByName.get(produk.nama_produk);
-        const kategori = canonical?.kategori || guessKategoriFromNama(produk.nama_produk);
-        const image = produk.gambar_produk || canonical?.image || imageByName.get(produk.nama_produk) || produkBatikFallback[idx % produkBatikFallback.length]?.image || "";
+            // Penentuan Kategori
+            const canonical = canonicalProductByName.get(produk.nama_produk);
+            const kategori = canonical?.kategori || guessKategoriFromNama(produk.nama_produk);
 
-        return {
-            id: Number(produk.produk_id),
-            detail_batik_id: defaultVarian ? Number(defaultVarian.detail_batik_id) : Number(produk.produk_id),
-            nama: produk.nama_produk,
-            kategori,
-            harga: Number.isFinite(harga) ? harga : 0,
-            tag: "",
-            image
-        };
-    });
+            // LOGIKA GAMBAR: Pastikan mengarah ke folder frontend
+            let finalImage = "";
+            const rawImg = produk.gambar_produk || "";
 
-    const apiByName = new Map();
-    mapped.forEach((item) => {
-        if (!apiByName.has(item.nama)) {
-            apiByName.set(item.nama, item);
-        }
-    });
+            if (rawImg.startsWith('../img/')) {
+                finalImage = rawImg;
+            } else if (rawImg.includes('uploads/')) {
+                const fileName = rawImg.split('/').pop();
+                finalImage = `../img/uploads/${fileName}`;
+            } else {
+                finalImage = canonical?.image || "../img/batik1.jpg";
+            }
 
-    produkBatik = produkBatikFallback.map((fallback) => ({
-        ...fallback,
-        ...(apiByName.get(fallback.nama) || {})
-    })).sort((a, b) => {
-        const orderA = canonicalProductByName.get(a.nama)?.id || 999;
-        const orderB = canonicalProductByName.get(b.nama)?.id || 999;
-        return orderA - orderB;
-    });
-}
+            return {
+                id: Number(produk.produk_id),
+                detail_batik_id: defaultVarian ? Number(defaultVarian.detail_batik_id) : Number(produk.produk_id),
+                stok: Number(produk.total_stok || 0),
+                nama: produk.nama_produk,
+                kategori,
+                harga: Number.isFinite(harga) ? harga : 0,
+                tag: Number(produk.total_stok) <= 0 ? "Habis" : "",
+                image: finalImage
+            };
+        });
+
+        const apiByName = new Map();
+        mapped.forEach((item) => {
+            if (!apiByName.has(item.nama)) apiByName.set(item.nama, item);
+        });
+
+        // Gabungkan dengan data fallback
+        produkBatik = produkBatikFallback.map((fallback) => ({
+            ...fallback,
+            ...(apiByName.get(fallback.nama) || {})
+        })).sort((a, b) => {
+            const orderA = canonicalProductByName.get(a.nama)?.id || 999;
+            const orderB = canonicalProductByName.get(b.nama)?.id || 999;
+            return orderA - orderB;
+        });
+
+        // Tambahkan produk baru yang tidak ada di fallback
+        mapped.forEach(item => {
+            if (!produkBatik.find(p => p.nama === item.nama)) {
+                produkBatik.push(item);
+            }
+        });
+    } 
+
 
 const itemPerPage = 6;
 let currentPage = 1;
@@ -240,45 +261,51 @@ function updatePagination() {
     nextPageButton.disabled = currentPage === totalPages || filteredProducts.length === 0;
 }
 
-function renderProduk() {
-    productGrid.innerHTML = "";
+    function renderProduk() {
+        if (!productGrid) return;
+        productGrid.innerHTML = ""; // Bersihkan grid
 
-    if (filteredProducts.length === 0) {
-        emptyState.classList.remove("d-none");
-        updatePagination();
-        return;
-    }
+        if (filteredProducts.length === 0) {
+            if (emptyState) emptyState.classList.remove("d-none");
+            updatePagination();
+            return;
+        }
 
-    emptyState.classList.add("d-none");
+        if (emptyState) emptyState.classList.add("d-none");
 
-    const startIndex = (currentPage - 1) * itemPerPage;
-    const visibleProducts = filteredProducts.slice(startIndex, startIndex + itemPerPage);
+        const startIndex = (currentPage - 1) * itemPerPage;
+        const visibleProducts = filteredProducts.slice(startIndex, startIndex + itemPerPage);
 
-    visibleProducts.forEach((item) => {
-        const kategoriLabel = item.kategori === "kain" ? "Kain Batik" : "Pakaian";
+        visibleProducts.forEach((item) => {
+            const kategoriLabel = item.kategori === "kain" ? "Kain Batik" : "Pakaian";
+            const isHabis = item.stok <= 0; // Sekarang 'item' sudah terdefinisi di sini
 
-        productGrid.innerHTML += `
-            <article class="product-card">
+            productGrid.innerHTML += `
+            <article class="product-card ${isHabis ? 'out-of-stock' : ''}">
                 <div class="product-media">
-                    ${item.tag ? `<span class="product-badge">${item.tag}</span>` : ""}
-                    <img src="${item.image}" alt="${item.nama}" class="product-image">
+                    ${isHabis ? `<span class="product-badge bg-danger">Habis</span>` : (item.tag ? `<span class="product-badge">${item.tag}</span>` : "")}
+                    <img src="${item.image}" alt="${item.nama}" class="product-image" 
+                         style="${isHabis ? 'filter: grayscale(1);' : ''}"
+                         onerror="this.src='../img/batik1.jpg'">
                 </div>
                 <div class="product-body">
                     <p class="product-category">${kategoriLabel}</p>
                     <h3 class="product-title">${item.nama}</h3>
                     <div class="product-footer">
                         <span class="product-price">${formatRupiah(item.harga)}</span>
-                        <button class="cart-button" type="button" onclick="tambahKeKeranjang(${item.id})">
-                            <i class="bi bi-cart"></i>
+                        <button class="cart-button" type="button" 
+                                onclick="tambahKeKeranjang(${item.id})" 
+                                ${isHabis ? 'disabled' : ''}>
+                            <i class="bi ${isHabis ? 'bi-x-circle' : 'bi-cart'}"></i>
                         </button>
                     </div>
                 </div>
             </article>
         `;
-    });
+        });
 
-    updatePagination();
-}
+        updatePagination();
+    }
 
 function applyFilters() {
     const keyword = searchInput ? searchInput.value.trim().toLowerCase() : "";

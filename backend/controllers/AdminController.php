@@ -25,55 +25,62 @@ class AdminController {
      * LOGIKA BARU: createProduk dengan penanganan file yang lebih aman
      */
     public function createProduk(): void {
-        // 1. Ambil data teks dari $_POST
+        // 1. Ambil data input dengan aman
         $namaProduk = $_POST['nama_produk'] ?? '';
         $harga      = $_POST['harga'] ?? 0;
         $stok       = $_POST['stok'] ?? 0;
-        $jenisId    = $_POST['jenis_id'] ?? 1; // Pastikan kirim jenis_id dari frontend
+        $jenisId    = $_POST['jenis_id'] ?? 1;
         $deskripsi  = $_POST['deskripsi'] ?? '';
-
+        $adminId    = $_POST['admin_id'] ?? null;
+    
+        // 2. Cek apakah ada file yang diunggah
         $fileGambar = $_FILES['gambar_produk'] ?? null;
-
-        // Path absolut sesuai lingkungan LAMPP kamu
-        $baseDir = "/opt/lampp/htdocs/paoman-batik/backend/public/uploads/produk/";
-
-        // 2. Validasi Folder & Izin Akses (Gunakan @ untuk membungkam warning jika ijin ditolak)
-        if (!is_dir($baseDir)) {
-            if (!@mkdir($baseDir, 0775, true) && !is_dir($baseDir)) {
-                $this->respond(false, null, 'Server gagal menyediakan folder upload. Cek izin akses /opt/lampp.', 500);
-            }
-        }
-
-        // 3. Validasi Input File
+    
         if (!$fileGambar || $fileGambar['error'] !== UPLOAD_ERR_OK) {
-            $this->respond(false, null, 'File gambar tidak valid atau gagal diunggah.', 400);
+            $this->respond(false, null, 'Gambar wajib diunggah atau terjadi error saat upload.', 400);
+            return;
         }
-
-        // 4. Olah Nama File (Hanya simpan nama file di DB, bukan full path sistem)
+    
+        // 3. DEFINISI PATH (Kunci Utama)
+        // baseDir: Alamat fisik di Linux untuk move_uploaded_file
+        $baseDir = "/opt/lampp/htdocs/paoman-batik/frontend/img/uploads/";
+    
+        // Pastikan folder tujuan ada
+        if (!is_dir($baseDir)) {
+            mkdir($baseDir, 0775, true);
+        }
+    
+        // 4. Olah Nama File
         $ext = pathinfo($fileGambar['name'], PATHINFO_EXTENSION);
         $newFilename = 'produk_' . time() . '.' . $ext;
-        $targetPath = $baseDir . $newFilename;
-
-        // 5. Eksekusi: Pindah File Dulu, Baru Simpan ke DB
+    
+        // Target Path: Alamat lengkap file di sistem (Internal)
+        $targetPath = $baseDir . $newFilename; 
+    
+        // DB Path: String yang akan disimpan di database (External/Web)
+        // Kita simpan "uploads/nama_file.jpg" agar konsisten dengan logika pembelian.js
+        $dbPath = "uploads/" . $newFilename; 
+    
+        // 5. Eksekusi Pemindahan File
         if (move_uploaded_file($fileGambar['tmp_name'], $targetPath)) {
             $model = new ProdukModel();
+            
             try {
-                // Gunakan fungsi insertProduk yang sudah kita buat di ProdukModel
-                $produkId = $model->insertProduk($namaProduk, $newFilename, $jenisId, $deskripsi);
-
-                // Tambahkan varian otomatis (harga & stok)
+                // Simpan ke Tabel Produk (Pastikan kolom gambar_produk menerima $dbPath)
+                $produkId = $model->insertProduk($namaProduk, $dbPath, $jenisId, $deskripsi);
+                
+                // Simpan ke Tabel Varian (untuk Harga dan Stok)
                 $model->insertVarian($produkId, (float)$harga, (int)$stok);
-
-                $this->respond(true, ['produk_id' => $produkId], 'Produk dan gambar berhasil disimpan');
+    
+                $this->respond(true, ['produk_id' => $produkId], 'Produk dan gambar berhasil disimpan di frontend.');
             } catch (Exception $e) {
-                // Jika DB gagal, hapus file yang sudah terlanjur diupload agar tidak jadi sampah
-                if (file_exists($targetPath)) {
-                    unlink($targetPath);
-                }
+                // Jika DB gagal, hapus file fisik yang terlanjur pindah agar tidak jadi sampah[cite: 5]
+                if (file_exists($targetPath)) unlink($targetPath);
                 $this->respond(false, null, 'Gagal menyimpan ke database: ' . $e->getMessage(), 500);
             }
         } else {
-            $this->respond(false, null, 'Gagal memindahkan file ke direktori tujuan. Pastikan folder uploads dimiliki user daemon.', 500);
+            // Jika gagal di sini, biasanya masalah Permission atau Path salah[cite: 5]
+            $this->respond(false, null, 'Gagal memindahkan file ke folder frontend. Cek izin folder!', 500);
         }
     }
 
