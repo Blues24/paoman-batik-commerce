@@ -312,4 +312,45 @@ class PesananModel {
      * Rollback transaksi.
      */
     public function rollBack(): void         { $this->db->rollBack(); }
+
+    /**
+     * Ambil laporan penjualan per produk.
+     * Menggabungkan tabel detail_pesanan -> detail_batik -> produk dan pesanan.
+     * Mengembalikan array baris: [produk_id, nama_produk, total_terjual, total_pendapatan, last_terjual]
+     *
+     * @param string|null $from  ISO date string (yyyy-mm-dd or datetime) sebagai batas bawah (inklusive)
+     * @param string|null $to    ISO date string sebagai batas atas (inklusive)
+     */
+    public function getSalesReport(?string $from = null, ?string $to = null): array {
+        // Filter: kita hanya hitung dari pesanan yang tidak dibatalkan / pending.
+        // Asumsi: status 'dibatalkan' menandakan pesanan yang tidak dihitung.
+        $where = ['p.status_pesanan NOT IN ("dibatalkan")'];
+        $params = [];
+
+        if (!empty($from)) {
+            $where[] = 'p.tanggal_pesanan >= ?';
+            $params[] = $from;
+        }
+        if (!empty($to)) {
+            $where[] = 'p.tanggal_pesanan <= ?';
+            $params[] = $to;
+        }
+
+        $sql = 'SELECT pr.produk_id,
+                       pr.nama_produk,
+                       SUM(dp.jumlah) AS total_terjual,
+                       SUM(COALESCE(dp.harga_saat_pesan,0) * COALESCE(dp.jumlah,0)) AS total_pendapatan,
+                       MAX(p.tanggal_pesanan) AS last_terjual
+                FROM detail_pesanan dp
+                JOIN pesanan p ON p.pesanan_id = dp.pesanan_id
+                JOIN detail_batik db ON db.detail_batik_id = dp.detail_batik_id
+                JOIN produk pr ON pr.produk_id = db.produk_id
+                WHERE ' . implode(' AND ', $where) . '
+                GROUP BY pr.produk_id, pr.nama_produk
+                ORDER BY total_terjual DESC, total_pendapatan DESC';
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

@@ -98,6 +98,23 @@ class AdminController {
     }
 
     /**
+     * Mengembalikan laporan penjualan per produk.
+     * Query menerima optional query params: from, to (ISO date/datetime)
+     */
+    public function laporanPenjualan(): void {
+        $from = $_GET['from'] ?? null;
+        $to = $_GET['to'] ?? null;
+
+        $model = new PesananModel();
+        try {
+            $rows = $model->getSalesReport($from, $to);
+            $this->respond(true, $rows, 'Laporan penjualan berhasil', 200);
+        } catch (Exception $e) {
+            $this->respond(false, null, 'Gagal mengambil laporan penjualan', 500);
+        }
+    }
+
+    /**
      * Hapus Akun Pelanggan (Permanen)
      */
     public function deletePelanggan(): void {
