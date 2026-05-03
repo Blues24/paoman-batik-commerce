@@ -256,12 +256,30 @@ body {
 }
 
 .modal-content {
-    background-color: white;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-    position: relative;
+    background-color: #fefefe;
+        margin: 5% auto;
+        /* Jarak atas dan bawah */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+        /* Sesuaikan dengan keinginanmu */
+        border-radius: 12px;
+    
+        /* Penambahan fitur scroll */
+        max-height: 85vh;
+        /* Maksimal tinggi 85% dari tinggi layar */
+        overflow-y: auto;
+        /* Munculkan scrollbar jika konten meluap */
+        position: relative;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
 }
 
 .close-modal {
