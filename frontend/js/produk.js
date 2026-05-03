@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const API_URL = window.API_URL || 'http://localhost/paoman-batik/backend/public/api';
 
-    const BASE_IMAGE_URL = 'http://localhost/paoman-batik/backend/public/uploads/produk';
+    const BASE_IMAGE_URL = '../img/uploads';
 
     const fallbackImages = [
         '../../img/batik1.jpg',
@@ -92,24 +92,24 @@ document.addEventListener('DOMContentLoaded', () => {
     function getProductImage(product, index = 0) {
         const rawPath = product.gambar_produk || "";
 
-        // 1. CEK: Jika path mengandung "../img/", itu adalah gambar statis/katalog
+        // 1. Jika path adalah katalog statis (data lama)
         if (rawPath.includes('../img/')) {
-            // Jangan tambahkan BASE_IMAGE_URL, tapi sesuaikan path relatifnya
             return rawPath.replace('../img/', '../../img/');
         }
 
-        // 2. CEK: Jika ada isinya tapi bukan path relatif, berarti itu hasil upload (hanya nama file)
+        // 2. Jika hasil upload (Data mengandung "uploads/")
         if (rawPath && rawPath.trim() !== "") {
-            return `${BASE_IMAGE_URL}/${rawPath}`;
+            // Jika di DB isinya "uploads/namafile.jpg", 
+            // kita cukup arahkan ke folder img frontend
+            return `../../img/${rawPath.replace('uploads/', 'uploads/')}`;
         }
 
-        // 3. CEK: Jika kosong, coba cari di canonicalByName berdasarkan nama produk
+        // 3. Fallback ke Canonical (Katalog bawaan)
         const canonical = canonicalByName.get(product.nama_produk);
         if (canonical && canonical.image) {
             return canonical.image.replace('../img/', '../../img/');
         }
 
-        // 4. FALLBACK: Jika semua gagal, gunakan gambar random dari array fallback
         return fallbackImages[index % fallbackImages.length];
     }
 
