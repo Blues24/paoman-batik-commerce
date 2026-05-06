@@ -114,6 +114,11 @@ try {
     $router->delete('/api/produk/:id',           ['ProdukController', 'destroy']);
     $router->post('/api/produk/:id/varian',      ['ProdukController', 'storeVarian']);
     $router->put ('/api/varian/:id',             ['ProdukController', 'updateVarian']);
+    $router->post('/api/admin/tambah-produk', ['AdminController', 'createProduk']);
+
+    // ===== Konsultasi Endpoints =====
+    $router->post('/api/konsultasi', ['KonsultasiController', 'store']);
+    $router->get('/api/admin/konsultasi', ['KonsultasiController', 'adminIndex']);
 
     // ===== Pesanan Endpoints =====
     $router->post('/api/pesanan',                ['PesananController', 'store']);
@@ -122,6 +127,7 @@ try {
     $router->post('/api/pesanan/:id/cancel',     ['PesananController', 'cancel']);
     $router->get ('/api/admin/pesanan',          ['PesananController', 'adminIndex']);
     $router->put ('/api/pesanan/:id/status',     ['PesananController', 'updateStatus']);
+    
 
     // ===== Ulasan Endpoints =====
     $router->post('/api/ulasan',                 ['UlasanController', 'store']);

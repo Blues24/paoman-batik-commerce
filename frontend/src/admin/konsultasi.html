@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin - Konsultasi</title>
+    <link rel="stylesheet" href="../../css/navadmin.css">
+    <link rel="stylesheet" href="../../css/kelolaAkun.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Welcome Admin</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="dasboardAdmin.html" class="nav-item" data-target="dashboard">
+                    <i data-lucide="layout-dashboard"></i> Dashboard
+                </a>
+                <a href="produk.html" class="nav-item" data-target="produk">
+                    <i data-lucide="package"></i> Produk
+                </a>
+                <a href="listPesanan.html" class="nav-item" data-target="pesanan">
+                    <i data-lucide="clipboard-list"></i> List Pesanan
+                </a>
+                <a href="konsultasi.html" class="nav-item active" data-target="konsultasi">
+                    <i data-lucide="message-square"></i> Konsultasi
+                </a>
+                <a href="kelolaStok.html" class="nav-item" data-target="laporan">
+                    <i data-lucide="bar-chart-3"></i> Kelola Stok
+                </a>
+                <a href="kelolaAkun.html" class="nav-item" data-target="akun">
+                    <i data-lucide="user-cog"></i> Kelola Akun
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item logout">
+                    <i data-lucide="log-out"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Konsultasi Masuk</h1>
+            </header>
+
+            <section class="card table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nama</th>
+                            <th>WA</th>
+                            <th>Jenis</th>
+                            <th>Estimasi</th>
+                            <th>Target Waktu</th>
+                            <th>Referensi</th>
+                            <th>Deskripsi</th>
+                            <th>Status</th>
+                            <th>Tgl</th>
+                        </tr>
+                    </thead>
+                    <tbody id="konsultasi-list">
+                        <tr><td colspan="10">Memuat...</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <!-- Script di akhir body -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../../js/user-session.js"></script>
+    <script src="../../js/navigasiAdmin.js"></script>
+    <script src="../../js/admin-konsultasi.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
