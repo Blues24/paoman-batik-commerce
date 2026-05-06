@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td><div class="profile-circle"></div></td>
                             <td><strong>${user.username}</strong></td>
                             <td>${user.email}</td>
-                            <td><span class="badge badge-customer">Customer</span></td>
                             <td><span class="badge badge-${user.status === 'aktif' ? 'active' : 'inactive'}">${user.status === 'aktif' ? 'Aktif' : 'Nonaktif'}</span></td>
                             <td>${user.tanggal_bergabung || '-'}</td>
                             <td>
@@ -76,7 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentRow = this.closest('tr');
                 document.getElementById('editUsername').value = currentRow.querySelector('td:nth-child(2) strong').textContent;
                 document.getElementById('editEmail').value = currentRow.querySelector('td:nth-child(3)').textContent;
-                document.getElementById('editStatus').value = currentRow.querySelector('td:nth-child(5) .badge').textContent;
+                // After removing ROLE column, STATUS is now the 4th column
+                document.getElementById('editStatus').value = currentRow.querySelector('td:nth-child(4) .badge').textContent;
                 document.getElementById('editModal').style.display = 'flex';
             };
         });
