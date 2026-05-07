@@ -37,6 +37,10 @@ const pakaianUkuran = document.getElementById("pakaianUkuran");
 const pakaianGender = document.getElementById("pakaianGender");
 const pakaianWarna = document.getElementById("pakaianWarna");
 const pakaianMinimumInfo = document.getElementById("pakaianMinimumInfo");
+const paymentDetailInput = document.getElementById("paymentDetail");
+const paymentProofInput = document.getElementById("paymentProof");
+const paymentDetailField = document.querySelector(".payment-detail-field");
+const paymentProofField = document.querySelector(".payment-proof-field");
 const orderNoticeOverlay = document.getElementById("orderNoticeOverlay");
 const orderNoticeIcon = document.getElementById("orderNoticeIcon");
 const orderNoticeTitle = document.getElementById("orderNoticeTitle");
@@ -311,6 +315,19 @@ function getSelectedPaymentMethod() {
     return document.querySelector('input[name="metodePembayaran"]:checked')?.value || "qris";
 }
 
+function updatePaymentFields() {
+    const method = getSelectedPaymentMethod();
+    const needsProof = method === "qris" || method === "ewallet";
+
+    paymentDetailField?.classList.toggle("d-none", !needsProof);
+    paymentProofField?.classList.toggle("d-none", !needsProof);
+
+    if (!needsProof) {
+        if (paymentDetailInput) paymentDetailInput.value = "";
+        if (paymentProofInput) paymentProofInput.value = "";
+    }
+}
+
 function buildOrderOptions() {
     if (activeProductCategory === "kain") {
         return {
@@ -420,6 +437,20 @@ orderForm.addEventListener("submit", async (event) => {
     }
 
     const quantity = Math.max(getPakaianMinimum(), Number(qtyInput.value) || 1);
+    const paymentMethod = getSelectedPaymentMethod();
+    const paymentProof = paymentProofInput?.files?.[0] || null;
+    const paymentDetail = paymentDetailInput?.value?.trim() || "";
+
+    if ((paymentMethod === "qris" || paymentMethod === "ewallet") && !paymentProof) {
+        showOrderNotice({
+            title: "Upload Bukti",
+            message: "Untuk QRIS atau E-Wallet, upload bukti pembayaran dulu supaya admin bisa konfirmasi.",
+            type: "warning",
+            hideSecondary: true
+        });
+        return;
+    }
+
     const notesField = document.querySelector(".notes-field textarea");
     const activeProductId = Number(activeProduct.dataset.id);
     const cartItems = getCartItems();
@@ -448,7 +479,8 @@ orderForm.addEventListener("submit", async (event) => {
     }];
 
     const result = await window.UserSession.createOrder(items, {
-        metode_pembayaran: getSelectedPaymentMethod(),
+        metode_pembayaran: paymentMethod,
+        payment_detail: paymentDetail,
         catatan: notesField?.value?.trim() || ""
     });
 
@@ -460,6 +492,19 @@ orderForm.addEventListener("submit", async (event) => {
             hideSecondary: true
         });
         return;
+    }
+
+    if (paymentProof && result.data?.pesanan_id) {
+        const uploadResult = await window.UserSession.uploadPaymentProof(result.data.pesanan_id, paymentProof, paymentDetail);
+        if (!uploadResult.success) {
+            showOrderNotice({
+                title: "Pesanan Masuk",
+                message: `Pesanan sudah dibuat, tapi bukti pembayaran belum terupload: ${uploadResult.message}`,
+                type: "warning",
+                hideSecondary: true
+            });
+            return;
+        }
     }
 
     showOrderNotice({
@@ -480,10 +525,17 @@ orderForm.addEventListener("submit", async (event) => {
     if (notesField) {
         notesField.value = "";
     }
+    if (paymentProofInput) paymentProofInput.value = "";
+    if (paymentDetailInput) paymentDetailInput.value = "";
+});
+
+document.querySelectorAll('input[name="metodePembayaran"]').forEach((input) => {
+    input.addEventListener("change", updatePaymentFields);
 });
 
 document.addEventListener("DOMContentLoaded", () => {
     renderCartProducts();
+    updatePaymentFields();
 });
 
 if (orderNoticePrimary) {

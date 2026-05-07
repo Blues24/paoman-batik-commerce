@@ -322,6 +322,20 @@ tbody td {
     line-height: 1.5;
 }
 
+.order-detail-items {
+    margin: 12px 0;
+    padding: 12px;
+    background: #F9FAFB;
+    border-radius: 8px;
+    color: #374151;
+    font-size: 13px;
+}
+
+.order-detail-items ul {
+    margin: 8px 0 0;
+    padding-left: 18px;
+}
+
 .form-group { margin-bottom: 15px; }
 .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; }
 .form-group select {

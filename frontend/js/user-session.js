@@ -252,11 +252,40 @@ async function createOrder(items, orderOptions = {}) {
             akun_id: user.akun_id,
             items: items,
             metode_pembayaran: orderOptions.metode_pembayaran || orderOptions.metodePembayaran || 'qris',
+            payment_detail: orderOptions.payment_detail || orderOptions.paymentDetail || '',
             catatan: orderOptions.catatan || ''
          })
     });
 
     return { success: response.ok && data?.success, message: data?.message || 'Gagal membuat pesanan.', data: data?.data };
+}
+
+async function uploadPaymentProof(pesananId, file, paymentDetail = '') {
+    const user = getStoredUser();
+    if (!user?.akun_id) {
+        return { success: false, message: 'Login dulu sebelum upload bukti pembayaran.' };
+    }
+
+    const formData = new FormData();
+    formData.append('akun_id', user.akun_id);
+    formData.append('payment_detail', paymentDetail || '');
+    formData.append('bukti_pembayaran', file);
+
+    const response = await fetch(`${window.API_URL}/pesanan/${encodeURIComponent(String(pesananId))}/bukti-pembayaran`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'X-CSRF-Token': sessionStorage.getItem('csrf_token') || localStorage.getItem('csrf_token') || ''
+        },
+        body: formData
+    });
+    const data = await response.json().catch(() => null);
+
+    return {
+        success: response.ok && data?.success,
+        message: data?.message || 'Gagal upload bukti pembayaran.',
+        data: data?.data || null
+    };
 }
 
 async function getCurrentUserOrders() {
@@ -345,6 +374,7 @@ window.UserSession = {
     getCurrentUserOrders,
     getOrderDetail,
     cancelOrder,
+    uploadPaymentProof,
     submitReview
 };
 })();

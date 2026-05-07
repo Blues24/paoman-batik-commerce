@@ -77,8 +77,21 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'Belum Bayar';
     }
 
+    function paymentToApi(label) {
+        const map = {
+            'QRIS': 'menunggu_konfirmasi',
+            'E-Wallet': 'menunggu_konfirmasi',
+            'COD': 'bayar_di_tempat',
+            'Lunas': 'dibayar',
+            'Belum Bayar': 'belum_dibayar'
+        };
+        return map[label] || 'menunggu_konfirmasi';
+    }
+
     function normalizeImagePath(path) {
         if (!path) return '';
+        if (path.startsWith('http')) return path;
+        if (path.includes('uploads/')) return `../../img/uploads/${path.split('/').pop()}`;
         return path.replace('../img/', '../../img/');
     }
 
@@ -117,6 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 tanggal: formatDate(order.tanggal_pesanan),
                 total: Number(order.total_harga || 0),
                 bayar: paymentToLabel(order.payment_status, order.metode_pembayaran),
+                payment_status: order.payment_status || '',
+                payment_detail: order.payment_detail || '',
+                bukti_pembayaran: order.bukti_pembayaran || '',
                 status: statusToLabel(order.status_pesanan),
                 produk,
                 kategori: order.kategori || 'Produk Batik',
@@ -167,10 +183,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. LOGIKA MODAL DETAIL
     function attachModalEvents() {
         document.querySelectorAll('.btn-detail-trigger').forEach(btn => {
-            btn.onclick = () => {
+            btn.onclick = async () => {
                 const id = btn.dataset.id;
                 const order = dataPesanan.find(p => p.id === id);
                 if (order) {
+                    let detail = null;
+                    const admin = getAdmin();
+                    if (admin?.admin_id && /^\d+$/.test(String(id))) {
+                        const detailResult = await apiFetch(`/admin/pesanan/${id}?admin_id=${encodeURIComponent(admin.admin_id)}`);
+                        if (detailResult.response.ok && detailResult.data?.success) {
+                            detail = detailResult.data.data;
+                        }
+                    }
+
+                    const items = Array.isArray(detail?.items) ? detail.items : [];
                     currentEditId = id;
                     document.getElementById('modalOrderId').innerText = order.id;
                     document.getElementById('modalCustomer').innerText = order.customer;
@@ -178,6 +204,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('modalProductImage').alt = order.produk;
                     document.getElementById('modalProductName').innerText = order.produk;
                     document.getElementById('modalProductMeta').innerText = `${order.kategori} | ${order.jumlah} item`;
+                    document.getElementById('modalPaymentDetail').innerText = detail?.payment_detail || order.payment_detail || '-';
+                    const proof = detail?.bukti_pembayaran || order.bukti_pembayaran || '';
+                    const proofLink = document.getElementById('modalPaymentProof');
+                    if (proof) {
+                        proofLink.href = normalizeImagePath(proof);
+                        proofLink.textContent = 'Lihat bukti pembayaran';
+                    } else {
+                        proofLink.removeAttribute('href');
+                        proofLink.textContent = 'Belum ada';
+                    }
+                    document.getElementById('modalOrderItems').innerHTML = items.length
+                        ? `<strong>Rincian Pesanan:</strong><ul>${items.map(item => `<li>${item.nama_produk} - ${item.jumlah} x Rp ${Number(item.harga_saat_pesan || 0).toLocaleString('id-ID')} (${item.ukuran || '-'}, ${item.warna || '-'})</li>`).join('')}</ul>`
+                        : '';
                     document.getElementById('updateBayar').value = order.bayar;
                     document.getElementById('updateStatus').value = order.status;
                     modal.style.display = 'block';
@@ -200,7 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'PUT',
                     body: JSON.stringify({
                         admin_id: admin.admin_id,
-                        status_pesanan: statusToApi(nextStatus)
+                        status_pesanan: statusToApi(nextStatus),
+                        payment_status: paymentToApi(document.getElementById('updateBayar').value)
                     })
                 });
             }

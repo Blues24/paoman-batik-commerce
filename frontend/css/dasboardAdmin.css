@@ -253,4 +253,19 @@ td {
     border-radius: 20px;
 }
 
+.status-pill.green {
+    background: #ecfdf5;
+    color: #10b981;
+}
+
+.status-pill.yellow {
+    background: #fffbeb;
+    color: #d97706;
+}
+
+.status-pill.red {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
 .text-red { color: #ef4444; font-weight: bold; }

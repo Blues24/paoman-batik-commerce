@@ -77,6 +77,43 @@ class PesananController {
         return in_array($metode, ['qris', 'ewallet', 'cod'], true) ? $metode : 'qris';
     }
 
+    private function savePaymentFile(): string {
+        $file = $_FILES['bukti_pembayaran'] ?? $_FILES['payment_proof'] ?? null;
+        if (!$file || !is_uploaded_file($file['tmp_name'])) {
+            $this->respond(false, null, 'File bukti pembayaran wajib diunggah', 422);
+        }
+
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            $this->respond(false, null, 'Upload bukti pembayaran gagal. Kode error: ' . $file['error'], 400);
+        }
+
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'pdf'], true)) {
+            $this->respond(false, null, 'Bukti pembayaran harus JPG, PNG, WEBP, atau PDF', 422);
+        }
+
+        $uploadDir = realpath(__DIR__ . '/../../frontend/img/uploads');
+        if ($uploadDir === false) {
+            $targetRoot = __DIR__ . '/../../frontend/img/uploads';
+            if (!is_dir($targetRoot)) {
+                @mkdir($targetRoot, 0777, true);
+            }
+            $uploadDir = realpath($targetRoot);
+        }
+
+        if ($uploadDir === false || !is_dir($uploadDir)) {
+            $this->respond(false, null, 'Folder upload tidak ditemukan', 500);
+        }
+
+        $filename = 'bukti_' . time() . '_' . substr(bin2hex(random_bytes(4)), 0, 8) . '.' . $ext;
+        $target = $uploadDir . DIRECTORY_SEPARATOR . $filename;
+        if (!move_uploaded_file($file['tmp_name'], $target)) {
+            $this->respond(false, null, 'Gagal menyimpan bukti pembayaran', 500);
+        }
+
+        return 'uploads/' . $filename;
+    }
+
     private function minimumJumlahUntukItem(array $item, array $varian): int {
         $namaProduk = strtolower((string)($varian['nama_produk'] ?? ''));
         $kategori = strtolower((string)($item['kategori'] ?? ''));
@@ -150,8 +187,10 @@ class PesananController {
             }
 
             $metodePembayaran = $this->validMetodePembayaran((string)($body['metode_pembayaran'] ?? 'qris'));
-            $catatan = trim((string)($body['catatan'] ?? '')) ?: null;
-            $pesananId = $model->create($pelangganId, $totalHarga, $metodePembayaran, $catatan);
+            $paymentDetail = trim((string)($body['payment_detail'] ?? ''));
+            $catatanOrder = trim((string)($body['catatan'] ?? ''));
+            $catatan = trim($catatanOrder . ($paymentDetail ? "\nRincian pembayaran: " . $paymentDetail : '')) ?: null;
+            $pesananId = $model->create($pelangganId, $totalHarga, $metodePembayaran, $catatan, $paymentDetail ?: null);
             foreach ($resolved as $r) {
                 $model->addItem($pesananId, $r);
                 $model->kurangiStok($r['detail_batik_id'], $r['jumlah']);
@@ -261,7 +300,35 @@ class PesananController {
 
         $model = new PesananModel();
         $model->updateStatus((int)$id, $body['status_pesanan']);
+        if (!empty($body['payment_status']) && in_array($body['payment_status'], ['belum_dibayar','menunggu_konfirmasi','dibayar','bayar_di_tempat'], true)) {
+            $model->updatePaymentStatus((int)$id, $body['payment_status']);
+        }
         $this->respond(true, null, 'Status pesanan diupdate');
+    }
+
+    public function uploadPaymentProof(string $id): void {
+        verifyCsrf();
+
+        $body = $this->body();
+        $akunId = (int) ($body['akun_id'] ?? ($_POST['akun_id'] ?? 0));
+        if ($akunId <= 0) {
+            $this->respond(false, null, 'akun_id wajib diisi', 422);
+        }
+
+        $pelangganId = $this->pelangganIdFromAkunId($akunId);
+        if ($pelangganId <= 0) {
+            $this->respond(false, null, 'Akun belum terhubung ke data pelanggan', 422);
+        }
+
+        $proofPath = $this->savePaymentFile();
+        $paymentDetail = trim((string)($_POST['payment_detail'] ?? $body['payment_detail'] ?? '')) ?: null;
+
+        $model = new PesananModel();
+        if (!$model->savePaymentProof((int)$id, $pelangganId, $proofPath, $paymentDetail)) {
+            $this->respond(false, null, 'Pesanan tidak ditemukan atau bukti gagal disimpan', 404);
+        }
+
+        $this->respond(true, ['bukti_pembayaran' => $proofPath], 'Bukti pembayaran berhasil diunggah');
     }
 
     /**
@@ -277,5 +344,23 @@ class PesananController {
         
         $model = new PesananModel();
         $this->respond(true, $model->getAll($_GET['status'] ?? null), '', 200);
+    }
+
+    public function adminShow(string $id): void {
+        $body = $this->body();
+        $adminId = (int) ($body['admin_id'] ?? ($_GET['admin_id'] ?? 0));
+
+        if ($adminId <= 0) {
+            $this->respond(false, null, 'admin_id wajib diisi (admin only)', 422);
+        }
+
+        $model = new PesananModel();
+        $pesanan = $model->findByIdForAdmin((int)$id);
+        if (!$pesanan) {
+            $this->respond(false, null, 'Pesanan tidak ditemukan', 404);
+        }
+
+        $pesanan['items'] = $model->getItems((int)$id);
+        $this->respond(true, $pesanan, '', 200);
     }
 }

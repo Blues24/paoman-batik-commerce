@@ -73,6 +73,8 @@ CREATE TABLE pesanan (
     metode_pembayaran ENUM('qris','ewallet','cod') NOT NULL DEFAULT 'qris',
     payment_status  ENUM('belum_dibayar','menunggu_konfirmasi','dibayar','bayar_di_tempat') NOT NULL DEFAULT 'belum_dibayar',
     catatan         TEXT,
+    payment_detail  VARCHAR(255),
+    bukti_pembayaran VARCHAR(255),
     total_harga     DECIMAL(14,2) NOT NULL DEFAULT 0,
     CONSTRAINT fk_pesanan_pelanggan FOREIGN KEY (pelanggan_id) REFERENCES pelanggan(pelanggan_id)
         ON UPDATE CASCADE ON DELETE RESTRICT

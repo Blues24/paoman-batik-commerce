@@ -345,6 +345,8 @@ a {
 }
 
 .field-group select,
+.field-group input[type="text"],
+.field-group input[type="file"],
 .quantity-control input,
 .notes-field textarea {
     min-height: 52px;

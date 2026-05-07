@@ -142,10 +142,17 @@ const orderImageByName = {
 
 function getOrderPrimaryImage(order) {
     const explicit = order.productImage || order.gambar_produk || order.items?.[0]?.image || order.items?.[0]?.gambar_produk || "";
-    if (explicit) return explicit;
+    if (explicit) return normalizeImagePath(explicit);
 
     const name = getOrderPrimaryName(order);
     return orderImageByName[name] || "";
+}
+
+function normalizeImagePath(path) {
+    if (!path) return "";
+    if (path.startsWith("http")) return path;
+    if (path.includes("uploads/")) return `../img/uploads/${path.split("/").pop()}`;
+    return path;
 }
 
 function getOrderPrimaryName(order) {
@@ -189,6 +196,9 @@ async function renderOrderHistory() {
         const image = getOrderPrimaryImage(order);
         const isCompleted = ["selesai", "siap diambil"].includes(String(orderStatus).toLowerCase());
         const isPending = String(orderStatus).toLowerCase() === "pending";
+        const canUploadPayment = ["qris", "ewallet"].includes(String(paymentMethod).toLowerCase())
+            && !["dibayar", "bayar_di_tempat"].includes(String(paymentStatus).toLowerCase());
+        const proofUrl = normalizeImagePath(order.bukti_pembayaran || "");
 
         list.innerHTML += `
             <article class="order-item-card">
@@ -205,9 +215,14 @@ async function renderOrderHistory() {
                     </div>
                     <p class="order-meta">${getOrderPrimaryCategory(order)} | ${getOrderItemCount(order)} item | ${formatDate(order.tanggal_pesanan || order.createdAt)}</p>
                     <p class="order-meta">Pembayaran: ${formatPaymentMethod(paymentMethod)}</p>
+                    ${order.catatan ? `<p class="order-meta">${order.catatan}</p>` : ""}
+                    ${proofUrl ? `<p class="order-meta"><a href="${proofUrl}" target="_blank">Lihat bukti pembayaran</a></p>` : ""}
                     <div class="order-item-bottom">
                         <strong>${formatRupiah(order.total_harga || order.totalPrice)}</strong>
                         <span class="payment-pill ${getPaymentStatusClass(paymentStatus)}">${formatPaymentStatus(paymentStatus, paymentMethod)}</span>
+                        ${canUploadPayment ? `<button type="button" class="review-btn" onclick="uploadMyPaymentProof(${orderId})">
+                            <i class="bi bi-upload"></i> Bayar / Upload Bukti
+                        </button>` : ""}
                         ${isCompleted ? `<button type="button" class="review-btn" onclick="openReviewModal(${orderId})">
                             <i class="bi bi-star-fill"></i> Beri Ulasan
                         </button>` : ""}
@@ -220,6 +235,24 @@ async function renderOrderHistory() {
             </article>
         `;
     });
+}
+
+async function uploadMyPaymentProof(pesananId) {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*,.pdf";
+    input.onchange = async () => {
+        const file = input.files?.[0];
+        if (!file) return;
+
+        const detail = prompt("Rincian pembayaran (contoh: DANA 08xxxxxxxx / nama pengirim):") || "";
+        const result = await window.UserSession.uploadPaymentProof(pesananId, file, detail.trim());
+        showAccountMessage(result.message, result.success ? "success" : "error");
+        if (result.success) {
+            await renderOrderHistory();
+        }
+    };
+    input.click();
 }
 
 async function cancelMyOrder(pesananId) {

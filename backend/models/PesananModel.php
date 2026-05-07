@@ -46,10 +46,20 @@ class PesananModel {
         return $metode === 'cod' ? 'bayar_di_tempat' : 'menunggu_konfirmasi';
     }
 
+    private function optionalPesananColumns(string $alias = 'p'): string {
+        $columns = '';
+        foreach (['metode_pembayaran', 'payment_status', 'catatan', 'payment_detail', 'bukti_pembayaran'] as $column) {
+            if ($this->columnExists('pesanan', $column)) {
+                $columns .= ', ' . $alias . '.' . $column;
+            }
+        }
+        return $columns;
+    }
+
     /**
      * Membuat pesanan baru.
      */
-    public function create(int $pelangganId, float $totalHarga, string $metodePembayaran = 'qris', ?string $catatan = null): int {
+    public function create(int $pelangganId, float $totalHarga, string $metodePembayaran = 'qris', ?string $catatan = null, ?string $paymentDetail = null): int {
         $metodePembayaran = in_array($metodePembayaran, ['qris', 'ewallet', 'cod'], true) ? $metodePembayaran : 'qris';
         $columns = ['pelanggan_id', 'total_harga'];
         $placeholders = ['?', '?'];
@@ -71,6 +81,12 @@ class PesananModel {
             $columns[] = 'catatan';
             $placeholders[] = '?';
             $values[] = $catatan;
+        }
+
+        if ($this->columnExists('pesanan', 'payment_detail')) {
+            $columns[] = 'payment_detail';
+            $placeholders[] = '?';
+            $values[] = $paymentDetail;
         }
 
         $stmt = $this->db->prepare(
@@ -122,16 +138,7 @@ class PesananModel {
      * Mendapatkan pesanan berdasarkan pelanggan.
      */
     public function getByPelanggan(int $pelangganId): array {
-        $paymentColumns = '';
-        if ($this->columnExists('pesanan', 'metode_pembayaran')) {
-            $paymentColumns .= ', p.metode_pembayaran';
-        }
-        if ($this->columnExists('pesanan', 'payment_status')) {
-            $paymentColumns .= ', p.payment_status';
-        }
-        if ($this->columnExists('pesanan', 'catatan')) {
-            $paymentColumns .= ', p.catatan';
-        }
+        $paymentColumns = $this->optionalPesananColumns('p');
         $productImageColumn = $this->columnExists('produk', 'gambar_produk') ? ', MIN(pr.gambar_produk) AS gambar_produk' : '';
 
         $stmt = $this->db->prepare(
@@ -156,10 +163,19 @@ class PesananModel {
      * Mencari pesanan berdasarkan ID dan pelanggan.
      */
     public function findById(int $pesananId, int $pelangganId): array|false {
-        $stmt = $this->db->prepare(
-            'SELECT * FROM pesanan WHERE pesanan_id = ? AND pelanggan_id = ?'
-        );
+        $stmt = $this->db->prepare('SELECT * FROM pesanan WHERE pesanan_id = ? AND pelanggan_id = ?');
         $stmt->execute([$pesananId, $pelangganId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function findByIdForAdmin(int $pesananId): array|false {
+        $stmt = $this->db->prepare(
+            'SELECT p.*, pl.nama AS nama_pelanggan, pl.email, pl.no_hp, pl.alamat
+             FROM pesanan p
+             JOIN pelanggan pl ON pl.pelanggan_id = p.pelanggan_id
+             WHERE p.pesanan_id = ?'
+        );
+        $stmt->execute([$pesananId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -262,17 +278,53 @@ class PesananModel {
         $stmt->execute([$status, $pesananId]);
     }
 
+    public function updatePaymentStatus(int $pesananId, string $paymentStatus): void {
+        if (!$this->columnExists('pesanan', 'payment_status')) {
+            return;
+        }
+
+        $stmt = $this->db->prepare('UPDATE pesanan SET payment_status=? WHERE pesanan_id=?');
+        $stmt->execute([$paymentStatus, $pesananId]);
+    }
+
+    public function savePaymentProof(int $pesananId, int $pelangganId, string $proofPath, ?string $paymentDetail): bool {
+        $order = $this->findById($pesananId, $pelangganId);
+        if (!$order) {
+            return false;
+        }
+
+        $sets = [];
+        $values = [];
+
+        if ($this->columnExists('pesanan', 'bukti_pembayaran')) {
+            $sets[] = 'bukti_pembayaran=?';
+            $values[] = $proofPath;
+        }
+        if ($this->columnExists('pesanan', 'payment_detail')) {
+            $sets[] = 'payment_detail=?';
+            $values[] = $paymentDetail;
+        }
+        if ($this->columnExists('pesanan', 'payment_status')) {
+            $sets[] = 'payment_status=?';
+            $values[] = 'menunggu_konfirmasi';
+        }
+
+        if (!$sets) {
+            return true;
+        }
+
+        $values[] = $pesananId;
+        $values[] = $pelangganId;
+        $stmt = $this->db->prepare('UPDATE pesanan SET ' . implode(', ', $sets) . ' WHERE pesanan_id=? AND pelanggan_id=?');
+        $stmt->execute($values);
+        return $stmt->rowCount() > 0;
+    }
+
     /**
      * Mendapatkan semua pesanan (admin).
      */
     public function getAll(?string $status = null): array {
-        $paymentColumns = '';
-        if ($this->columnExists('pesanan', 'metode_pembayaran')) {
-            $paymentColumns .= ', p.metode_pembayaran';
-        }
-        if ($this->columnExists('pesanan', 'payment_status')) {
-            $paymentColumns .= ', p.payment_status';
-        }
+        $paymentColumns = $this->optionalPesananColumns('p');
         $productImageColumn = $this->columnExists('produk', 'gambar_produk') ? ', MIN(pr.gambar_produk) AS gambar_produk' : '';
 
         $sql    = 'SELECT p.pesanan_id, p.tanggal_pesanan, p.status_pesanan,

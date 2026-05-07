@@ -21,7 +21,7 @@
                     <i data-lucide="package"></i> Produk
                 </a>
                 <a href="listPesanan.html" class="nav-item active" data-target="pesanan">
-                    <i data-lucide="clipboard-list"></i> List Pesanan
+                    <i data-lucide="clipboard-list"></i> Rincian Pesanan
                 </a>
                 <a href="konsultasi.html" class="nav-item" data-target="konsultasi">
                     <i data-lucide="message-square"></i> Konsultasi
@@ -43,7 +43,7 @@
         <main class="main-content">
             <header class="top-bar">
                 <div class="header-left">
-                    <h1 id="page-title">List Pesanan</h1>
+                    <h1 id="page-title">Rincian Pesanan</h1>
                 </div>
                 
                 <div class="filter-pills" id="filterContainer">
@@ -119,6 +119,9 @@
             </div>
             <p><strong>ID Pesanan:</strong> <span id="modalOrderId"></span></p>
             <p><strong>Pelanggan:</strong> <span id="modalCustomer"></span></p>
+            <p><strong>Rincian Pembayaran:</strong> <span id="modalPaymentDetail">-</span></p>
+            <p><strong>Bukti Pembayaran:</strong> <a id="modalPaymentProof" href="#" target="_blank">Belum ada</a></p>
+            <div id="modalOrderItems" class="order-detail-items"></div>
             <hr>
             <div class="form-group">
                 <label>Status Pembayaran:</label>

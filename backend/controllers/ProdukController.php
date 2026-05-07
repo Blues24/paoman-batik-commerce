@@ -58,6 +58,49 @@ class ProdukController {
         return $data;
     }
 
+    private function saveUploadedImage(array $fields = ['gambar_produk', 'image_file']): ?string {
+        foreach ($fields as $field) {
+            if (empty($_FILES[$field]) || !is_uploaded_file($_FILES[$field]['tmp_name'])) {
+                continue;
+            }
+
+            if ($_FILES[$field]['error'] !== UPLOAD_ERR_OK) {
+                $this->respond(false, null, 'Upload gambar gagal. Kode error: ' . $_FILES[$field]['error'], 400);
+            }
+
+            $ext = strtolower(pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION));
+            $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+            if (!in_array($ext, $allowed, true)) {
+                $this->respond(false, null, 'Format gambar harus JPG, PNG, atau WEBP', 422);
+            }
+
+            $uploadDir = realpath(__DIR__ . '/../../frontend/img/uploads');
+            if ($uploadDir === false) {
+                $targetRoot = __DIR__ . '/../../frontend/img/uploads';
+                if (!is_dir($targetRoot)) {
+                    @mkdir($targetRoot, 0777, true);
+                }
+                $uploadDir = realpath($targetRoot);
+            }
+
+            if ($uploadDir === false || !is_dir($uploadDir)) {
+                $this->respond(false, null, 'Folder upload tidak ditemukan', 500);
+            }
+
+            $safeBase = preg_replace('/[^a-zA-Z0-9_.-]/', '_', pathinfo($_FILES[$field]['name'], PATHINFO_FILENAME));
+            $filename = 'produk_' . time() . '_' . substr(bin2hex(random_bytes(4)), 0, 8) . '_' . $safeBase . '.' . $ext;
+            $target = $uploadDir . DIRECTORY_SEPARATOR . $filename;
+
+            if (!move_uploaded_file($_FILES[$field]['tmp_name'], $target)) {
+                $this->respond(false, null, 'Gagal memindahkan file gambar ke folder upload', 500);
+            }
+
+            return 'uploads/' . $filename;
+        }
+
+        return null;
+    }
+
     /**
      * Mendapatkan semua produk (public endpoint).
      */
@@ -88,36 +131,9 @@ class ProdukController {
         
         $adminId = $this->validateAdmin();
         $body    = $this->body();
-        // If an uploaded file exists in $_FILES['image_file'], move it to frontend img/uploads
-        if (!empty($_FILES['image_file']) && is_uploaded_file($_FILES['image_file']['tmp_name'])) {
-            $uploadDir = __DIR__ . '/../../frontend/img/uploads';
-            if (!is_dir($uploadDir)) @mkdir($uploadDir, 0777, true);
-            $fname = time() . '_' . preg_replace('/[^a-zA-Z0-9_.-]/', '_', $_FILES['image_file']['name']);
-            $dest = $uploadDir . DIRECTORY_SEPARATOR . $fname;
-            $moved = false;
-            $moveErr = '';
-            try {
-                $moved = move_uploaded_file($_FILES['image_file']['tmp_name'], $dest);
-                if ($moved) {
-                    // store relative web path used by frontend
-                    $body['gambar_produk'] = '../../img/uploads/' . $fname;
-                } else {
-                    $moveErr = 'move_uploaded_file returned false';
-                }
-            } catch (Exception $e) {
-                $moveErr = $e->getMessage();
-            }
-
-            // Debug log to help diagnose upload/display issues
-            $log = sprintf("[%s] ProdukController::store upload: name=%s tmp=%s dest=%s moved=%s err=%s\n",
-                date('Y-m-d H:i:s'),
-                $_FILES['image_file']['name'] ?? '',
-                $_FILES['image_file']['tmp_name'] ?? '',
-                $dest,
-                $moved ? '1' : '0',
-                $moveErr
-            );
-            @file_put_contents(__DIR__ . '/../logs/api.log', $log, FILE_APPEND);
+        $uploadedPath = $this->saveUploadedImage();
+        if ($uploadedPath) {
+            $body['gambar_produk'] = $uploadedPath;
         }
         $model   = new ProdukModel();
 
@@ -139,7 +155,12 @@ class ProdukController {
         
         $adminId = $this->validateAdmin();
         $model   = new ProdukModel();
-        $model->update((int)$id, $this->body());
+        $body = $this->body();
+        $uploadedPath = $this->saveUploadedImage();
+        if ($uploadedPath) {
+            $body['gambar_produk'] = $uploadedPath;
+        }
+        $model->update((int)$id, $body);
         $this->respond(true, null, 'Produk berhasil diupdate');
     }
 

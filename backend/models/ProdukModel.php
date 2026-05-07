@@ -183,12 +183,25 @@ class ProdukModel {
      * Mengupdate produk.
      */
     public function update(int $id, array $data): void {
+        $current = $this->findById($id);
+        if (!$current) {
+            throw new Exception('Produk tidak ditemukan');
+        }
+
         $sets = ['jenis_id=?', 'nama_produk=?', 'deskripsi=?', 'status=?'];
-        $values = [$data['jenis_id'], $data['nama_produk'], $data['deskripsi'] ?? null, $data['status'] ?? 'aktif'];
+        $values = [
+            $data['jenis_id'] ?? $current['jenis_id'],
+            $data['nama_produk'] ?? $current['nama_produk'],
+            $data['deskripsi'] ?? $current['deskripsi'] ?? null,
+            $data['status'] ?? $current['status'] ?? 'aktif'
+        ];
 
         if ($this->columnExists('produk', 'gambar_produk')) {
-            $sets[] = 'gambar_produk=?';
-            $values[] = $data['gambar_produk'] ?? $data['image'] ?? null;
+            $gambar = $data['gambar_produk'] ?? $data['image'] ?? null;
+            if ($gambar !== null && $gambar !== '') {
+                $sets[] = 'gambar_produk=?';
+                $values[] = $gambar;
+            }
         }
 
         $values[] = $id;

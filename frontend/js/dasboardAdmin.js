@@ -1,73 +1,99 @@
-// navigasiAdmin.js
-
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Inisialisasi Lucide Icons
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
+    const API_URL = window.API_URL || 'http://localhost/paoman-batik/backend/public/api';
+    const admin = window.UserSession?.getCurrentUser?.() || { admin_id: 1 };
+
+    function rupiah(value) {
+        return `Rp ${Number(value || 0).toLocaleString('id-ID')}`;
     }
 
-    // 2. Handling Active Navigation
-    const navItems = document.querySelectorAll('.nav-item');
-    
-    navItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            // Jika bukan link logout, atur status active
-            if (!this.classList.contains('logout')) {
-                navItems.forEach(nav => nav.classList.remove('active'));
-                this.classList.add('active');
-            }
-        });
-    });
+    function imagePath(path) {
+        if (!path) return '../../img/batik1.jpg';
+        if (path.startsWith('http')) return path;
+        if (path.includes('uploads/')) return `../../img/uploads/${path.split('/').pop()}`;
+        return path.replace('../img/', '../../img/');
+    }
 
-    // 3. Logika Filter Laporan Penjualan (Mockup)
-    const filterSelect = document.querySelector('.filter-select');
-    if (filterSelect) {
-        filterSelect.addEventListener('change', (e) => {
-            const period = e.target.value;
-            console.log(`Menampilkan laporan untuk: ${period}`);
-            // Di sini kamu bisa memanggil fungsi fetch data dari API nantinya
-            alert(`Filter diganti ke ${period}. Data akan diperbarui.`);
+    async function apiGet(endpoint) {
+        const res = await fetch(`${API_URL}${endpoint}`, { credentials: 'include' });
+        const payload = await res.json().catch(() => null);
+        if (!res.ok || !payload?.success) {
+            throw new Error(payload?.message || 'Data gagal dimuat');
+        }
+        return payload.data;
+    }
+
+    async function renderStats() {
+        const stats = await apiGet(`/admin/statistik-dashboard?admin_id=${encodeURIComponent(admin.admin_id || 1)}`);
+        document.getElementById('stat-total-produk').textContent = stats.total_produk ?? 0;
+        document.getElementById('stat-produk-aktif').textContent = stats.total_produk ?? 0;
+        document.getElementById('stat-total-pesanan').textContent = stats.total_pesanan ?? 0;
+        document.getElementById('stat-total-user').textContent = stats.total_pelanggan ?? 0;
+    }
+
+    async function renderHistory() {
+        const orders = await apiGet(`/admin/pesanan?admin_id=${encodeURIComponent(admin.admin_id || 1)}`);
+        const list = document.querySelector('.history-list');
+        if (!list) return;
+
+        list.innerHTML = '';
+        orders.slice(0, 5).forEach((order) => {
+            const status = String(order.status_pesanan || '').toLowerCase();
+            const badgeClass = status === 'selesai' ? 'success' : 'warning';
+            const badgeText = status === 'selesai' ? 'SUKSES' : status.toUpperCase() || 'MENUNGGU';
+
+            list.insertAdjacentHTML('beforeend', `
+                <div class="history-item">
+                    <i data-lucide="user" class="item-avatar"></i>
+                    <div class="item-info">
+                        <strong>${order.nama_pelanggan || '-'}</strong>
+                        <span>Order #${order.pesanan_id} - ${order.nama_produk || 'Produk Batik'}</span>
+                    </div>
+                    <div class="item-status">
+                        <strong class="price-sm">${rupiah(order.total_harga)}</strong>
+                        <span class="status-badge ${badgeClass}">${badgeText}</span>
+                    </div>
+                </div>
+            `);
+        });
+
+        if (orders.length === 0) {
+            list.innerHTML = '<p style="color:#6b7280">Belum ada riwayat pembelian.</p>';
+        }
+    }
+
+    async function renderStock() {
+        const products = await apiGet('/produk');
+        const tbody = document.querySelector('.table-card tbody');
+        if (!tbody) return;
+
+        tbody.innerHTML = '';
+        products.slice(0, 8).forEach((product, index) => {
+            const stock = Number(product.total_stok || 0);
+            const statusClass = stock === 0 ? 'red' : stock <= 10 ? 'yellow' : 'green';
+            const statusText = stock === 0 ? 'Stok Habis' : stock <= 10 ? 'Stok Sedikit' : 'Stok Banyak';
+
+            tbody.insertAdjacentHTML('beforeend', `
+                <tr>
+                    <td class="product-cell">
+                        <img src="${imagePath(product.gambar_produk)}" alt="${product.nama_produk}">
+                        ${product.nama_produk}
+                    </td>
+                    <td>PB-${String(index + 1).padStart(3, '0')}</td>
+                    <td>${product.nama_jenis || 'Batik'}</td>
+                    <td class="${stock === 0 ? 'text-red' : ''}">${stock}</td>
+                    <td><span class="status-pill ${statusClass}">${statusText}</span></td>
+                    <td><a href="kelolaStok.html"><i data-lucide="pencil"></i></a></td>
+                </tr>
+            `);
         });
     }
 
-    // 4. Logika Tombol Logout
-    const logoutBtn = document.querySelector('.logout');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Mencegah pindah halaman langsung
-            
-            const konfirmasi = confirm("Apakah Anda yakin ingin keluar dari sistem?");
-            if (konfirmasi) {
-                console.log("Admin Logging out...");
-                // Hapus session/token di sini jika ada
-                // localStorage.removeItem('adminToken');
-                
-                // Redirect ke halaman login
-                window.location.href = "login.html"; 
-            }
-        });
-    }
-
-    // 5. Animasi Chart Bar (Opsional - Memberikan efek naik saat load)
-    const bars = document.querySelectorAll('.bar');
-    bars.forEach(bar => {
-        const targetHeight = bar.style.height;
-        bar.style.height = '0';
-        setTimeout(() => {
-            bar.style.transition = 'height 0.8s ease-out';
-            bar.style.height = targetHeight;
-        }, 100);
-    });
+    (async () => {
+        try {
+            await Promise.all([renderStats(), renderHistory(), renderStock()]);
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        } catch (error) {
+            console.warn('[Dashboard Admin]', error.message);
+        }
+    })();
 });
-
-/**
- * Fungsi pembantu untuk memformat mata uang Rupiah
- * Bisa dipanggil saat kamu memasukkan data real dari database
- */
-function formatRupiah(angka) {
-    return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0
-    }).format(angka);
-}

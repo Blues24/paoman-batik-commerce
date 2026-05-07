@@ -41,18 +41,24 @@ class AdminController {
             return;
         }
     
-        // 3. DEFINISI PATH (Kunci Utama)
-        // baseDir: Alamat fisik di Linux untuk move_uploaded_file
-        $baseDir = "/opt/lampp/htdocs/paoman-batik/frontend/img/uploads/";
+        // 3. DEFINISI PATH: gunakan path project saat ini agar jalan di Windows/XAMPP dan Linux.
+        $baseDir = realpath(__DIR__ . '/../../frontend/img/uploads');
+        if ($baseDir === false) {
+            $baseDir = __DIR__ . '/../../frontend/img/uploads';
+        }
     
         // Pastikan folder tujuan ada
         if (!is_dir($baseDir)) {
-            mkdir($baseDir, 0775, true);
+            mkdir($baseDir, 0777, true);
         }
+        $baseDir = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
     
         // 4. Olah Nama File
-        $ext = pathinfo($fileGambar['name'], PATHINFO_EXTENSION);
-        $newFilename = 'produk_' . time() . '.' . $ext;
+        $ext = strtolower(pathinfo($fileGambar['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp'], true)) {
+            $this->respond(false, null, 'Format gambar harus JPG, PNG, atau WEBP.', 422);
+        }
+        $newFilename = 'produk_' . time() . '_' . substr(bin2hex(random_bytes(4)), 0, 8) . '.' . $ext;
     
         // Target Path: Alamat lengkap file di sistem (Internal)
         $targetPath = $baseDir . $newFilename; 

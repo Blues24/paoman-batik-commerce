@@ -111,6 +111,7 @@ try {
     $router->get ('/api/produk/:id',             ['ProdukController', 'show']);
     $router->post('/api/produk',                 ['ProdukController', 'store']);
     $router->put ('/api/produk/:id',             ['ProdukController', 'update']);
+    $router->post('/api/produk/:id/update',      ['ProdukController', 'update']);
     $router->delete('/api/produk/:id',           ['ProdukController', 'destroy']);
     $router->post('/api/produk/:id/varian',      ['ProdukController', 'storeVarian']);
     $router->put ('/api/varian/:id',             ['ProdukController', 'updateVarian']);
@@ -125,7 +126,9 @@ try {
     $router->get ('/api/pesanan/saya',           ['PesananController', 'myOrders']);
     $router->get ('/api/pesanan/:id',            ['PesananController', 'show']);
     $router->post('/api/pesanan/:id/cancel',     ['PesananController', 'cancel']);
+    $router->post('/api/pesanan/:id/bukti-pembayaran', ['PesananController', 'uploadPaymentProof']);
     $router->get ('/api/admin/pesanan',          ['PesananController', 'adminIndex']);
+    $router->get ('/api/admin/pesanan/:id',      ['PesananController', 'adminShow']);
     $router->put ('/api/pesanan/:id/status',     ['PesananController', 'updateStatus']);
     
 

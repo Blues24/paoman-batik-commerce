@@ -50,6 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnTambahList = Array.from(document.querySelectorAll('#btnTambahProduk'));
     const btnClose = document.querySelector('.close-modal');
     const formProduk = document.getElementById('formProduk');
+    const modalTitle = document.getElementById('modalProdukTitle');
+    const editProdukId = document.getElementById('editProdukId');
+    const editVarianId = document.getElementById('editVarianId');
+    let editVarianData = null;
     
     function getAdmin() {
         return window.UserSession?.getCurrentUser?.() || null;
@@ -92,16 +96,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function getProductImage(product, index = 0) {
         const rawPath = product.gambar_produk || "";
 
-        // 1. Jika path adalah katalog statis (data lama)
+        if (rawPath.startsWith('http')) {
+            return rawPath;
+        }
+
         if (rawPath.includes('../img/')) {
             return rawPath.replace('../img/', '../../img/');
         }
 
-        // 2. Jika hasil upload (Data mengandung "uploads/")
-        if (rawPath && rawPath.trim() !== "") {
-            // Jika di DB isinya "uploads/namafile.jpg", 
-            // kita cukup arahkan ke folder img frontend
-            return `../../img/${rawPath.replace('uploads/', 'uploads/')}`;
+        if (rawPath.includes('uploads/')) {
+            return `../../img/uploads/${rawPath.split('/').pop()}`;
         }
 
         // 3. Fallback ke Canonical (Katalog bawaan)
@@ -182,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <i data-lucide="trash-2"></i>
                             </button>
                             <button class="btn-view" data-id="${product.produk_id}">
-                                <i data-lucide="eye"></i> Detail
+                                <i data-lucide="pencil"></i> Edit Produk
                             </button>
                         </div>
                     </div>
@@ -200,8 +204,21 @@ document.addEventListener('DOMContentLoaded', () => {
         return Number(stockVal);
     }
 
-    function openModal() {
+    function openModal(product = null) {
         formProduk.reset();
+        editProdukId.value = product?.produk_id || '';
+        editVarianId.value = product?.varianId || '';
+        editVarianData = product?.varianData || null;
+        modalTitle.textContent = product ? 'Edit Produk' : 'Tambah Produk Baru';
+
+        document.getElementById('namaProduk').value = product?.nama_produk || '';
+        document.getElementById('hargaProduk').value = product?.harga || '';
+        document.getElementById('stokProduk').value = product?.stok || '';
+
+        const fileInput = document.getElementById('imgProdukFile');
+        if (fileInput) {
+            fileInput.required = !product;
+        }
 
         const previewContainer = document.getElementById('previewContainer');
         if (previewContainer) previewContainer.style.display = 'none';
@@ -244,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p class="price">${formatHarga(product.harga_mulai)}</p>
                         <div class="action-buttons">
                             <button class="btn-icon outline btn-delete" data-id="${product.produk_id}" title="Nonaktifkan produk"><i data-lucide="trash-2"></i></button>
-                            <button class="btn-view" data-id="${product.produk_id}"><i data-lucide="eye"></i> Detail</button>
+                            <button class="btn-view" data-id="${product.produk_id}"><i data-lucide="pencil"></i> Edit Produk</button>
                         </div>
                     </div>
                 </div>
@@ -265,14 +282,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Gunakan FormData untuk mengirim file[cite: 1]
+        const isEdit = Boolean(editProdukId.value);
         const formData = new FormData();
         const fileInput = document.getElementById('imgProdukFile'); // Input file baru
 
         formData.append('admin_id', admin.admin_id);
         formData.append('nama_produk', document.getElementById('namaProduk').value.trim());
+        formData.append('jenis_id', 1);
         formData.append('harga', document.getElementById('hargaProduk').value);
         formData.append('stok', document.getElementById('stokProduk').value);
+        formData.append('status', 'aktif');
 
         // Tambahkan file gambar jika ada
         if (fileInput.files[0]) {
@@ -280,12 +299,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            // Kirim tanpa header Content-Type (biarkan browser set otomatis ke multipart/form-data)
-            const response = await fetch(`${API_URL}/admin/tambah-produk`, {
+            const endpoint = isEdit ? `/produk/${editProdukId.value}/update` : '/admin/tambah-produk';
+            const response = await fetch(`${API_URL}${endpoint}`, {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-CSRF-Token': sessionStorage.getItem('csrf_token') || ''
+                    'X-CSRF-Token': sessionStorage.getItem('csrf_token') || localStorage.getItem('csrf_token') || ''
                 }
             });
 
@@ -296,9 +315,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            if (isEdit && editVarianId.value) {
+                await apiFetch(`/varian/${editVarianId.value}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        admin_id: admin.admin_id,
+                        ukuran: editVarianData?.ukuran || 'All Size',
+                        warna: editVarianData?.warna || 'Default',
+                        bahan: editVarianData?.bahan || 'Katun',
+                        harga: document.getElementById('hargaProduk').value,
+                        stok: document.getElementById('stokProduk').value
+                    })
+                });
+            }
+
             closeModal();
             await loadProduk();
-            showMessage('Produk berhasil ditambahkan ke server.', 'success');
+            showMessage(isEdit ? 'Produk berhasil diperbarui.' : 'Produk berhasil ditambahkan ke server.', 'success');
         } catch (error) {
             showMessage('Terjadi kesalahan saat upload.', 'error');
         }
@@ -329,6 +362,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 await loadProduk();
             };
         });
+
+        document.querySelectorAll('.btn-view').forEach(btn => {
+            btn.onclick = async () => {
+                const { response, data } = await apiFetch(`/produk/${btn.dataset.id}`);
+                if (!response.ok || !data?.success) {
+                    showMessage(data?.message || 'Detail produk gagal dimuat.', 'error');
+                    return;
+                }
+
+                const detail = data.data;
+                const varian = Array.isArray(detail.varian) ? detail.varian[0] : null;
+                openModal({
+                    ...detail,
+                    varianId: varian?.detail_batik_id || '',
+                    varianData: varian || null,
+                    harga: varian?.harga || detail.harga_mulai || '',
+                    stok: varian?.stok ?? detail.total_stok ?? ''
+                });
+            };
+        });
     }
 
     // Preview gambar sebelum di upload
@@ -345,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     btnTambahList.forEach((button) => {
-        button.onclick = openModal;
+        button.onclick = () => openModal();
     });
 
     if (btnClose) {
