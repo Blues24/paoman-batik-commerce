@@ -34,29 +34,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'GET'
             });
 
-            if (response.ok && data.success) {
-                const tbody = document.querySelector('.table-card table tbody');
-                tbody.innerHTML = '';
+            const tbody = document.getElementById('userTableBody');
+            if (!tbody) return;
 
+            // PASTI KOSONG: Hapus semua baris lama sebelum mengisi yang baru
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            if (response.ok && data.success) {
                 data.data.users.forEach(user => {
-                    const row = `
-                        <tr data-id="${user.akun_id}">
-                            <td><div class="profile-circle"></div></td>
-                            <td><strong>${user.username}</strong></td>
-                            <td>${user.email}</td>
-                            <td><span class="badge badge-${user.status === 'aktif' ? 'active' : 'inactive'}">${user.status === 'aktif' ? 'Aktif' : 'Nonaktif'}</span></td>
-                            <td>${user.tanggal_bergabung || '-'}</td>
-                            <td>
-                                <div class="action-btns">
-                                    <button class="btn-edit"><i data-lucide="pencil"></i></button>
-                                    <button class="btn-delete"><i data-lucide="trash-2"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                    tbody.insertAdjacentHTML('beforeend', row);
+                    const row = document.createElement('tr');
+                    row.setAttribute('data-id', user.akun_id);
+                    row.innerHTML = `
+                    <td><div class="profile-circle"></div></td>
+                    <td><strong>${user.username}</strong></td>
+                    <td>${user.email}</td>
+                    <td>
+                        <span class="badge badge-${user.status === 'aktif' ? 'active' : 'inactive'}">
+                            ${user.status === 'aktif' ? 'Aktif' : 'Nonaktif'}
+                        </span>
+                    </td>
+                    <td>-</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-edit"><i data-lucide="pencil"></i></button>
+                            <button class="btn-delete"><i data-lucide="trash-2"></i></button>
+                        </div>
+                    </td>
+                `;
+                    tbody.appendChild(row);
                 });
 
+                // Update info lainnya
                 totalItems = data.data.total;
                 updatePaginationUI(data.data.totalPages);
                 lucide.createIcons();
@@ -73,10 +83,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.btn-edit').forEach(button => {
             button.onclick = function () {
                 currentRow = this.closest('tr');
-                document.getElementById('editUsername').value = currentRow.querySelector('td:nth-child(2) strong').textContent;
-                document.getElementById('editEmail').value = currentRow.querySelector('td:nth-child(3)').textContent;
-                // After removing ROLE column, STATUS is now the 4th column
-                document.getElementById('editStatus').value = currentRow.querySelector('td:nth-child(4) .badge').textContent;
+                // Username ada di kolom ke-2 (td:nth-child(2))
+                document.getElementById('editUsername').value = currentRow.querySelector('td:nth-child(2) strong').textContent.trim();
+                // Email ada di kolom ke-3
+                document.getElementById('editEmail').value = currentRow.querySelector('td:nth-child(3)').textContent.trim();
+                // Status ada di kolom ke-4 (bukan lagi ke-5)
+                const currentStatus = currentRow.querySelector('td:nth-child(4) .badge').textContent.trim();
+                document.getElementById('editStatus').value = currentStatus;
+
                 document.getElementById('editModal').style.display = 'flex';
             };
         });

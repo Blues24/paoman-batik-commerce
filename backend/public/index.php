@@ -100,6 +100,7 @@ try {
     $router->post('/api/admin/login',           ['AuthController', 'loginAdmin']);
 
     // ===== Admin management Endpoints =====
+    $router->post('/api/admin/tambah-produk', ['AdminController', 'createProduk']);
     $router->get ('/api/admin/ambil-data-pelanggan', ['AdminController', 'getPelanggan']);
     $router->post('/api/admin/hapus-data-pelanggan', ['AdminController', 'deletePelanggan']);
     $router->post('/api/admin/update-data-pelanggan', ['AdminController', 'updatePelanggan']);

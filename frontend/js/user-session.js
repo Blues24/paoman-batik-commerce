@@ -119,12 +119,10 @@ async function loginUser( credentials ) {
                 const dataUser = {
                     ...userData.data,
                     username: credentials.identifier,
-                    role: 'pelanggan'
                 };
                 setStoredUser(dataUser);
                 return {
                     success: true,
-                    role: 'pelanggan',
                     message: 'Pelanggan berhasil login!'
                 }
             } else {
