@@ -160,6 +160,7 @@ td {
 .action-btns {
     display: flex;
     gap: 12px;
+    align-items: center; /* Vertically center icons/buttons */
 }
 
 .action-btns button {
@@ -168,11 +169,22 @@ td {
     cursor: pointer;
     color: #9CA3AF;
     transition: all 0.2s;
-    padding: 4px;
+    padding: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0; /* remove baseline shift so icon centers perfectly */
 }
 
 .btn-edit:hover { color: var(--primary-blue); }
 .btn-delete:hover { color: var(--danger); }
+
+/* Ensure icon elements inside action buttons have consistent sizing */
+.action-btns button i {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
 
 /* =========================================
    PAGINATION
