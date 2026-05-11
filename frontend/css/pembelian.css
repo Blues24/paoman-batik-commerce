@@ -485,6 +485,14 @@ a {
     border-radius: 10px;
     background: var(--surface);
     color: #7b8498;
+    font-weight: 700;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.page-btn:not(:disabled):hover {
+    background: #eef3ff;
+    border-color: #bfcaf0;
+    color: var(--primary);
 }
 
 .page-btn.active {
@@ -496,6 +504,15 @@ a {
 
 .page-arrow {
     color: #98a1b4;
+}
+
+.page-ellipsis {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 38px;
+    color: var(--muted);
+    font-weight: 800;
 }
 
 .page-btn:disabled {
@@ -755,5 +772,14 @@ a {
 
     .buyer-review-grid {
         grid-template-columns: 1fr;
+    }
+
+    .catalog-pagination {
+        gap: 8px;
+    }
+
+    .page-btn {
+        width: 36px;
+        height: 36px;
     }
 }

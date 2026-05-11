@@ -143,7 +143,6 @@ const searchInput = document.getElementById("searchProduk");
 const priceRange = document.getElementById("priceRange");
 const priceValue = document.getElementById("priceValue");
 const categoryFilters = Array.from(document.querySelectorAll(".category-filter"));
-const pageButtons = Array.from(document.querySelectorAll(".page-number"));
 const prevPageButton = document.getElementById("prevPage");
 const nextPageButton = document.getElementById("nextPage");
 const catalogPagination = document.getElementById("catalogPagination");
@@ -247,44 +246,91 @@ function getTotalPages() {
     return Math.max(1, Math.ceil(filteredProducts.length / itemPerPage));
 }
 
-function updatePagination() {
-    const totalPages = getTotalPages();
-    if (catalogPagination) {
-        const currentButtons = Array.from(catalogPagination.querySelectorAll(".page-number"));
-        const desiredPages = Array.from({ length: totalPages }, (_, index) => index + 1);
-        const currentPages = currentButtons.map((button) => Number(button.dataset.page));
-
-        if (desiredPages.join(",") !== currentPages.join(",")) {
-            currentButtons.forEach((button) => button.remove());
-            desiredPages.forEach((page) => {
-                const button = document.createElement("button");
-                button.type = "button";
-                button.className = "page-btn page-number";
-                button.dataset.page = String(page);
-                button.textContent = String(page);
-                button.addEventListener("click", () => {
-                    if (button.disabled || page === currentPage) return;
-                    currentPage = page;
-                    renderProduk();
-                });
-                catalogPagination.insertBefore(button, nextPageButton);
-            });
-        }
+function getPaginationItems(totalPages, activePage) {
+    if (totalPages <= 5) {
+        return Array.from({ length: totalPages }, (_, index) => index + 1);
     }
 
-    Array.from(document.querySelectorAll(".page-number")).forEach((button) => {
-        const page = Number(button.dataset.page);
-        button.classList.toggle("active", page === currentPage);
-        button.disabled = page > totalPages;
+    const pages = new Set([1, totalPages, activePage, activePage - 1, activePage + 1]);
+    const validPages = Array.from(pages)
+        .filter((page) => page >= 1 && page <= totalPages)
+        .sort((a, b) => a - b);
+
+    return validPages.reduce((items, page, index) => {
+        if (index > 0 && page - validPages[index - 1] > 1) {
+            items.push("ellipsis");
+        }
+        items.push(page);
+        return items;
+    }, []);
+}
+
+function goToPage(page, shouldScroll = true) {
+    const totalPages = getTotalPages();
+    const targetPage = Math.min(Math.max(Number(page) || 1, 1), totalPages);
+
+    if (targetPage === currentPage) {
+        return;
+    }
+
+    currentPage = targetPage;
+    renderProduk();
+
+    if (shouldScroll) {
+        document.querySelector(".catalog-header")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+}
+
+function updatePagination() {
+    const totalPages = getTotalPages();
+    const hasMultiplePages = filteredProducts.length > itemPerPage;
+
+    currentPage = Math.min(Math.max(currentPage, 1), totalPages);
+
+    if (!catalogPagination) {
+        return;
+    }
+
+    catalogPagination.classList.toggle("d-none", !hasMultiplePages);
+    if (!hasMultiplePages) {
+        return;
+    }
+
+    catalogPagination.querySelectorAll(".page-number, .page-ellipsis").forEach((item) => item.remove());
+
+    getPaginationItems(totalPages, currentPage).forEach((item) => {
+        if (item === "ellipsis") {
+            const ellipsis = document.createElement("span");
+            ellipsis.className = "page-ellipsis";
+            ellipsis.textContent = "...";
+            catalogPagination.insertBefore(ellipsis, nextPageButton);
+            return;
+        }
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "page-btn page-number";
+        button.dataset.page = String(item);
+        button.textContent = String(item);
+        button.classList.toggle("active", item === currentPage);
+        button.setAttribute("aria-label", `Halaman ${item}`);
+        button.setAttribute("aria-current", item === currentPage ? "page" : "false");
+        catalogPagination.insertBefore(button, nextPageButton);
     });
 
-    prevPageButton.disabled = currentPage === 1 || filteredProducts.length === 0;
-    nextPageButton.disabled = currentPage === totalPages || filteredProducts.length === 0;
+    if (prevPageButton) {
+        prevPageButton.disabled = currentPage === 1;
+    }
+
+    if (nextPageButton) {
+        nextPageButton.disabled = currentPage === totalPages;
+    }
 }
 
     function renderProduk() {
         if (!productGrid) return;
         productGrid.innerHTML = ""; // Bersihkan grid
+        currentPage = Math.min(Math.max(currentPage, 1), getTotalPages());
 
         if (filteredProducts.length === 0) {
             if (emptyState) emptyState.classList.remove("d-none");
@@ -399,18 +445,16 @@ categoryFilters.forEach((input) => {
     });
 });
 
-pageButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-        const targetPage = Number(button.dataset.page);
-
-        if (button.disabled || targetPage === currentPage) {
+if (catalogPagination) {
+    catalogPagination.addEventListener("click", (event) => {
+        const button = event.target.closest(".page-number");
+        if (!button || button.disabled) {
             return;
         }
 
-        currentPage = targetPage;
-        renderProduk();
+        goToPage(Number(button.dataset.page));
     });
-});
+}
 
 if (prevPageButton) {
     prevPageButton.addEventListener("click", () => {
@@ -418,8 +462,7 @@ if (prevPageButton) {
             return;
         }
 
-        currentPage -= 1;
-        renderProduk();
+        goToPage(currentPage - 1);
     });
 }
 
@@ -429,8 +472,7 @@ if (nextPageButton) {
             return;
         }
 
-        currentPage += 1;
-        renderProduk();
+        goToPage(currentPage + 1);
     });
 }
 
