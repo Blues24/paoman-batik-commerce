@@ -224,6 +224,23 @@ tbody td {
 .badge.lunas { background: #ECFDF5; color: #10B981; }
 .badge.belum-bayar { background: #FEF2F2; color: #EF4444; }
 
+.proof-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: #EEF3FF;
+    color: #2B4DBB;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.proof-chip.empty {
+    background: #F3F4F6;
+    color: #6B7280;
+}
+
 .status-box {
     padding: 4px 12px;
     border-radius: 8px;
@@ -315,6 +332,17 @@ tbody td {
     object-fit: cover;
     border-radius: 10px;
     background: #E5E7EB;
+}
+
+.payment-proof-preview {
+    display: block;
+    width: min(100%, 360px);
+    max-height: 260px;
+    object-fit: contain;
+    margin-top: 10px;
+    border: 1px solid #E5E7EB;
+    border-radius: 12px;
+    background: #F9FAFB;
 }
 
 .modal-product-preview strong,

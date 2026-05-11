@@ -92,6 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!path) return '';
         if (path.startsWith('http')) return path;
         if (path.includes('uploads/')) return `../../img/uploads/${path.split('/').pop()}`;
+        if (path.startsWith('produk_') || path.startsWith('bukti_')) return `../../img/uploads/${path}`;
+        if (path.startsWith('batik') || path.startsWith('baju')) return `../../img/${path}`;
         return path.replace('../img/', '../../img/');
     }
 
@@ -159,6 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${item.tanggal}</td>
                     <td><strong>Rp ${item.total.toLocaleString('id-ID')}</strong></td>
                     <td><span class="badge ${item.bayar === 'Belum Bayar' ? 'belum-bayar' : 'lunas'}">${item.bayar}</span></td>
+                    <td>${item.bukti_pembayaran ? `<a class="proof-chip" href="${normalizeImagePath(item.bukti_pembayaran)}" target="_blank">Lihat Bukti</a>` : '<span class="proof-chip empty">Belum Ada</span>'}</td>
                     <td><span class="status-box ${getStatusClass(item.status)}">${item.status}</span></td>
                     <td><button class="btn-detail-trigger" data-id="${item.id}">DETAIL</button></td>
                 </tr>
@@ -207,9 +210,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('modalPaymentDetail').innerText = detail?.payment_detail || order.payment_detail || '-';
                     const proof = detail?.bukti_pembayaran || order.bukti_pembayaran || '';
                     const proofLink = document.getElementById('modalPaymentProof');
+                    proofLink.parentElement?.querySelector('.payment-proof-preview')?.remove();
                     if (proof) {
                         proofLink.href = normalizeImagePath(proof);
                         proofLink.textContent = 'Lihat bukti pembayaran';
+                        const proofPath = normalizeImagePath(proof);
+                        const isImage = /\.(jpg|jpeg|png|webp)$/i.test(proofPath);
+                        proofLink.insertAdjacentHTML('afterend', isImage ? `<img class="payment-proof-preview" src="${proofPath}" alt="Bukti pembayaran">` : '');
                     } else {
                         proofLink.removeAttribute('href');
                         proofLink.textContent = 'Belum ada';

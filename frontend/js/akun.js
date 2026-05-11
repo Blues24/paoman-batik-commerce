@@ -94,6 +94,45 @@ function formatPaymentMethod(method) {
     return map[String(method || "").toLowerCase()] || "QRIS";
 }
 
+function getPaymentGuide(method) {
+    const normalized = String(method || "").toLowerCase();
+    if (normalized === "ewallet") {
+        return {
+            title: "Bayar via E-Wallet",
+            rows: ["DANA 0819-1131-5662", "GoPay 0819-8842-1107", "OVO/ShopeePay 0819-7720-4521"]
+        };
+    }
+
+    if (normalized === "cod") {
+        return {
+            title: "COD / Bayar di Tempat",
+            rows: ["Bayar saat pesanan diterima atau saat ambil di toko."]
+        };
+    }
+
+    return {
+        title: "Bayar via QRIS",
+        rows: ["Merchant Batik Paoman Indramayu", "ID QRIS 9360-0218-PAOMAN"]
+    };
+}
+
+function renderPaymentGuide(order, canUploadPayment) {
+    const method = order.metode_pembayaran || order.paymentMethod || "qris";
+    const guide = getPaymentGuide(method);
+    const isQris = String(method).toLowerCase() === "qris";
+
+    return `
+        <div class="account-payment-guide">
+            <div>
+                <strong>${guide.title}</strong>
+                ${guide.rows.map((row) => `<span>${row}</span>`).join("")}
+                ${canUploadPayment ? `<em>Upload bukti setelah transfer supaya admin bisa konfirmasi.</em>` : ""}
+            </div>
+            ${isQris ? `<div class="mini-qris" aria-label="Barcode QRIS simulasi"><span></span><span></span><span></span></div>` : ""}
+        </div>
+    `;
+}
+
 function requireLoggedInUser() {
     const currentUser = window.UserSession.getCurrentUser();
 
@@ -243,6 +282,7 @@ async function renderOrderHistory() {
                     </div>
                     <p class="order-meta">${getOrderPrimaryCategory(order)} | ${getOrderItemCount(order)} item | ${formatDate(order.tanggal_pesanan || order.createdAt)}</p>
                     <p class="order-meta">Pembayaran: ${formatPaymentMethod(paymentMethod)}</p>
+                    ${renderPaymentGuide(order, canUploadPayment)}
                     ${order.catatan ? `<p class="order-meta">${order.catatan}</p>` : ""}
                     ${proofUrl ? `<p class="order-meta"><a href="${proofUrl}" target="_blank">Lihat bukti pembayaran</a></p>` : ""}
                     <div class="order-item-bottom">

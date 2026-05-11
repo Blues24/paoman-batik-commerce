@@ -32,6 +32,23 @@ async function fetchProductReviews(produkId) {
     }
 }
 
+async function fetchLatestReviews(limit = 6) {
+    try {
+        const apiBase = window.API_URL || DEFAULT_API_BASE;
+        const response = await fetch(`${apiBase}/ulasan?limit=${encodeURIComponent(limit)}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+        });
+
+        const data = await response.json();
+        return data.success ? (data.data || []) : [];
+    } catch (err) {
+        console.error('Fetch latest reviews error:', err);
+        return [];
+    }
+}
+
 // =========== RENDER REVIEWS ===========
 function renderReviews(reviews, containerId = 'reviewsContainer') {
     const container = document.getElementById(containerId);
@@ -53,7 +70,8 @@ function renderReviews(reviews, containerId = 'reviewsContainer') {
         reviewCard.innerHTML = `
             <div class="review-header">
                 <div class="review-user-info">
-                    <strong>${review.nama_pelanggan || 'Anonymous'}</strong>
+                    <strong>${escapeHtml(review.nama_pelanggan || 'Anonymous')}</strong>
+                    ${review.nama_produk ? `<span class="review-product">${escapeHtml(review.nama_produk)}</span>` : ''}
                     <span class="review-date">${formatReviewDate(review.tanggal_ulasan)}</span>
                 </div>
                 <div class="review-rating">
@@ -62,7 +80,7 @@ function renderReviews(reviews, containerId = 'reviewsContainer') {
             </div>
 
             <div class="review-body">
-                ${review.komentar ? `<p>${review.komentar}</p>` : '<p><em>Tidak ada komentar</em></p>'}
+                ${review.komentar ? `<p>${escapeHtml(review.komentar)}</p>` : '<p><em>Tidak ada komentar</em></p>'}
             </div>
         `;
         container.appendChild(reviewCard);
@@ -71,11 +89,9 @@ function renderReviews(reviews, containerId = 'reviewsContainer') {
 
 // =========== STAR RENDERING ===========
 function renderStars(rating) {
-    let stars = '';
-    for (let i = 1; i <= 5; i++) {
-        stars += i <= rating ? '★' : '☆';
-    }
-    return `<span class="stars">${stars}</span>`;
+    const safeRating = Number(rating) || 0;
+    const starsHtml = Array.from({ length: 5 }, (_, index) => index < safeRating ? '&#9733;' : '&#9734;').join('');
+    return `<span class="stars">${starsHtml}</span>`;
 }
 
 // =========== RATING SUMMARY ===========
@@ -116,6 +132,15 @@ function formatReviewDate(dateString) {
     if (diffDays < 30) return `${Math.floor(diffDays / 7)} minggu lalu`;
     if (diffDays < 365) return `${Math.floor(diffDays / 30)} bulan lalu`;
     return date.toLocaleDateString('id-ID');
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
 // =========== RENDER RATING BAR CHART ===========
@@ -171,7 +196,16 @@ function closeReviewModal() {
 // Bisa di-import untuk display reviews di product detail page
 
 window.fetchProductReviews = fetchProductReviews;
+window.fetchLatestReviews = fetchLatestReviews;
 window.renderReviews = renderReviews;
 window.renderRatingDistribution = renderRatingDistribution;
 window.closeReviewModal = closeReviewModal;
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const latestContainer = document.getElementById('latestReviews');
+    if (!latestContainer) return;
+
+    const reviews = await fetchLatestReviews(6);
+    renderReviews(reviews, 'latestReviews');
+});
 })();

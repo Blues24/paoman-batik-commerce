@@ -115,6 +115,15 @@ class UlasanController {
     }
 
     /**
+     * Mendapatkan ulasan terbaru dari semua produk (public endpoint).
+     */
+    public function index(): void {
+        $limit = (int)($_GET['limit'] ?? 6);
+        $model = new UlasanModel();
+        $this->respond(true, $model->getLatest($limit), '', 200);
+    }
+
+    /**
      * Mengupdate status ulasan (admin only).
      */
     public function moderate(string $id): void {

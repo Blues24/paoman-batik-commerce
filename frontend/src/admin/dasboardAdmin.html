@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="../../css/dasboardAdmin.css">
+    <link rel="stylesheet" href="../../css/dasboardAdmin.css?v=20260511-2">
     <link rel="stylesheet" href="../../css/navadmin.css?v=20260501">
 
 </head>
@@ -136,7 +136,18 @@
 
             <section class="bottom-section">
                 <div class="card table-card">
-                    <h4>Stock</h4>
+                    <div class="stock-header">
+                        <div>
+                            <h4>Ringkasan Produk</h4>
+                            <p id="stockSummaryText">5 produk teratas berdasarkan stok.</p>
+                        </div>
+                        <div class="stock-tabs" role="tablist" aria-label="Filter ringkasan produk">
+                            <button type="button" class="stock-tab active" data-mode="banyak">Paling Banyak</button>
+                            <button type="button" class="stock-tab" data-mode="sedikit">Paling Sedikit</button>
+                            <button type="button" class="stock-tab" data-mode="laris">Laris</button>
+                            <button type="button" class="stock-tab" data-mode="kurang-laris">Kurang Laris</button>
+                        </div>
+                    </div>
                     <table>
                         <thead>
                             <tr>
@@ -171,7 +182,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../../js/user-session.js"></script>
     <script src="../../js/navigasiAdmin.js"></script> <!-- Pastikan ini di bawah SweetAlert -->
-    <script src="../../js/dasboardAdmin.js"></script>
+    <script src="../../js/dasboardAdmin.js?v=20260511-2"></script>
     <script>
     // Fetch dashboard statistics and sales report, then render on the page.
     (function () {
@@ -287,7 +298,7 @@
             // Build a small table with last sale time
             let html = '<div style="overflow:auto"><table class="sales-table" style="width:100%;border-collapse:collapse">';
             html += '<thead><tr style="text-align:left;color:#6b7280;font-size:12px"><th>Produk</th><th>Terjual</th><th>Pendapatan (Rp)</th><th>Terakhir Terjual</th></tr></thead><tbody>';
-            rows.forEach(r => {
+            rows.slice(0, 5).forEach(r => {
                 const nama = escapeHtml(r.nama_produk || 'N/A');
                 const terjual = Number(r.total_terjual || 0).toLocaleString();
                 const pendapatan = Number(r.total_pendapatan || 0).toLocaleString();
@@ -306,8 +317,8 @@
             const chartPlaceholder = document.querySelector('.chart-placeholder');
             if (!chartPlaceholder) return;
 
-            // Take top 7 products
-            const top = (rows || []).slice(0, 7);
+            // Take top 5 products only so the dashboard stays compact.
+            const top = (rows || []).slice(0, 5);
             if (top.length === 0) {
                 chartPlaceholder.innerHTML = '<div style="color:#6b7280">Tidak ada data chart</div>';
                 return;

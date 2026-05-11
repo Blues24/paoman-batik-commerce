@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const API_URL = window.API_URL || 'http://localhost/paoman-batik/backend/public/api';
     const admin = window.UserSession?.getCurrentUser?.() || { admin_id: 1 };
+    let dashboardProducts = [];
+    let salesRows = [];
+    let stockMode = 'banyak';
 
     function rupiah(value) {
         return `Rp ${Number(value || 0).toLocaleString('id-ID')}`;
@@ -10,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!path) return '../../img/batik1.jpg';
         if (path.startsWith('http')) return path;
         if (path.includes('uploads/')) return `../../img/uploads/${path.split('/').pop()}`;
+        if (path.startsWith('produk_')) return `../../img/uploads/${path}`;
+        if (path.startsWith('batik') || path.startsWith('baju')) return `../../img/${path}`;
         return path.replace('../img/', '../../img/');
     }
 
@@ -62,12 +67,61 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function renderStock() {
-        const products = await apiGet('/produk');
+        const [products, sales] = await Promise.all([
+            apiGet('/produk'),
+            apiGet(`/admin/laporan-penjualan?admin_id=${encodeURIComponent(admin.admin_id || 1)}`)
+        ]);
+        dashboardProducts = Array.isArray(products) ? products : [];
+        salesRows = Array.isArray(sales) ? sales : [];
+        renderStockTable();
+    }
+
+    function getProductSales(product) {
+        const byId = salesRows.find((row) => Number(row.produk_id) === Number(product.produk_id));
+        if (byId) return Number(byId.total_terjual || 0);
+
+        const byName = salesRows.find((row) => row.nama_produk === product.nama_produk);
+        return Number(byName?.total_terjual || 0);
+    }
+
+    function getVisibleProducts() {
+        const rows = dashboardProducts.map((product) => ({
+            ...product,
+            total_stok: Number(product.total_stok || 0),
+            total_terjual: getProductSales(product)
+        }));
+
+        if (stockMode === 'sedikit') {
+            return rows.sort((a, b) => a.total_stok - b.total_stok || a.nama_produk.localeCompare(b.nama_produk)).slice(0, 5);
+        }
+
+        if (stockMode === 'laris') {
+            return rows.sort((a, b) => b.total_terjual - a.total_terjual || b.total_stok - a.total_stok).slice(0, 5);
+        }
+
+        if (stockMode === 'kurang-laris') {
+            return rows.sort((a, b) => a.total_terjual - b.total_terjual || a.total_stok - b.total_stok).slice(0, 5);
+        }
+
+        return rows.sort((a, b) => b.total_stok - a.total_stok || a.nama_produk.localeCompare(b.nama_produk)).slice(0, 5);
+    }
+
+    function renderStockTable() {
         const tbody = document.querySelector('.table-card tbody');
         if (!tbody) return;
 
         tbody.innerHTML = '';
-        products.slice(0, 8).forEach((product, index) => {
+        const products = getVisibleProducts();
+        const summary = document.getElementById('stockSummaryText');
+        const summaryText = {
+            banyak: '5 produk dengan stok paling banyak.',
+            sedikit: '5 produk dengan stok paling sedikit.',
+            laris: '5 produk paling laris berdasarkan jumlah terjual.',
+            'kurang-laris': '5 produk paling kurang laris berdasarkan jumlah terjual.'
+        };
+        if (summary) summary.textContent = summaryText[stockMode] || summaryText.banyak;
+
+        products.forEach((product, index) => {
             const stock = Number(product.total_stok || 0);
             const statusClass = stock === 0 ? 'red' : stock <= 10 ? 'yellow' : 'green';
             const statusText = stock === 0 ? 'Stok Habis' : stock <= 10 ? 'Stok Sedikit' : 'Stok Banyak';
@@ -86,7 +140,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 </tr>
             `);
         });
+
+        if (products.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="color:#6b7280">Belum ada produk.</td></tr>';
+        }
+
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
+
+    document.querySelectorAll('.stock-tab').forEach((button) => {
+        button.addEventListener('click', () => {
+            stockMode = button.dataset.mode || 'banyak';
+            document.querySelectorAll('.stock-tab').forEach((tab) => tab.classList.toggle('active', tab === button));
+            renderStockTable();
+        });
+    });
 
     (async () => {
         try {
