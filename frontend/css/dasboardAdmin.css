@@ -243,6 +243,65 @@ td {
     display: flex;
     align-items: center;
     gap: 10px;
+    min-width: 280px;
+}
+
+.product-cell img {
+    width: 64px !important;
+    min-width: 64px;
+    max-width: 64px;
+    height: 64px !important;
+    min-height: 64px;
+    max-height: 64px;
+    flex: 0 0 64px;
+    object-fit: cover !important;
+    border-radius: 10px;
+    background: #eef2f7;
+}
+
+.table-card table img {
+    width: 64px !important;
+    max-width: 64px !important;
+    height: 64px !important;
+    object-fit: cover !important;
+}
+
+.stock-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.stock-header p {
+    margin-top: 6px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.stock-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.stock-tab {
+    border: 1px solid #d7ddea;
+    background: #fff;
+    color: #4b5563;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.stock-tab.active {
+    border-color: var(--primary-blue);
+    background: var(--primary-blue);
+    color: #fff;
 }
 
 .status-pill {
@@ -269,3 +328,13 @@ td {
 }
 
 .text-red { color: #ef4444; font-weight: bold; }
+
+@media (max-width: 900px) {
+    .stock-header {
+        flex-direction: column;
+    }
+
+    .stock-tabs {
+        justify-content: flex-start;
+    }
+}

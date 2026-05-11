@@ -96,18 +96,7 @@ async function apiGetJson(endpoint) {
             const canonical = canonicalProductByName.get(produk.nama_produk);
             const kategori = canonical?.kategori || guessKategoriFromNama(produk.nama_produk);
 
-            // LOGIKA GAMBAR: Pastikan mengarah ke folder frontend
-            let finalImage = "";
-            const rawImg = produk.gambar_produk || "";
-
-            if (rawImg.startsWith('../img/')) {
-                finalImage = rawImg;
-            } else if (rawImg.includes('uploads/')) {
-                const fileName = rawImg.split('/').pop();
-                finalImage = `../img/uploads/${fileName}`;
-            } else {
-                finalImage = canonical?.image || "../img/batik1.jpg";
-            }
+            const finalImage = normalizeProductImage(produk.gambar_produk || "", canonical?.image || "../img/batik1.jpg");
 
             return {
                 id: Number(produk.produk_id),
@@ -126,8 +115,7 @@ async function apiGetJson(endpoint) {
             if (!apiByName.has(item.nama)) apiByName.set(item.nama, item);
         });
 
-        // Gabungkan dengan data fallback
-        produkBatik = produkBatikFallback.map((fallback) => ({
+        const mergedFallbacks = produkBatikFallback.map((fallback) => ({
             ...fallback,
             ...(apiByName.get(fallback.nama) || {})
         })).sort((a, b) => {
@@ -136,12 +124,12 @@ async function apiGetJson(endpoint) {
             return orderA - orderB;
         });
 
-        // Tambahkan produk baru yang tidak ada di fallback
-        mapped.forEach(item => {
-            if (!produkBatik.find(p => p.nama === item.nama)) {
-                produkBatik.push(item);
-            }
-        });
+        const newProducts = mapped
+            .filter(item => !canonicalProductByName.has(item.nama))
+            .sort((a, b) => Number(b.id || 0) - Number(a.id || 0));
+
+        // Produk baru dari admin ditaruh paling depan agar langsung terlihat di halaman user.
+        produkBatik = [...newProducts, ...mergedFallbacks];
     } 
 
 
@@ -158,6 +146,7 @@ const categoryFilters = Array.from(document.querySelectorAll(".category-filter")
 const pageButtons = Array.from(document.querySelectorAll(".page-number"));
 const prevPageButton = document.getElementById("prevPage");
 const nextPageButton = document.getElementById("nextPage");
+const catalogPagination = document.getElementById("catalogPagination");
 const cartCount = document.getElementById("cartCount");
 const cartConfirmOverlay = document.getElementById("cartConfirmOverlay");
 const cartConfirmMessage = document.getElementById("cartConfirmMessage");
@@ -173,6 +162,16 @@ function formatRingkas(angka) {
     }
 
     return `Rp ${Math.round(angka / 1000)}rb`;
+}
+
+function normalizeProductImage(rawPath, fallbackImage = "../img/batik1.jpg") {
+    if (!rawPath) return fallbackImage;
+    if (rawPath.startsWith("http")) return rawPath;
+    if (rawPath.startsWith("../img/")) return rawPath;
+    if (rawPath.includes("uploads/")) return `../img/uploads/${rawPath.split("/").pop()}`;
+    if (rawPath.startsWith("produk_")) return `../img/uploads/${rawPath}`;
+    if (rawPath.startsWith("batik") || rawPath.startsWith("baju")) return `../img/${rawPath}`;
+    return fallbackImage;
 }
 
 function getCartItems() {
@@ -250,8 +249,30 @@ function getTotalPages() {
 
 function updatePagination() {
     const totalPages = getTotalPages();
+    if (catalogPagination) {
+        const currentButtons = Array.from(catalogPagination.querySelectorAll(".page-number"));
+        const desiredPages = Array.from({ length: totalPages }, (_, index) => index + 1);
+        const currentPages = currentButtons.map((button) => Number(button.dataset.page));
 
-    pageButtons.forEach((button) => {
+        if (desiredPages.join(",") !== currentPages.join(",")) {
+            currentButtons.forEach((button) => button.remove());
+            desiredPages.forEach((page) => {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "page-btn page-number";
+                button.dataset.page = String(page);
+                button.textContent = String(page);
+                button.addEventListener("click", () => {
+                    if (button.disabled || page === currentPage) return;
+                    currentPage = page;
+                    renderProduk();
+                });
+                catalogPagination.insertBefore(button, nextPageButton);
+            });
+        }
+    }
+
+    Array.from(document.querySelectorAll(".page-number")).forEach((button) => {
         const page = Number(button.dataset.page);
         button.classList.toggle("active", page === currentPage);
         button.disabled = page > totalPages;

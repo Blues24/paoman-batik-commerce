@@ -108,6 +108,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return `../../img/uploads/${rawPath.split('/').pop()}`;
         }
 
+        if (rawPath.startsWith('produk_')) {
+            return `../../img/uploads/${rawPath}`;
+        }
+
+        if (rawPath.startsWith('batik') || rawPath.startsWith('baju')) {
+            return `../../img/${rawPath}`;
+        }
+
         // 3. Fallback ke Canonical (Katalog bawaan)
         const canonical = canonicalByName.get(product.nama_produk);
         if (canonical && canonical.image) {
@@ -253,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="product-card">
                     <div class="image-container">
                         <span class="badge-status ${statusClass}">${statusText}</span>
-                        <img src="${image}" alt="${product.nama_produk}">
+                        <img src="${image}" alt="${product.nama_produk}" onerror="this.src='../../img/batik1.jpg'">
                     </div>
                     <div class="product-info">
                         <h4 title="${product.nama_produk}">${product.nama_produk}</h4>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Batik Paoman - Pemesanan</title>
     <link href="../css/abaikan/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/pemesanan.css" rel="stylesheet">
+    <link href="../css/pemesanan.css?v=20260511-2" rel="stylesheet">
     <link href="../css/navuser.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="../css/footer.css">
@@ -134,9 +134,19 @@
                                     <span><i class="bi bi-cash-coin"></i> COD</span>
                                 </label>
                             </div>
+                            <div id="paymentGuide" class="payment-guide">
+                                <div class="payment-guide-copy">
+                                    <strong id="paymentGuideTitle">QRIS Batik Paoman</strong>
+                                    <span id="paymentGuideSubtitle">Scan barcode QRIS toko, lalu upload bukti pembayaran.</span>
+                                    <div id="paymentGuideAccounts" class="payment-accounts"></div>
+                                </div>
+                                <div id="qrisBarcode" class="qris-barcode" aria-label="Barcode QRIS simulasi">
+                                    <span></span><span></span><span></span>
+                                </div>
+                            </div>
                             <label class="field-group payment-detail-field">
                                 <span>Rincian Pembayaran</span>
-                                <input id="paymentDetail" type="text" placeholder="Contoh: DANA 08xxxxxxxx / transfer dari nama akun">
+                                <input id="paymentDetail" type="text" placeholder="Contoh: DANA dari nama akun Daffa">
                             </label>
                             <label class="field-group payment-proof-field">
                                 <span>Bukti Pembayaran</span>
@@ -171,7 +181,7 @@
     <script src="../js/footer.js"></script>
     <script src="../js/user-session.js"></script>
     <script src="../js/navuser.js"></script>
-    <script src="../js/pemesanan.js"></script>
+    <script src="../js/pemesanan.js?v=20260511-2"></script>
     <script src="../js/session.js" defer></script>
 </body>
 </html>

@@ -11,6 +11,30 @@ class PesananModel {
 
     public function __construct() {
         $this->db = Database::connect();
+        $this->ensurePaymentColumns();
+    }
+
+    private function ensurePaymentColumns(): void {
+        $columns = [
+            'metode_pembayaran' => "ALTER TABLE pesanan ADD COLUMN metode_pembayaran ENUM('qris','ewallet','cod') NOT NULL DEFAULT 'qris' AFTER status_pesanan",
+            'payment_status' => "ALTER TABLE pesanan ADD COLUMN payment_status ENUM('belum_dibayar','menunggu_konfirmasi','dibayar','bayar_di_tempat') NOT NULL DEFAULT 'belum_dibayar' AFTER metode_pembayaran",
+            'catatan' => "ALTER TABLE pesanan ADD COLUMN catatan TEXT NULL AFTER payment_status",
+            'payment_detail' => "ALTER TABLE pesanan ADD COLUMN payment_detail VARCHAR(255) NULL AFTER catatan",
+            'bukti_pembayaran' => "ALTER TABLE pesanan ADD COLUMN bukti_pembayaran VARCHAR(255) NULL AFTER payment_detail"
+        ];
+
+        foreach ($columns as $column => $sql) {
+            if ($this->columnExists('pesanan', $column)) {
+                continue;
+            }
+
+            try {
+                $this->db->exec($sql);
+                $this->columnCache["pesanan.{$column}"] = true;
+            } catch (Throwable $e) {
+                $this->columnCache["pesanan.{$column}"] = false;
+            }
+        }
     }
 
     /**

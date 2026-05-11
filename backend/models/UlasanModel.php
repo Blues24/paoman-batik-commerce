@@ -57,6 +57,25 @@ class UlasanModel {
     }
 
     /**
+     * Mendapatkan ulasan terbaru dari semua produk untuk halaman katalog.
+     */
+    public function getLatest(int $limit = 6): array {
+        $limit = max(1, min(12, $limit));
+        $stmt = $this->db->prepare(
+            'SELECT u.ulasan_id, u.rating, u.komentar, u.tanggal_ulasan,
+                    pl.nama AS nama_pelanggan, pr.nama_produk
+             FROM ulasan u
+             JOIN pelanggan pl ON pl.pelanggan_id = u.pelanggan_id
+             JOIN produk pr ON pr.produk_id = u.produk_id
+             WHERE u.status = "aktif"
+             ORDER BY u.tanggal_ulasan DESC
+             LIMIT ' . $limit
+        );
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Mengupdate status ulasan.
      */
     public function updateStatus(int $ulasanId, string $status): void {

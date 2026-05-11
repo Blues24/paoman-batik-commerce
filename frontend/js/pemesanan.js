@@ -41,6 +41,10 @@ const paymentDetailInput = document.getElementById("paymentDetail");
 const paymentProofInput = document.getElementById("paymentProof");
 const paymentDetailField = document.querySelector(".payment-detail-field");
 const paymentProofField = document.querySelector(".payment-proof-field");
+const paymentGuide = document.getElementById("paymentGuide");
+const paymentGuideTitle = document.getElementById("paymentGuideTitle");
+const paymentGuideSubtitle = document.getElementById("paymentGuideSubtitle");
+const paymentGuideAccounts = document.getElementById("paymentGuideAccounts");
 const orderNoticeOverlay = document.getElementById("orderNoticeOverlay");
 const orderNoticeIcon = document.getElementById("orderNoticeIcon");
 const orderNoticeTitle = document.getElementById("orderNoticeTitle");
@@ -318,9 +322,44 @@ function getSelectedPaymentMethod() {
 function updatePaymentFields() {
     const method = getSelectedPaymentMethod();
     const needsProof = method === "qris" || method === "ewallet";
+    const paymentGuides = {
+        qris: {
+            title: "QRIS Batik Paoman",
+            subtitle: "Scan barcode QRIS toko, lalu upload bukti pembayaran.",
+            accounts: [
+                "Merchant: <b>Batik Paoman Indramayu</b>",
+                "ID QRIS: <b>9360-0218-PAOMAN</b>"
+            ],
+            placeholder: "Contoh: QRIS dari BCA a.n. Daffa"
+        },
+        ewallet: {
+            title: "E-Wallet Batik Paoman",
+            subtitle: "Transfer ke salah satu e-wallet toko, lalu upload bukti pembayaran.",
+            accounts: [
+                "DANA: <b>0819-1131-5662</b>",
+                "GoPay: <b>0819-8842-1107</b>",
+                "OVO/ShopeePay: <b>0819-7720-4521</b>"
+            ],
+            placeholder: "Contoh: DANA dari nomor 08xxxxxxxx a.n. Daffa"
+        },
+        cod: {
+            title: "COD / Bayar di Tempat",
+            subtitle: "Pembayaran dilakukan saat pesanan diterima atau diambil di toko.",
+            accounts: [
+                "Alamat toko: <b>Jl. Siliwangi No.10, Paoman, Indramayu</b>"
+            ],
+            placeholder: ""
+        }
+    };
+    const guide = paymentGuides[method] || paymentGuides.qris;
 
     paymentDetailField?.classList.toggle("d-none", !needsProof);
     paymentProofField?.classList.toggle("d-none", !needsProof);
+    paymentGuide?.classList.toggle("cod", method === "cod");
+    if (paymentGuideTitle) paymentGuideTitle.textContent = guide.title;
+    if (paymentGuideSubtitle) paymentGuideSubtitle.textContent = guide.subtitle;
+    if (paymentGuideAccounts) paymentGuideAccounts.innerHTML = guide.accounts.map((row) => `<div>${row}</div>`).join("");
+    if (paymentDetailInput) paymentDetailInput.placeholder = guide.placeholder;
 
     if (!needsProof) {
         if (paymentDetailInput) paymentDetailInput.value = "";
