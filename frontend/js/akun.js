@@ -164,6 +164,34 @@ function getOrderPrimaryCategory(order) {
 }
 
 let selectedProductForReview = null;
+let cancelOrderResolver = null;
+
+function openCancelOrderAlert() {
+    const alertOverlay = document.getElementById("cancelOrderAlert");
+
+    if (!alertOverlay) {
+        return Promise.resolve(confirm("Batalkan pesanan ini? Jika dibatalkan, stok akan dikembalikan."));
+    }
+
+    alertOverlay.classList.remove("d-none");
+
+    return new Promise((resolve) => {
+        cancelOrderResolver = resolve;
+    });
+}
+
+function closeCancelOrderAlert(isConfirmed = false) {
+    const alertOverlay = document.getElementById("cancelOrderAlert");
+
+    if (alertOverlay) {
+        alertOverlay.classList.add("d-none");
+    }
+
+    if (cancelOrderResolver) {
+        cancelOrderResolver(isConfirmed);
+        cancelOrderResolver = null;
+    }
+}
 
 async function renderOrderHistory() {
     const response = await window.UserSession.getCurrentUserOrders();
@@ -256,7 +284,7 @@ async function uploadMyPaymentProof(pesananId) {
 }
 
 async function cancelMyOrder(pesananId) {
-    const ok = confirm("Batalkan pesanan ini? Jika dibatalkan, stok akan dikembalikan.");
+    const ok = await openCancelOrderAlert();
     if (!ok) return;
 
     try {
@@ -296,6 +324,24 @@ async function openReviewModal(pesananId) {
 function closeReviewModal() {
     document.getElementById("reviewModal").classList.add("d-none");
     selectedProductForReview = null;
+}
+
+function initCancelOrderAlert() {
+    const alertOverlay = document.getElementById("cancelOrderAlert");
+    const dismissButton = document.getElementById("cancelAlertDismissBtn");
+    const confirmButton = document.getElementById("cancelAlertConfirmBtn");
+
+    if (!alertOverlay || !dismissButton || !confirmButton) {
+        return;
+    }
+
+    dismissButton.addEventListener("click", () => closeCancelOrderAlert(false));
+    confirmButton.addEventListener("click", () => closeCancelOrderAlert(true));
+    alertOverlay.addEventListener("click", (event) => {
+        if (event.target === alertOverlay) {
+            closeCancelOrderAlert(false);
+        }
+    });
 }
 
 function initStarRating() {
@@ -363,6 +409,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     fillAccountSummary(currentUser);
+    initCancelOrderAlert();
     initStarRating();
     initReviewForm();
     await renderOrderHistory();
@@ -416,5 +463,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const latestUser = window.UserSession.getCurrentUser();
         const result = await window.UserSession.requestPasswordReset(latestUser.email || latestUser.username);
         showAccountMessage(result.message, result.success ? "success" : "error");
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            closeCancelOrderAlert(false);
+        }
     });
 });
