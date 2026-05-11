@@ -2,6 +2,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('.consult-form');
     if (!form) return;
 
+    function showConsultationAlert(type, message) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: type,
+                title: type === 'success' ? 'Berhasil' : 'Gagal',
+                text: message,
+                confirmButtonColor: '#2e4fc2'
+            });
+            return;
+        }
+
+        alert(message);
+    }
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -38,14 +52,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const json = await res.json();
             if (res.ok && json.success) {
-                alert('Konsultasi berhasil dikirim. Tim kami akan menghubungi Anda.');
+                showConsultationAlert('success', 'Konsultasi berhasil dikirim. Tim kami akan menghubungi Anda.');
                 form.reset();
             } else {
-                alert('Gagal mengirim konsultasi: ' + (json.message || res.status));
+                showConsultationAlert('error', 'Gagal mengirim konsultasi: ' + (json.message || res.status));
             }
         } catch (err) {
             console.error(err);
-            alert('Terjadi kesalahan saat mengirim konsultasi');
+            showConsultationAlert('error', 'Terjadi kesalahan saat mengirim konsultasi');
         }
     });
 });

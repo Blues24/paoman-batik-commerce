@@ -111,6 +111,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return { response, data };
     }
 
+    function showStatusAlert(type, message) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: type,
+                title: type === 'success' ? 'Berhasil' : 'Gagal',
+                text: message,
+                confirmButtonColor: '#2B4DBB'
+            });
+            return;
+        }
+
+        alert(message);
+    }
+
     async function loadOrdersFromApi() {
         const admin = getAdmin();
         if (!admin?.admin_id) {
@@ -233,28 +247,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Simpan Perubahan dari Modal
-    document.getElementById('btnSimpanStatus').onclick = () => {
+    document.getElementById('btnSimpanStatus').onclick = async () => {
         const orderIndex = dataPesanan.findIndex(p => p.id === currentEditId);
         if (orderIndex !== -1) {
             const nextStatus = document.getElementById('updateStatus').value;
-            dataPesanan[orderIndex].bayar = document.getElementById('updateBayar').value;
+            const nextPaymentStatus = document.getElementById('updateBayar').value;
+            const previousOrder = { ...dataPesanan[orderIndex] };
+
+            dataPesanan[orderIndex].bayar = nextPaymentStatus;
             dataPesanan[orderIndex].status = nextStatus;
 
             const admin = getAdmin();
             if (admin?.admin_id && /^\d+$/.test(String(currentEditId))) {
-                apiFetch(`/pesanan/${currentEditId}/status`, {
+                const { response, data } = await apiFetch(`/pesanan/${currentEditId}/status`, {
                     method: 'PUT',
                     body: JSON.stringify({
                         admin_id: admin.admin_id,
                         status_pesanan: statusToApi(nextStatus),
-                        payment_status: paymentToApi(document.getElementById('updateBayar').value)
+                        payment_status: paymentToApi(nextPaymentStatus)
                     })
                 });
+
+                if (!response.ok || data?.success === false) {
+                    dataPesanan[orderIndex] = previousOrder;
+                    renderTable();
+                    showStatusAlert('error', data?.message || `Status Pesanan ${currentEditId} gagal diperbarui.`);
+                    return;
+                }
             }
             
             modal.style.display = 'none';
             renderTable(); 
-            alert("Status Pesanan " + currentEditId + " berhasil diperbarui!");
+            showStatusAlert('success', `Status Pesanan ${currentEditId} berhasil diperbarui.`);
         }
     };
 
@@ -313,4 +337,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadOrdersFromApi();
 });
-

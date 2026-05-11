@@ -35,4 +35,31 @@ class KonsultasiController {
             $this->respond(false, null, 'Gagal mengambil data konsultasi', 500);
         }
     }
+
+    public function updateStatus(string $id): void {
+        $body = $this->body();
+        $statusInput = strtolower(trim((string)($body['status_konsultasi'] ?? '')));
+        $statusMap = [
+            'pending' => 'Pending',
+            'diproses' => 'Diproses',
+            'selesai' => 'Selesai',
+        ];
+
+        if (!isset($statusMap[$statusInput])) {
+            $this->respond(false, null, 'Status konsultasi tidak valid', 422);
+        }
+
+        try {
+            $model = new KonsultasiModel();
+            $updated = $model->updateStatus((int)$id, $statusMap[$statusInput]);
+
+            if (!$updated) {
+                $this->respond(false, null, 'Konsultasi tidak ditemukan atau status belum berubah', 404);
+            }
+
+            $this->respond(true, ['id' => (int)$id, 'status_konsultasi' => $statusMap[$statusInput]], 'Status konsultasi berhasil diperbarui', 200);
+        } catch (Exception $e) {
+            $this->respond(false, null, 'Gagal memperbarui status konsultasi', 500);
+        }
+    }
 }

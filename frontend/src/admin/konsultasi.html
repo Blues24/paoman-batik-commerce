@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin - Konsultasi</title>
     <link rel="stylesheet" href="../../css/kelolaAkun.css">
+    <link rel="stylesheet" href="../../css/admin-konsultasi.css?v=20260512">
     <link rel="stylesheet" href="../../css/navadmin.css?v=20260501">
 </head>
 <body>
@@ -63,20 +64,69 @@
                             <th>Nama</th>
                             <th>WA</th>
                             <th>Jenis</th>
-                            <th>Estimasi</th>
-                            <th>Target Waktu</th>
-                            <th>Referensi</th>
                             <th>Deskripsi</th>
                             <th>Status</th>
                             <th>Tgl</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="konsultasi-list">
-                        <tr><td colspan="10">Memuat...</td></tr>
+                        <tr><td colspan="8">Memuat...</td></tr>
                     </tbody>
                 </table>
             </section>
         </main>
+    </div>
+
+    <div id="consultationDetailModal" class="modal-overlay consultation-modal">
+        <div class="modal-content modal-wide consultation-modal-content">
+            <div class="modal-header">
+                <h3>Detail Konsultasi</h3>
+                <button type="button" class="close-modal" id="closeConsultationModal">&times;</button>
+            </div>
+            <div class="consultation-detail-grid">
+                <div class="detail-item">
+                    <span>Nama</span>
+                    <strong id="detailNama">-</strong>
+                </div>
+                <div class="detail-item">
+                    <span>No. WhatsApp</span>
+                    <strong id="detailWhatsapp">-</strong>
+                </div>
+                <div class="detail-item">
+                    <span>Jenis Kebutuhan</span>
+                    <strong id="detailJenis">-</strong>
+                </div>
+                <div class="detail-item">
+                    <span>Estimasi Jumlah</span>
+                    <strong id="detailEstimasi">-</strong>
+                </div>
+                <div class="detail-item">
+                    <span>Target Waktu</span>
+                    <strong id="detailTarget">-</strong>
+                </div>
+                <div class="detail-item">
+                    <span>Referensi Produk</span>
+                    <strong id="detailReferensi">-</strong>
+                </div>
+            </div>
+            <div class="detail-description">
+                <span>Deskripsi Kebutuhan</span>
+                <p id="detailDeskripsi">-</p>
+            </div>
+            <div class="form-group">
+                <label for="detailStatus">Status Konsultasi</label>
+                <select id="detailStatus">
+                    <option value="pending">Pending</option>
+                    <option value="diproses">Diproses</option>
+                    <option value="selesai">Selesai</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" id="cancelConsultationModal">Batal</button>
+                <button type="button" class="btn-save" id="saveConsultationStatus">Simpan Status</button>
+            </div>
+        </div>
     </div>
 
     <!-- Script di akhir body -->
@@ -84,7 +134,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../../js/user-session.js"></script>
     <script src="../../js/navigasiAdmin.js"></script>
-    <script src="../../js/admin-konsultasi.js"></script>
+    <script src="../../js/admin-konsultasi.js?v=20260512"></script>
     <script>lucide.createIcons();</script>
 </body>
 </html>

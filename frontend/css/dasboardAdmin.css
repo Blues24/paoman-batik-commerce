@@ -243,26 +243,26 @@ td {
     display: flex;
     align-items: center;
     gap: 10px;
-    min-width: 280px;
+    min-width: 220px;
 }
 
 .product-cell img {
-    width: 64px !important;
-    min-width: 64px;
-    max-width: 64px;
-    height: 64px !important;
-    min-height: 64px;
-    max-height: 64px;
-    flex: 0 0 64px;
+    width: 42px !important;
+    min-width: 42px;
+    max-width: 42px;
+    height: 42px !important;
+    min-height: 42px;
+    max-height: 42px;
+    flex: 0 0 42px;
     object-fit: cover !important;
-    border-radius: 10px;
+    border-radius: 8px;
     background: #eef2f7;
 }
 
 .table-card table img {
-    width: 64px !important;
-    max-width: 64px !important;
-    height: 64px !important;
+    width: 42px !important;
+    max-width: 42px !important;
+    height: 42px !important;
     object-fit: cover !important;
 }
 

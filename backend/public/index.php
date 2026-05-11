@@ -121,6 +121,7 @@ try {
     // ===== Konsultasi Endpoints =====
     $router->post('/api/konsultasi', ['KonsultasiController', 'store']);
     $router->get('/api/admin/konsultasi', ['KonsultasiController', 'adminIndex']);
+    $router->put('/api/admin/konsultasi/:id/status', ['KonsultasiController', 'updateStatus']);
 
     // ===== Pesanan Endpoints =====
     $router->post('/api/pesanan',                ['PesananController', 'store']);

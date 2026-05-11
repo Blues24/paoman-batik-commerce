@@ -37,4 +37,9 @@ class KonsultasiModel {
         $stmt = $this->db->query('SELECT * FROM konsultasi ORDER BY tgl_pengajuan DESC');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function updateStatus(int $id, string $status): bool {
+        $stmt = $this->db->prepare('UPDATE konsultasi SET status_konsultasi = ? WHERE id_konsultasi = ?');
+        return $stmt->execute([$status, $id]);
+    }
 }
