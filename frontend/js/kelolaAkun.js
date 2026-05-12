@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.data.users.forEach(user => {
                     const row = document.createElement('tr');
                     row.setAttribute('data-id', user.akun_id);
+                    const tanggalBergabung = user.tanggal_daftar || user.tanggal_bergabung || user.created_at || '';
                     row.innerHTML = `
                     <td><div class="profile-circle"></div></td>
                     <td><strong>${user.username}</strong></td>
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${user.status === 'aktif' ? 'Aktif' : 'Nonaktif'}
                         </span>
                     </td>
-                    <td>-</td>
+                    <td>${formatTanggalBergabung(tanggalBergabung)}</td>
                     <td>
                         <div class="action-btns">
                             <button class="btn-edit"><i data-lucide="pencil"></i></button>
@@ -75,6 +76,19 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error("Fetch Error:", error);
         }
+    }
+
+    function formatTanggalBergabung(tanggal) {
+        if (!tanggal) return '-';
+
+        const match = String(tanggal).match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/);
+        if (!match) return tanggal;
+
+        const [, tahun, bulan, hari, jam, menit] = match;
+        const namaBulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        const tanggalFormatted = `${hari} ${namaBulan[Number(bulan) - 1]} ${tahun}`;
+
+        return jam && menit ? `${tanggalFormatted} ${jam}:${menit}` : tanggalFormatted;
     }
 
     // --- 4. EVENT LISTENERS (EDIT & HAPUS) ---

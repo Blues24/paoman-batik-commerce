@@ -170,9 +170,10 @@ class AkunModel {
      */
     public function getAllPelanggan(int $limit, int $offset): array {
         $stmt = $this->db->prepare(
-            'SELECT a.akun_id, a.username, p.email, a.status_akun as status 
+            'SELECT a.akun_id, a.username, p.email, a.status_akun as status, a.tanggal_daftar
              FROM akun a 
              INNER JOIN pelanggan p ON a.akun_id = p.akun_id 
+             ORDER BY a.tanggal_daftar DESC
              LIMIT ? OFFSET ?'
         );
         // Menggunakan INNER JOIN ke pelanggan memastikan hanya 'user' yang tertarik, 
