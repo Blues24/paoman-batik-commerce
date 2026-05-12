@@ -154,9 +154,8 @@ INSERT INTO pelanggan (pelanggan_id, akun_id, nama, email, no_hp, alamat) VALUES
 
 -- 4. Insert Jenis Produk
 INSERT INTO jenis_produk (jenis_id, nama_jenis, keterangan) VALUES
-(1, 'Batik Tulis', 'Dibuat manual menggunakan canting'),
-(2, 'Batik Cap', 'Dibuat menggunakan cap/stempel'),
-(3, 'Batik Printing', 'Diproduksi massal menggunakan mesin');
+(1, 'Kain', NULL),
+(2, 'Baju', NULL);
 
 -- 5. Insert Katalog Produk (Master Data)
 INSERT INTO produk (jenis_id, nama_produk, deskripsi, gambar_produk, status) VALUES
@@ -170,13 +169,13 @@ INSERT INTO produk (jenis_id, nama_produk, deskripsi, gambar_produk, status) VAL
 (1, 'Kain Batik Motif Kembang Gunda Premium', 'Kain batik kembang gunda versi premium.', '../img/batik8.jpg', 'aktif'),
 (1, 'Kain Batik Motif Iwak Etong', 'Kain batik motif iwak etong khas pesisir Indramayu.', '../img/batik9.jpg', 'aktif'),
 (1, 'Kain Batik Motif Kapal Laju', 'Kain batik motif kapal laju.', '../img/batik10.jpg', 'aktif'),
-(1, 'Baju Batik Motif Kembang Kapas', 'Baju batik motif kembang kapas pintu raja.', '../img/baju1.png', 'aktif'),
-(1, 'Kemeja Batik Motif Iwak Etong', 'Kemeja batik motif iwak etong khas pesisir Indramayu.', '../img/baju2.png', 'aktif'),
-(1, 'Blus Batik Motif Kembang Karang', 'Blus batik motif kembang karang.', '../img/baju3.png', 'aktif'),
-(1, 'Kemeja Batik Motif Kapal Laju', 'Kemeja batik motif kapal laju.', '../img/baju4.png', 'aktif'),
-(1, 'Outer Batik Motif Jarot Asem', 'Outer batik motif jarot asem.', '../img/baju5.png', 'aktif'),
-(1, 'Tunik Batik Motif Kembang Kapas', 'Tunik batik motif kembang kapas.', '../img/baju6.png', 'aktif'),
-(1, 'Dress Batik Motif Kapal Kandas', 'Dress batik motif kapal kandas.', '../img/baju7.png', 'aktif');
+(2, 'Baju Batik Motif Kembang Kapas', 'Baju batik motif kembang kapas pintu raja.', '../img/baju1.png', 'aktif'),
+(2, 'Kemeja Batik Motif Iwak Etong', 'Kemeja batik motif iwak etong khas pesisir Indramayu.', '../img/baju2.png', 'aktif'),
+(2, 'Blus Batik Motif Kembang Karang', 'Blus batik motif kembang karang.', '../img/baju3.png', 'aktif'),
+(2, 'Kemeja Batik Motif Kapal Laju', 'Kemeja batik motif kapal laju.', '../img/baju4.png', 'aktif'),
+(2, 'Outer Batik Motif Jarot Asem', 'Outer batik motif jarot asem.', '../img/baju5.png', 'aktif'),
+(2, 'Tunik Batik Motif Kembang Kapas', 'Tunik batik motif kembang kapas.', '../img/baju6.png', 'aktif'),
+(2, 'Dress Batik Motif Kapal Kandas', 'Dress batik motif kapal kandas.', '../img/baju7.png', 'aktif');
 
 -- 6. Insert Detail Batik (Varian Harga & Stok)
 -- Menggunakan subquery agar ID produk otomatis sinkron dengan nama produknya
