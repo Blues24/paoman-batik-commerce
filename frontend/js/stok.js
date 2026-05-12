@@ -9,7 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getImage(path) {
         if (!path) return '../../img/batik1.jpg';
-        return path.replace('../img/', '../../img/');
+
+        const normalizedPath = String(path).replace(/\\/g, '/').trim();
+        if (!normalizedPath) return '../../img/batik1.jpg';
+        if (/^https?:\/\//i.test(normalizedPath)) return normalizedPath;
+        if (normalizedPath.includes('uploads/')) return `../../img/uploads/${normalizedPath.split('/').pop()}`;
+        if (normalizedPath.startsWith('produk_')) return `../../img/uploads/${normalizedPath}`;
+        if (normalizedPath.startsWith('../img/')) return normalizedPath.replace('../img/', '../../img/');
+        if (normalizedPath.startsWith('img/')) return `../../${normalizedPath}`;
+        if (normalizedPath.startsWith('../../img/')) return normalizedPath;
+
+        return `../../img/${normalizedPath.replace(/^\/+/, '')}`;
     }
 
     async function apiFetch(endpoint, options = {}) {
@@ -93,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const status = getStatusLabel(p.stok);
             const row = `
                 <tr>
-                    <td><img src="${p.img}" alt="${p.nama}" class="img-product"></td>
+                    <td><img src="${p.img}" alt="${p.nama}" class="img-product" onerror="this.onerror=null;this.src='../../img/batik1.jpg';"></td>
                     <td>${p.nama}</td>
                     <td class="text-muted">${p.kode}</td>
                     <td class="${p.stok === 0 ? 'text-danger' : ''}"><strong>${p.stok}</strong></td>

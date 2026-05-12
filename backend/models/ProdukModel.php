@@ -89,6 +89,39 @@ class ProdukModel {
     }
 
     /**
+     * Mendapatkan produk terbaru untuk ringkasan dashboard admin.
+     */
+    public function getLatest(int $limit = 5): array {
+        $limit = max(1, min($limit, 20));
+        $hasImageColumn = $this->columnExists('produk', 'gambar_produk');
+        $imageSelect = $hasImageColumn
+            ? 'p.gambar_produk,'
+            : 'NULL AS gambar_produk,';
+        $imageGroupBy = $hasImageColumn ? ', p.gambar_produk' : '';
+
+        $stmt = $this->db->prepare(
+            'SELECT p.produk_id,
+                    p.nama_produk,
+                    p.deskripsi,
+                    ' . $imageSelect . '
+                    p.created_at,
+                    j.nama_jenis,
+                    MIN(db.harga) AS harga_mulai,
+                    COALESCE(SUM(db.stok), 0) AS total_stok
+             FROM produk p
+             JOIN jenis_produk j ON j.jenis_id = p.jenis_id
+             LEFT JOIN detail_batik db ON db.produk_id = p.produk_id
+             WHERE p.status = "aktif"
+             GROUP BY p.produk_id, p.nama_produk, p.deskripsi' . $imageGroupBy . ', p.created_at, j.nama_jenis
+             ORDER BY p.created_at DESC, p.produk_id DESC
+             LIMIT ?'
+        );
+        $stmt->bindValue(1, $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Mencari produk berdasarkan ID.
      */
    public function findById(int $id): array|false {

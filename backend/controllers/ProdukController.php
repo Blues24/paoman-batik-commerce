@@ -111,6 +111,16 @@ class ProdukController {
     }
 
     /**
+     * Mendapatkan 5 produk terbaru untuk dashboard admin.
+     */
+    public function latest(): void {
+        $limit = (int)($_GET['limit'] ?? 5);
+        $model = new ProdukModel();
+        $data = $model->getLatest($limit);
+        $this->respond(true, $data, 'Produk terbaru berhasil dimuat', 200);
+    }
+
+    /**
      * Mendapatkan detail produk berdasarkan ID (public endpoint).
      */
     public function show(string $id): void {

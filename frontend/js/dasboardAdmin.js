@@ -11,11 +11,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function imagePath(path) {
         if (!path) return '../../img/batik1.jpg';
-        if (path.startsWith('http')) return path;
-        if (path.includes('uploads/')) return `../../img/uploads/${path.split('/').pop()}`;
-        if (path.startsWith('produk_')) return `../../img/uploads/${path}`;
-        if (path.startsWith('batik') || path.startsWith('baju')) return `../../img/${path}`;
-        return path.replace('../img/', '../../img/');
+
+        const normalizedPath = String(path).replace(/\\/g, '/').trim();
+        if (!normalizedPath) return '../../img/batik1.jpg';
+        if (/^https?:\/\//i.test(normalizedPath)) return normalizedPath;
+        if (normalizedPath.includes('uploads/')) return `../../img/uploads/${normalizedPath.split('/').pop()}`;
+        if (normalizedPath.startsWith('produk_')) return `../../img/uploads/${normalizedPath}`;
+        if (normalizedPath.startsWith('../img/')) return normalizedPath.replace('../img/', '../../img/');
+        if (normalizedPath.startsWith('../../img/')) return normalizedPath;
+        if (normalizedPath.startsWith('img/')) return `../../${normalizedPath}`;
+        if (normalizedPath.startsWith('batik') || normalizedPath.startsWith('baju')) return `../../img/${normalizedPath}`;
+
+        return `../../img/${normalizedPath.replace(/^\/+/, '')}`;
     }
 
     async function apiGet(endpoint) {
@@ -68,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function renderStock() {
         const [products, sales] = await Promise.all([
-            apiGet('/produk'),
+            apiGet('/admin/produk-terbaru?limit=5'),
             apiGet(`/admin/laporan-penjualan?admin_id=${encodeURIComponent(admin.admin_id || 1)}`)
         ]);
         dashboardProducts = Array.isArray(products) ? products : [];
@@ -91,19 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
             total_terjual: getProductSales(product)
         }));
 
-        if (stockMode === 'sedikit') {
-            return rows.sort((a, b) => a.total_stok - b.total_stok || a.nama_produk.localeCompare(b.nama_produk)).slice(0, 5);
-        }
-
-        if (stockMode === 'laris') {
-            return rows.sort((a, b) => b.total_terjual - a.total_terjual || b.total_stok - a.total_stok).slice(0, 5);
-        }
-
-        if (stockMode === 'kurang-laris') {
-            return rows.sort((a, b) => a.total_terjual - b.total_terjual || a.total_stok - b.total_stok).slice(0, 5);
-        }
-
-        return rows.sort((a, b) => b.total_stok - a.total_stok || a.nama_produk.localeCompare(b.nama_produk)).slice(0, 5);
+        return rows.sort((a, b) => Number(b.produk_id) - Number(a.produk_id)).slice(0, 5);
     }
 
     function renderStockTable() {
@@ -113,13 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.innerHTML = '';
         const products = getVisibleProducts();
         const summary = document.getElementById('stockSummaryText');
-        const summaryText = {
-            banyak: '5 produk dengan stok paling banyak.',
-            sedikit: '5 produk dengan stok paling sedikit.',
-            laris: '5 produk paling laris berdasarkan jumlah terjual.',
-            'kurang-laris': '5 produk paling kurang laris berdasarkan jumlah terjual.'
-        };
-        if (summary) summary.textContent = summaryText[stockMode] || summaryText.banyak;
+        if (summary) summary.textContent = '5 produk terakhir yang baru ditambahkan.';
 
         products.forEach((product, index) => {
             const stock = Number(product.total_stok || 0);
@@ -129,10 +118,10 @@ document.addEventListener('DOMContentLoaded', () => {
             tbody.insertAdjacentHTML('beforeend', `
                 <tr>
                     <td class="product-cell">
-                        <img src="${imagePath(product.gambar_produk)}" alt="${product.nama_produk}">
+                        <img src="${imagePath(product.gambar_produk)}" alt="${product.nama_produk}" onerror="this.onerror=null;this.src='../../img/batik1.jpg';">
                         ${product.nama_produk}
                     </td>
-                    <td>PB-${String(index + 1).padStart(3, '0')}</td>
+                    <td>PB-${String(product.produk_id).padStart(3, '0')}</td>
                     <td>${product.nama_jenis || 'Batik'}</td>
                     <td class="${stock === 0 ? 'text-red' : ''}">${stock}</td>
                     <td><span class="status-pill ${statusClass}">${statusText}</span></td>

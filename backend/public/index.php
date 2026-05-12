@@ -106,6 +106,7 @@ try {
     $router->post('/api/admin/update-data-pelanggan', ['AdminController', 'updatePelanggan']);
     $router->get ('/api/admin/statistik-dashboard',  ['AdminController', 'getStats']);
     $router->get ('/api/admin/laporan-penjualan',  ['AdminController', 'laporanPenjualan']);
+    $router->get ('/api/admin/produk-terbaru',  ['ProdukController', 'latest']);
 
     // ===== Produk Endpoints =====
     $router->get ('/api/produk',                 ['ProdukController', 'index']);
