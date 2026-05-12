@@ -57,6 +57,10 @@ function getOrderStatusClass(status) {
         return "progress";
     }
 
+    if (normalizedStatus === "dibatalkan" || normalizedStatus === "cancelled" || normalizedStatus === "canceled") {
+        return "cancelled";
+    }
+
     return "waiting";
 }
 
