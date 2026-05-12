@@ -93,6 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return `Rp ${Number(value || 0).toLocaleString('id-ID')}`;
     }
 
+    function getKategoriLabel(product) {
+        const jenisId = Number(product?.jenis_id || product?.jenisId || 1);
+        if (jenisId === 2) {
+            return 'Baju';
+        }
+        if (jenisId === 1) {
+            return 'Kain';
+        }
+        return product?.nama_jenis || 'Kain';
+    }
+
     function getProductImage(product, index = 0) {
         const rawPath = product.gambar_produk || "";
 
@@ -187,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="product-info">
                         <h4 title="${product.nama_produk}">${product.nama_produk}</h4>
-                        <p class="product-meta">Stok ${stok}</p>
+                        <p class="product-meta">Stok ${stok} • ${getKategoriLabel(product)}</p>
                         <p class="price">${formatHarga(product.harga_mulai)}</p>
                         <div class="action-buttons">
                             <button class="btn-icon outline btn-delete" data-id="${product.produk_id}" title="Nonaktifkan produk">
@@ -222,6 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('namaProduk').value = product?.nama_produk || '';
         document.getElementById('hargaProduk').value = product?.harga || '';
         document.getElementById('stokProduk').value = product?.stok || '';
+        document.getElementById('kategoriProduk').value = product?.jenis_id ? String(product.jenis_id) : '1';
 
         const fileInput = document.getElementById('imgProdukFile');
         if (fileInput) {
@@ -265,11 +277,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="product-info">
                         <h4 title="${product.nama_produk}">${product.nama_produk}</h4>
-                        <p class="product-meta">Stok ${stok}</p>
+                        <p class="product-meta">Stok ${stok} • ${getKategoriLabel(product)}</p>
                         <p class="price">${formatHarga(product.harga_mulai)}</p>
                         <div class="action-buttons">
                             <button class="btn-icon outline btn-delete" data-id="${product.produk_id}" title="Nonaktifkan produk"><i data-lucide="trash-2"></i></button>
-                            <button class="btn-view" data-id="${product.produk_id}"><i data-lucide="pencil"></i> Edit Produk</button>
+                            <button class="btn-view" data-id="${product.produk_id}">Edit Produk</button>
                         </div>
                     </div>
                 </div>
@@ -296,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         formData.append('admin_id', admin.admin_id);
         formData.append('nama_produk', document.getElementById('namaProduk').value.trim());
-        formData.append('jenis_id', 1);
+        formData.append('jenis_id', document.getElementById('kategoriProduk').value);
         formData.append('harga', document.getElementById('hargaProduk').value);
         formData.append('stok', document.getElementById('stokProduk').value);
         formData.append('status', 'aktif');

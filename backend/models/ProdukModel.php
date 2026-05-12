@@ -72,9 +72,10 @@ class ProdukModel {
        $sql  = 'SELECT MIN(p.produk_id) AS produk_id,
                 p.nama_produk,
                 MIN(p.deskripsi) AS deskripsi' . $imageSelect . ',
+                MIN(p.jenis_id) AS jenis_id,
                 MIN(j.nama_jenis) AS nama_jenis,
                 MIN(db.harga) AS harga_mulai,
-                SUM(db.stok) AS total_stok, -- TAMBAHKAN BARIS INI
+                SUM(db.stok) AS total_stok,
                 ' . $orderCase . ' AS urutan_katalog
          FROM produk p
          JOIN jenis_produk j ON j.jenis_id = p.jenis_id
