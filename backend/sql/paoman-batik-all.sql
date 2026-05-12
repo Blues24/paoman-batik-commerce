@@ -89,7 +89,7 @@ CREATE TABLE detail_pesanan (
     CONSTRAINT fk_dp_detail_batik FOREIGN KEY (detail_batik_id) REFERENCES detail_batik(detail_batik_id) ON UPDATE CASCADE ON DELETE RESTRICT
 ) ENGINE=InnoDB;
 
--- Tabel tambahan: konsultasi, cart, ulasan
+-- Tabel tambahan: konsultasi, kontak, cart, ulasan
 CREATE TABLE `konsultasi` (
   `id_konsultasi` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `nama_lengkap` varchar(100) NOT NULL,
@@ -101,8 +101,20 @@ CREATE TABLE `konsultasi` (
   `deskripsi_kebutuhan` text NOT NULL,
   `status_konsultasi` enum('Pending','Diproses','Selesai') DEFAULT 'Pending',
   `tgl_pengajuan` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
+-- Tabel kontak (form contact us)
+CREATE TABLE `kontak` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `nama_lengkap` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `no_whatsapp` varchar(20) NOT NULL,
+  `topik` varchar(50) NOT NULL,
+  `pesan` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+-- Tabel keranjang belanja user
 CREATE TABLE cart_item (
     cart_item_id     INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     pelanggan_id     INT UNSIGNED NOT NULL,
@@ -148,7 +160,7 @@ INSERT INTO akun (akun_id, username, password_hash, status_akun) VALUES
 
 -- 3. Insert Data Pelanggan (Relasi ke Akun)
 INSERT INTO pelanggan (pelanggan_id, akun_id, nama, email, no_hp, alamat) VALUES
-(1, 1, "Daffa", "daffa123@gmail.com", "081010101010", "Jalanin aja dulu, nangis belakangan"),
+(1, 1, "Daffa", "daffa123@gmail.com", "081010101010", "Jalanin aja dulu, sambil dipukpuk waifu"),
 (2, 2, "Hasbi", "hasbi123@gmail.com", "086767676767", "Jl.Tidur lah untuk meraih mimpi"),
 (3, 3, "Lukman", "blues@mail.archblues.io", "08696966969", "Jalan-jalan malah ketiduran");
 

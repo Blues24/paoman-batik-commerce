@@ -272,6 +272,7 @@ td {
     gap: 16px;
     align-items: flex-start;
     margin-bottom: 16px;
+    flex-wrap: wrap;
 }
 
 .stock-header p {
@@ -280,11 +281,13 @@ td {
     font-size: 13px;
 }
 
-.stock-tabs {
+.stock-filter-tabs {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: 8px;
+    flex-basis: 100%;
+    order: 3;
 }
 
 .stock-tab {

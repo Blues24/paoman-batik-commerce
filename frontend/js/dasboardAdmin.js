@@ -98,7 +98,33 @@ document.addEventListener('DOMContentLoaded', () => {
             total_terjual: getProductSales(product)
         }));
 
-        return rows.sort((a, b) => Number(b.produk_id) - Number(a.produk_id)).slice(0, 5);
+        // Apply sorting based on stockMode
+        let sorted = [...rows];
+        
+        switch (stockMode) {
+            case 'terlaris':
+                // Sort by best-selling (highest sales)
+                sorted.sort((a, b) => Number(b.total_terjual || 0) - Number(a.total_terjual || 0));
+                break;
+            case 'tidak-laris':
+                // Sort by worst-selling (lowest sales)
+                sorted.sort((a, b) => Number(a.total_terjual || 0) - Number(b.total_terjual || 0));
+                break;
+            case 'banyak':
+                // Sort by stock high to low
+                sorted.sort((a, b) => Number(b.total_stok || 0) - Number(a.total_stok || 0));
+                break;
+            case 'sedikit':
+                // Sort by stock low to high
+                sorted.sort((a, b) => Number(a.total_stok || 0) - Number(b.total_stok || 0));
+                break;
+            case 'terbaru':
+            default:
+                // Sort by product ID descending (newest first)
+                sorted.sort((a, b) => Number(b.produk_id) - Number(a.produk_id));
+        }
+        
+        return sorted.slice(0, 5);
     }
 
     function renderStockTable() {
@@ -107,8 +133,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tbody.innerHTML = '';
         const products = getVisibleProducts();
+        
+        // Update summary text based on current sort mode
         const summary = document.getElementById('stockSummaryText');
-        if (summary) summary.textContent = '5 produk terakhir yang baru ditambahkan.';
+        if (summary) {
+            const summaryText = {
+                'terbaru': '5 produk terakhir yang baru ditambahkan.',
+                'terlaris': '5 produk paling terlaris.',
+                'tidak-laris': '5 produk yang paling sedikit terjual.',
+                'banyak': '5 produk dengan stok paling banyak.',
+                'sedikit': '5 produk dengan stok paling sedikit.'
+            };
+            summary.textContent = summaryText[stockMode] || summaryText['terbaru'];
+        }
 
         products.forEach((product, index) => {
             const stock = Number(product.total_stok || 0);

@@ -3,23 +3,23 @@ const CART_KEY = "batikPaomanCart";
 
 // Data statis sebagai fallback kalau backend belum jalan.
 const produkBatikFallback = [
-    { id: 1, nama: "Kain Batik Motif Tangga Istana", kategori: "kain", harga: 75000, tag: "Produk Terlaris", image: "../img/batik1.jpg", detail_batik_id: 1 },
-    { id: 2, nama: "Kain Batik Motif Godong Asem", kategori: "kain", harga: 50000, tag: "", image: "../img/batik2.jpg", detail_batik_id: 2 },
-    { id: 3, nama: "Kain Batik Motif Kembang Gunda", kategori: "kain", harga: 65000, tag: "", image: "../img/batik3.jpg", detail_batik_id: 3 },
-    { id: 4, nama: "Kain Batik Motif Ganggeng Manuk", kategori: "kain", harga: 65000, tag: "", image: "../img/batik4.jpg", detail_batik_id: 4 },
-    { id: 5, nama: "Kain Batik Motif Srempang Kandang", kategori: "kain", harga: 70000, tag: "", image: "../img/batik5.jpg", detail_batik_id: 5 },
-    { id: 6, nama: "Kain Batik Motif Lasemurang", kategori: "kain", harga: 85000, tag: "", image: "../img/batik6.jpg", detail_batik_id: 6 },
-    { id: 7, nama: "Kain Batik Motif Kembang Kapas", kategori: "kain", harga: 90000, tag: "", image: "../img/batik7.jpg", detail_batik_id: 7 },
-    { id: 8, nama: "Kain Batik Motif Mangga Bambu", kategori: "kain", harga: 85000, tag: "", image: "../img/batik8.jpg", detail_batik_id: 8 },
-    { id: 9, nama: "Kain Batik Motif Cuiri", kategori: "kain", harga: 95000, tag: "", image: "../img/batik9.jpg", detail_batik_id: 9 },
-    { id: 10, nama: "Kain Batik Motif Sekar Niem", kategori: "kain", harga: 100000, tag: "", image: "../img/batik10.jpg", detail_batik_id: 10 },
-    { id: 11, nama: "Baju Batik Motif Godong Asem", kategori: "pakaian", harga: 100000, tag: "Produk Baru", image: "../img/baju1.png", detail_batik_id: 11 },
-    { id: 12, nama: "Kemeja Batik Motif Kentangan", kategori: "pakaian", harga: 100000, tag: "", image: "../img/baju2.png", detail_batik_id: 12 },
-    { id: 13, nama: "Kemeja Batik Motif Sekar Niem", kategori: "pakaian", harga: 120000, tag: "", image: "../img/baju3.png", detail_batik_id: 13 },
-    { id: 14, nama: "Kemeja Batik Motif Lasemurang", kategori: "pakaian", harga: 135000, tag: "", image: "../img/baju4.png", detail_batik_id: 14 },
-    { id: 15, nama: "Baju Batik Motif Kentangan", kategori: "pakaian", harga: 95000, tag: "", image: "../img/baju5.png", detail_batik_id: 15 },
-    { id: 16, nama: "Baju Batik Motif Sekar Niem", kategori: "pakaian", harga: 95000, tag: "", image: "../img/baju6.png", detail_batik_id: 16 },
-    { id: 17, nama: "Baju Batik Motif Liris atau Parang", kategori: "pakaian", harga: 150000, tag: "", image: "../img/baju7.png", detail_batik_id: 17 }
+    { id: 1, nama: "Kain Batik Motif Ganggeng Pesisir", kategori: "kain", harga: 75000, tag: "Produk Terlaris", image: "../img/batik1.jpg", detail_batik_id: 1 },
+    { id: 2, nama: "Kain Batik Motif Jarot Asem", kategori: "kain", harga: 50000, tag: "", image: "../img/batik2.jpg", detail_batik_id: 2 },
+    { id: 3, nama: "Kain Batik Motif Kapal Kandas", kategori: "kain", harga: 65000, tag: "", image: "../img/batik3.jpg", detail_batik_id: 3 },
+    { id: 4, nama: "Kain Batik Motif Kembang Gunda", kategori: "kain", harga: 65000, tag: "", image: "../img/batik4.jpg", detail_batik_id: 4 },
+    { id: 5, nama: "Kain Batik Motif Banji Tepak", kategori: "kain", harga: 70000, tag: "", image: "../img/batik5.jpg", detail_batik_id: 5 },
+    { id: 6, nama: "Kain Batik Motif Lokcan", kategori: "kain", harga: 85000, tag: "", image: "../img/batik6.jpg", detail_batik_id: 6 },
+    { id: 7, nama: "Kain Batik Motif Lasem Urang", kategori: "kain", harga: 90000, tag: "", image: "../img/batik7.jpg", detail_batik_id: 7 },
+    { id: 8, nama: "Kain Batik Motif Kembang Gunda Premium", kategori: "kain", harga: 85000, tag: "", image: "../img/batik8.jpg", detail_batik_id: 8 },
+    { id: 9, nama: "Kain Batik Motif Iwak Etong", kategori: "kain", harga: 95000, tag: "", image: "../img/batik9.jpg", detail_batik_id: 9 },
+    { id: 10, nama: "Kain Batik Motif Kapal Laju", kategori: "kain", harga: 100000, tag: "", image: "../img/batik10.jpg", detail_batik_id: 10 },
+    { id: 11, nama: "Baju Batik Motif Kembang Kapas", kategori: "pakaian", harga: 100000, tag: "Produk Baru", image: "../img/baju1.png", detail_batik_id: 11 },
+    { id: 12, nama: "Kemeja Batik Motif Iwak Etong", kategori: "pakaian", harga: 100000, tag: "", image: "../img/baju2.png", detail_batik_id: 12 },
+    { id: 13, nama: "Blus Batik Motif Kembang Karang", kategori: "pakaian", harga: 120000, tag: "", image: "../img/baju3.png", detail_batik_id: 13 },
+    { id: 14, nama: "Kemeja Batik Motif Kapal Laju", kategori: "pakaian", harga: 135000, tag: "", image: "../img/baju4.png", detail_batik_id: 14 },
+    { id: 15, nama: "Outer Batik Motif Jarot Asem", kategori: "pakaian", harga: 95000, tag: "", image: "../img/baju5.png", detail_batik_id: 15 },
+    { id: 16, nama: "Tunik Batik Motif Kembang Kapas", kategori: "pakaian", harga: 95000, tag: "", image: "../img/baju6.png", detail_batik_id: 16 },
+    { id: 17, nama: "Dress Batik Motif Kapal Kandas", kategori: "pakaian", harga: 150000, tag: "", image: "../img/baju7.png", detail_batik_id: 17 }
 ];
 
 let produkBatik = [...produkBatikFallback];
@@ -28,19 +28,23 @@ const DEFAULT_API_BASE = "http://localhost/paoman-batik/backend/public/api";
 const API_URL = window.API_URL || DEFAULT_API_BASE;
 
 const legacyImageByName = {
-    "Kain Batik Motif Biru Pesisir": "../img/batik1.jpg",
-    "Kain Batik Motif Godong Asem": "../img/batik2.jpg",
-    "Baju Batik Motif Kentangan": "../img/baju1.png",
-    "Kain Batik Motif Mangga Bambu": "../img/batik4.jpg",
-    "Kemeja Batik Motif Kembang Paoman": "../img/baju2.png",
-    "Kain Batik Motif Lereng Paoman": "../img/batik7.jpg",
-    "Blus Batik Motif Pesisir Laut": "../img/baju3.png",
-    "Kain Batik Motif Daun Nila": "../img/batik9.jpg",
-    "Kemeja Batik Motif Kawung Laut": "../img/baju4.png",
-    "Kain Batik Motif Biru Pesisir Premium": "../img/batik1.jpg",
-    "Outer Batik Motif Godong Asem": "../img/baju5.png",
-    "Tunik Batik Motif Kentangan": "../img/baju6.png",
-    "Dress Batik Motif Mangga Bambu": "../img/baju7.png"
+    "Kain Batik Motif Ganggeng Pesisir": "../img/batik1.jpg",
+    "Kain Batik Motif Jarot Asem": "../img/batik2.jpg",
+    "Kain Batik Motif Kapal Kandas": "../img/batik3.jpg",
+    "Kain Batik Motif Kembang Gunda": "../img/batik4.jpg",
+    "Kain Batik Motif Banji Tepak": "../img/batik5.jpg",
+    "Kain Batik Motif Lokcan": "../img/batik6.jpg",
+    "Kain Batik Motif Lasem Urang": "../img/batik7.jpg",
+    "Kain Batik Motif Kembang Gunda Premium": "../img/batik8.jpg",
+    "Kain Batik Motif Iwak Etong": "../img/batik9.jpg",
+    "Kain Batik Motif Kapal Laju": "../img/batik10.jpg",
+    "Baju Batik Motif Kembang Kapas": "../img/baju1.png",
+    "Kemeja Batik Motif Iwak Etong": "../img/baju2.png",
+    "Blus Batik Motif Kembang Karang": "../img/baju3.png",
+    "Kemeja Batik Motif Kapal Laju": "../img/baju4.png",
+    "Outer Batik Motif Jarot Asem": "../img/baju5.png",
+    "Tunik Batik Motif Kembang Kapas": "../img/baju6.png",
+    "Dress Batik Motif Kapal Kandas": "../img/baju7.png"
 };
 const imageByName = new Map([
     ...Object.entries(legacyImageByName),
