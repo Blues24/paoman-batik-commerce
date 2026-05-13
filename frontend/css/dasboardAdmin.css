@@ -174,29 +174,34 @@ body {
 .price-placeholder { color: var(--primary-blue); margin-top: 5px; }
 
 /* Bar Chart Representation */
-.chart-placeholder {
+.chart-bars {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    height: 150px;
-    padding-top: 20px;
+        align-items: flex-end;
+        justify-content: space-around;
+        height: 250px;
+        width: 100%;
+        /* TAMBAHKAN INI: Memberi ruang 40px untuk teks JAN, FEB agar tidak menabrak tabel */
+        margin-bottom: 40px;
+        padding-bottom: 10px;
+        position: relative;
 }
 
 .bar {
-    width: 40px;
-    background: #E5E7EB;
-    border-radius: 4px 4px 0 0;
-    position: relative;
+    transition: height 0.5s ease, background-color 0.3s ease;
+    min-width: 30px; /* Atur lebar batang */
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
 }
 
-.bar.active { background: var(--primary-blue); }
+.bar.active {
+     background: var(--primary-blue); 
+}
 
 .bar span {
-    position: absolute;
-    bottom: -25px;
-    left: 50%;
-    transform: translateX(-50%);
     font-size: 10px;
+    margin-bottom: -20px;
+    /* Posisi teks bulan di bawah batang */
     color: var(--gray-text);
 }
 

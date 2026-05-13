@@ -1,3 +1,5 @@
+let rawSalesData = [];
+
 document.addEventListener('DOMContentLoaded', () => {
     const API_URL = window.API_URL || 'http://localhost/paoman-batik/backend/public/api';
     const admin = window.UserSession?.getCurrentUser?.() || { admin_id: 1 };
@@ -84,58 +86,117 @@ document.addEventListener('DOMContentLoaded', () => {
         salesRows = Array.isArray(sales) ? sales : [];
         renderStockTable();
     }
-
-    async function fetchAndProcessSales(){
+    
+    async function fetchAndProcessSales() {
         try {
-            // Ambil data mentah melalui API call di /admin/laporan-penjualan
-            const salesData = await apiGet('/admin/laporan-penjualan');
+            const response = await apiGet('/admin/laporan-penjualan');
+            rawSalesData = Array.isArray(response) ? response : [];
 
-            // Inisialisasi perekapan data setiap bulan
-            const month = [
-                "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-            ];
-            const monthlyAggregation = {};
-            month.forEach(m => monthlyAggregation[m] = 0);
-
-            let totalPendapatan = 0;
-
-            if (Array.isArray(salesData)){
-                salesData.forEach(item => {
-                    if (item.last_terjual) {
-                        // Normalisasikan tanggal MySQL ke format ISO
-                        const date = new Date(item.last_terjual.replace(' ', 'T'));
-
-                        if (!isNaN(date.getTime())){
-                            const monthLabel = month[date.getMonth()];
-
-                            const pendapatan = parseFloat(item.total_pendapatan || 0);
-                            monthlyAggregation[monthLabel] += pendapatan;
-
-                            totalPendapatan += pendapatan;
-                        }
-                    }
-                });
+            // Inisialisasi Event Listener Dropdown
+            const filterSelect = document.getElementById('filterBulan');
+            if (filterSelect) {
+                filterSelect.addEventListener('change', (e) => applyFilter(e.target.value));
             }
 
-            // Update Price Placeholder
-            const priceElement = document.querySelector('.price-placeholder');
-            if (priceElement) {
-                priceElement.textContent = rupiah(totalPendapatan);
-            }
-            
-            // Mapping ke format yang dibutuhkan fungsi renderChart
-            const finalChartData = month.map(name => ({
-                label: name,
-                count: monthlyAggregation[name],
-            }));
-
-            renderBarChart(finalChartData)
-        }catch (error){
-                console.error("Gagal memproses laporan penjualan: ", error);
-                renderBarChart([]);
-                const priceElement = document.querySelector('.price-placeholder');
-                if (priceElement) priceElement.textContent = rupiah(0);
+            // Tampilan awal: Semua Bulan
+            applyFilter('all');
+        } catch (error) {
+            console.error("Gagal memproses laporan:", error);
         }
+    }
+
+    function applyFilter(selectedMonth) {
+        const monthNames = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+        let monthlyAggregation = {};
+        let totalHargaTampil = 0;
+
+        // 1. Kalkulasi Data
+        rawSalesData.forEach(item => {
+            const date = new Date(item.last_terjual.replace(' ', 'T'));
+            const mIndex = date.getMonth();
+            const pendapatan = parseFloat(item.total_pendapatan || 0);
+
+            if (selectedMonth === 'all' || mIndex.toString() === selectedMonth) {
+                monthlyAggregation[mIndex] = (monthlyAggregation[mIndex] || 0) + pendapatan;
+                totalHargaTampil += pendapatan;
+            }
+        });
+
+        // 2. Update Price Placeholder
+        const priceElement = document.querySelector('.price-placeholder');
+        if (priceElement) priceElement.textContent = rupiah(totalHargaTampil);
+
+        // 3. Render Chart
+        const chartContainer = document.querySelector('.chart-bars');
+        if (!chartContainer) return;
+
+        chartContainer.innerHTML = '';
+
+        // Ambil semua nilai pendapatan untuk mencari yang tertinggi
+        const values = Object.values(monthlyAggregation);
+        const maxVal = values.length > 0 ? Math.max(...values, 1) : 1;
+
+        monthNames.forEach((name, index) => {
+            const value = monthlyAggregation[index] || 0;
+
+            if (selectedMonth !== 'all' && index.toString() !== selectedMonth) return;
+
+            // Hitung tinggi, pastikan tidak NaN
+            let height = (value / maxVal) * 100;
+            if (isNaN(height)) height = 0;
+
+            const barDiv = document.createElement('div');
+
+            // Tambahkan class bar
+            barDiv.className = `bar ${index.toString() === selectedMonth ? 'active' : ''}`;
+
+            // PAKSA STYLE VIA JS (Untuk memastikan terlihat)
+            barDiv.style.height = `${Math.max(height, 5)}%`; // Minimal 5% agar tidak hilang
+            barDiv.style.backgroundColor = value > 0 ? '#2B4DBB' : '#E5E7EB'; // Biru jika ada duit, abu jika kosong
+            barDiv.style.minWidth = '30px'; // Pastikan punya lebar
+            barDiv.style.display = 'flex';
+            barDiv.style.alignItems = 'flex-end';
+            barDiv.style.justifyContent = 'center';
+            barDiv.style.position = 'relative';
+            barDiv.style.borderRadius = '4px 4px 0 0';
+
+            barDiv.innerHTML = `<span style="position: absolute; bottom: -25px; font-size: 10px; color: #6B7280;">${name}</span>`;
+
+            // Tooltip Instan
+            barDiv.setAttribute('data-info', `${name}: ${rupiah(value)}`);
+            barDiv.onmouseenter = (e) => showInstantTooltip(e);
+            barDiv.onmouseleave = () => hideInstantTooltip();
+
+            chartContainer.appendChild(barDiv);
+        });
+    }
+
+    function showInstantTooltip(e) {
+    let tooltip = document.getElementById('chart-tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.id = 'chart-tooltip';
+        tooltip.style.cssText = `
+            position: fixed; background: #1f2937; color: white; 
+            padding: 5px 10px; border-radius: 4px; font-size: 12px;
+            pointer-events: none; z-index: 9999; transition: opacity 0.1s;
+        `;
+        document.body.appendChild(tooltip);
+    }
+    tooltip.textContent = e.currentTarget.getAttribute('data-info');
+    tooltip.style.opacity = '1';
+    
+    // Posisikan tooltip di dekat kursor
+    const moveTooltip = (ev) => {
+        tooltip.style.left = (ev.clientX + 10) + 'px';
+        tooltip.style.top = (ev.clientY - 30) + 'px';
+    };
+        e.currentTarget.onmousemove = moveTooltip;
+    }
+
+    function hideInstantTooltip() {
+        const tooltip = document.getElementById('chart-tooltip');
+        if (tooltip) tooltip.style.opacity = '0';
     }
 
     function getProductSales(product) {
