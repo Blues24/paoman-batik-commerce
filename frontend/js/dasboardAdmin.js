@@ -40,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('stat-produk-aktif').textContent = stats.total_produk ?? 0;
         document.getElementById('stat-total-pesanan').textContent = stats.total_pesanan ?? 0;
         document.getElementById('stat-total-user').textContent = stats.total_pelanggan ?? 0;
+
+        await fetchAndProcessSales();
     }
 
     async function renderHistory() {
@@ -81,6 +83,59 @@ document.addEventListener('DOMContentLoaded', () => {
         dashboardProducts = Array.isArray(products) ? products : [];
         salesRows = Array.isArray(sales) ? sales : [];
         renderStockTable();
+    }
+
+    async function fetchAndProcessSales(){
+        try {
+            // Ambil data mentah melalui API call di /admin/laporan-penjualan
+            const salesData = await apiGet('/admin/laporan-penjualan');
+
+            // Inisialisasi perekapan data setiap bulan
+            const month = [
+                "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+            ];
+            const monthlyAggregation = {};
+            month.forEach(m => monthlyAggregation[m] = 0);
+
+            let totalPendapatan = 0;
+
+            if (Array.isArray(salesData)){
+                salesData.forEach(item => {
+                    if (item.last_terjual) {
+                        // Normalisasikan tanggal MySQL ke format ISO
+                        const date = new Date(item.last_terjual.replace(' ', 'T'));
+
+                        if (!isNaN(date.getTime())){
+                            const monthLabel = month[date.getMonth()];
+
+                            const pendapatan = parseFloat(item.total_pendapatan || 0);
+                            monthlyAggregation[monthLabel] += pendapatan;
+
+                            totalPendapatan += pendapatan;
+                        }
+                    }
+                });
+            }
+
+            // Update Price Placeholder
+            const priceElement = document.querySelector('.price-placeholder');
+            if (priceElement) {
+                priceElement.textContent = rupiah(totalPendapatan);
+            }
+            
+            // Mapping ke format yang dibutuhkan fungsi renderChart
+            const finalChartData = month.map(name => ({
+                label: name,
+                count: monthlyAggregation[name],
+            }));
+
+            renderBarChart(finalChartData)
+        }catch (error){
+                console.error("Gagal memproses laporan penjualan: ", error);
+                renderBarChart([]);
+                const priceElement = document.querySelector('.price-placeholder');
+                if (priceElement) priceElement.textContent = rupiah(0);
+        }
     }
 
     function getProductSales(product) {
