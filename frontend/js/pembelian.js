@@ -68,7 +68,17 @@ async function apiGetJson(endpoint) {
     const data = await response.json().catch(() => null);
     return { response, data };
 }
-
+async function loadCategories() {
+    const { response, data } = await apiGetJson("/produk/jenis");
+    if (!response.ok || !data?.success || !Array.isArray(data.data)) {
+        // Fallback to static categories
+        return [
+            { jenis_id: 1, nama_jenis: 'Kain', keterangan: null },
+            { jenis_id: 2, nama_jenis: 'Baju', keterangan: null }
+        ];
+    }
+    return data.data;
+}
     async function loadProdukFromApi() {
         const { response, data } = await apiGetJson("/produk");
         if (!response.ok || !data?.success || !Array.isArray(data.data)) {
@@ -98,7 +108,9 @@ async function apiGetJson(endpoint) {
 
             // Penentuan Kategori
             const canonical = canonicalProductByName.get(produk.nama_produk);
-            const kategori = canonical?.kategori || guessKategoriFromNama(produk.nama_produk);
+            const kategori = produk.nama_jenis ? 
+                (produk.nama_jenis.toLowerCase() === 'kain' ? 'kain' : 'pakaian') : 
+                (canonical?.kategori || guessKategoriFromNama(produk.nama_produk));
 
             const finalImage = normalizeProductImage(produk.gambar_produk || "", canonical?.image || "../img/batik1.jpg");
 
@@ -146,7 +158,8 @@ const emptyState = document.getElementById("emptyState");
 const searchInput = document.getElementById("searchProduk");
 const priceRange = document.getElementById("priceRange");
 const priceValue = document.getElementById("priceValue");
-const categoryFilters = Array.from(document.querySelectorAll(".category-filter"));
+// categoryFilters akan diinisialisasi ulang setelah render
+let categoryFilters = [];
 const prevPageButton = document.getElementById("prevPage");
 const nextPageButton = document.getElementById("nextPage");
 const catalogPagination = document.getElementById("catalogPagination");
@@ -175,6 +188,27 @@ function normalizeProductImage(rawPath, fallbackImage = "../img/batik1.jpg") {
     if (rawPath.startsWith("produk_")) return `../img/uploads/${rawPath}`;
     if (rawPath.startsWith("batik") || rawPath.startsWith("baju")) return `../img/${rawPath}`;
     return fallbackImage;
+}
+
+function renderCategoryFilters(categories) {
+    const container = document.getElementById("categoryFilters");
+    if (!container) return;
+
+    container.innerHTML = categories.map(cat => `
+        <label class="filter-option">
+            <input class="category-filter" type="checkbox" value="${cat.nama_jenis.toLowerCase()}" checked>
+            <span>${cat.nama_jenis === 'Kain' ? 'Kain Batik' : 'Baju'}</span>
+        </label>
+    `).join('');
+
+    // Re-initialize categoryFilters after rendering
+    categoryFilters = Array.from(document.querySelectorAll(".category-filter"));
+    categoryFilters.forEach((input) => {
+        input.addEventListener("change", (event) => {
+            syncSemuaProduk(event.target);
+            applyFilters();
+        });
+    });
 }
 
 function getCartItems() {
@@ -348,7 +382,7 @@ function updatePagination() {
         const visibleProducts = filteredProducts.slice(startIndex, startIndex + itemPerPage);
 
         visibleProducts.forEach((item) => {
-            const kategoriLabel = item.kategori === "kain" ? "Kain Batik" : "Pakaian";
+            const kategoriLabel = item.kategori === "kain" ? "Kain Batik" : "Baju";
             const isHabis = item.stok <= 0; // Sekarang 'item' sudah terdefinisi di sini
 
             productGrid.innerHTML += `
@@ -442,12 +476,7 @@ if (priceRange) {
     });
 }
 
-categoryFilters.forEach((input) => {
-    input.addEventListener("change", (event) => {
-        syncSemuaProduk(event.target);
-        applyFilters();
-    });
-});
+// Event listeners for category filters are now handled in renderCategoryFilters
 
 if (catalogPagination) {
     catalogPagination.addEventListener("click", (event) => {
@@ -498,37 +527,47 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     if (priceValue && priceRange) {
         priceValue.textContent = formatRingkas(Number(priceRange.value));
     }
 
     updateCartCount();
-    (async () => {
-        try {
-            await loadProdukFromApi();
-        } catch (err) {
-            console.warn("[Produk] fallback ke data statis:", err?.message || err);
-            produkBatik = [...produkBatikFallback];
-        }
 
-        // Sync state ke data terbaru.
-        filteredProducts = [...produkBatik];
+    try {
+        const categories = await loadCategories();
+        renderCategoryFilters(categories);
+    } catch (err) {
+        console.warn("[Kategori] fallback ke data statis:", err?.message || err);
+        renderCategoryFilters([
+            { jenis_id: 1, nama_jenis: 'Kain', keterangan: null },
+            { jenis_id: 2, nama_jenis: 'Baju', keterangan: null }
+        ]);
+    }
 
-        if (priceRange) {
-            const max = produkBatik.reduce((m, p) => Math.max(m, Number(p.harga) || 0), 0);
-            if (max > 0) {
-                priceRange.max = String(max);
-                if (Number(priceRange.value) > max) {
-                    priceRange.value = String(max);
-                }
-                if (priceValue) {
-                    priceValue.textContent = formatRingkas(Number(priceRange.value));
-                }
+    try {
+        await loadProdukFromApi();
+    } catch (err) {
+        console.warn("[Produk] fallback ke data statis:", err?.message || err);
+        produkBatik = [...produkBatikFallback];
+    }
+
+    // Sync state ke data terbaru.
+    filteredProducts = [...produkBatik];
+
+    if (priceRange) {
+        const max = produkBatik.reduce((m, p) => Math.max(m, Number(p.harga) || 0), 0);
+        if (max > 0) {
+            priceRange.max = String(max);
+            if (Number(priceRange.value) > max) {
+                priceRange.value = String(max);
+            }
+            if (priceValue) {
+                priceValue.textContent = formatRingkas(Number(priceRange.value));
             }
         }
+    }
 
-        applyFilters();
-    })();
+    applyFilters();
 });
 })();

@@ -19,11 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     // 1. DATA SUMBER (Simulasi database)
     let dataPesanan = [
-        { id: "#ORD-95628", customer: "Bayu", tanggal: "22 Apr 2026", total: 120000, bayar: "QRIS", status: "Diproses", produk: "Blus Batik Motif Kembang Karang", kategori: "Pakaian", jumlah: 5, image: "../../img/baju3.png" },
+        { id: "#ORD-95628", customer: "Bayu", tanggal: "22 Apr 2026", total: 120000, bayar: "QRIS", status: "Diproses", produk: "Blus Batik Motif Kembang Karang", kategori: "Baju", jumlah: 5, image: "../../img/baju3.png" },
         { id: "#ORD-2023001", customer: "Budi Santoso", tanggal: "28 Feb 2026", total: 1500000, bayar: "E-Wallet", status: "Diproses", produk: "Kain Batik Motif Ganggeng Pesisir", kategori: "Kain Batik", jumlah: 30, image: "../../img/batik1.jpg" },
-        { id: "#ORD-2023002", customer: "Siti Aminah", tanggal: "01 Mar 2026", total: 750000, bayar: "COD", status: "Diproses", produk: "Kemeja Batik Motif Iwak Etong", kategori: "Pakaian", jumlah: 5, image: "../../img/baju2.png" },
+        { id: "#ORD-2023002", customer: "Siti Aminah", tanggal: "01 Mar 2026", total: 750000, bayar: "COD", status: "Diproses", produk: "Kemeja Batik Motif Iwak Etong", kategori: "Baju", jumlah: 5, image: "../../img/baju2.png" },
         { id: "#ORD-2023003", customer: "Andi Wijaya", tanggal: "02 Mar 2026", total: 2100000, bayar: "QRIS", status: "Siap Diambil", produk: "Kain Batik Motif Banji Tepak", kategori: "Kain Batik", jumlah: 28, image: "../../img/batik7.jpg" },
-        { id: "#ORD-2023004", customer: "Rina Maria", tanggal: "03 Mar 2026", total: 450000, bayar: "E-Wallet", status: "Selesai", produk: "Tunik Batik Motif Kembang Kapas", kategori: "Pakaian", jumlah: 5, image: "../../img/baju6.png" },
+        { id: "#ORD-2023004", customer: "Rina Maria", tanggal: "03 Mar 2026", total: 450000, bayar: "E-Wallet", status: "Selesai", produk: "Tunik Batik Motif Kembang Kapas", kategori: "Baju", jumlah: 5, image: "../../img/baju6.png" },
         { id: "#ORD-2023005", customer: "Anwar", tanggal: "04 Mar 2026", total: 1200000, bayar: "COD", status: "Diproses", produk: "Kain Batik Motif Kembang Gunda", kategori: "Kain Batik", jumlah: 18, image: "../../img/batik5.jpg" }
     ];
 

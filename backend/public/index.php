@@ -110,6 +110,7 @@ try {
 
     // ===== Produk Endpoints =====
     $router->get ('/api/produk',                 ['ProdukController', 'index']);
+    $router->get ('/api/produk/jenis',           ['ProdukController', 'jenis']);
     $router->get ('/api/produk/:id',             ['ProdukController', 'show']);
     $router->post('/api/produk',                 ['ProdukController', 'store']);
     $router->put ('/api/produk/:id',             ['ProdukController', 'update']);

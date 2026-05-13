@@ -162,6 +162,15 @@ class ProdukModel {
     }
 
     /**
+     * Mendapatkan semua jenis produk.
+     */
+    public function getJenis(): array {
+        $stmt = $this->db->prepare('SELECT jenis_id, nama_jenis, keterangan FROM jenis_produk ORDER BY nama_jenis');
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * Membuat produk baru.
      */
     public function create(array $data): int {

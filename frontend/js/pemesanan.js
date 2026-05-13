@@ -239,7 +239,7 @@ function renderCartProducts() {
 
     // Semua item yang ada di keranjang ditampilkan sebagai pilihan produk pemesanan.
     cartItems.forEach((item) => {
-        const kategoriLabel = item.kategori === "kain" ? "Kain Batik" : "Pakaian";
+        const kategoriLabel = item.kategori === "kain" ? "Kain Batik" : "Baju";
         const imagePath = item.image || productImageMap[item.id] || "";
 
         productPicker.innerHTML += `

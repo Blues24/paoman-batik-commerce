@@ -215,4 +215,13 @@ class ProdukController {
         $model->updateVarian((int)$varianId, $this->body());
         $this->respond(true, null, 'Varian berhasil diupdate');
     }
+
+    /**
+     * Mendapatkan semua jenis produk.
+     */
+    public function jenis(): void {
+        $model = new ProdukModel();
+        $data  = $model->getJenis();
+        $this->respond(true, $data, '', 200);
+    }
 }
