@@ -314,33 +314,28 @@
         }
 
         function renderBarChart(rows) {
-            // rows: array of { nama_produk, total_terjual }
-            const chartPlaceholder = document.querySelector('.chart-placeholder');
+           const chartPlaceholder = document.getElementById('chart-placeholder');
             if (!chartPlaceholder) return;
 
-            // Take top 5 products only so the dashboard stays compact.
-            const top = (rows || []).slice(0, 5);
-            if (top.length === 0) {
-                chartPlaceholder.innerHTML = '<div style="color:#6b7280">Tidak ada data chart</div>';
-                return;
-            }
+            // Cari nilai pendapatan tertinggi untuk skala
+            const maxVal = Math.max(...data.map(d => d.count), 1);
 
-            const max = Math.max(...top.map(r => Number(r.total_terjual || 0)), 1);
-            // Build bars
-            let html = '<div style="display:flex;align-items:flex-end;gap:10px;height:140px;padding:8px 6px">';
-            top.forEach(r => {
-                const count = Number(r.total_terjual || 0);
-                const h = Math.round((count / max) * 100); // percent
-                const label = escapeHtml((r.nama_produk || '').substring(0, 10));
-                html += `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">`;
-                html += `<div title="${label} - ${count}" style="width:100%;background:#E5E7EB;border-radius:6px;display:flex;align-items:flex-end;justify-content:center">`;
-                html += `<div style="width:80%;background:#2B4DBB;height:${h}% ;border-radius:6px 6px 0 0;display:flex;align-items:flex-end;justify-content:center;color:white;font-size:12px;padding:4px 0">${count}</div>`;
-                html += `</div>`;
-                html += `<div style="font-size:11px;color:#374151;word-break:break-word;text-align:center;margin-top:6px">${label}</div>`;
-                html += `</div>`;
+            let html = '<div style="display:flex; align-items:flex-end; height:200px; gap:10px; border-bottom:1px solid #E5E7EB; padding-bottom:8px">';
+
+            data.forEach(item => {
+                // Hitung tinggi berdasarkan persentase dari nilai tertinggi
+                const h = (item.count / maxVal) * 100;
+
+                html += `
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; height:100%; justify-content:flex-end">
+                <div title="${item.label}: ${rupiah(item.count)}" 
+                     style="width:100%; max-width:35px; background:#2B4DBB; height:${h}%; border-radius:4px 4px 0 0; transition: all 0.5s ease">
+                </div>
+                <span style="font-size:10px; color:#6B7280; margin-top:8px">${item.label}</span>
+            </div>`;
             });
-            html += '</div>';
 
+            html += '</div>';
             chartPlaceholder.innerHTML = html;
         }
 
