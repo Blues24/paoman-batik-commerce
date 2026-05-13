@@ -87,18 +87,23 @@
                             <h4>Laporan Penjualan</h4>
                             <h2 class="price-placeholder">Rp N/A</h2>
                         </div>
-                        <select class="filter-select">
-                            <option>1 Bulan Terakhir</option>
+                        <select class="filter-select" id="filterBulan">
+                            <option value="all">Semua Waktu</option>
+                            <option value="0">Januari</option>
+                            <option value="1">Februari</option>
+                            <option value="2">Maret</option>
+                            <option value="3">April</option>
+                            <option value="4">Mei</option>
+                            <option value="5">Juni</option>
+                            <option value="6">Juli</option>
+                            <option value="7">Agustus</option>
+                            <option value="8">September</option>
+                            <option value="9">Oktober</option>
+                            <option value="10">November</option>
+                            <option value="11">Desember</option>
                         </select>
                     </div>
-                    <div class="chart-placeholder">
-                        <div class="bar active" style="height: 60%;"><span>JAN</span></div>
-                        <div class="bar" style="height: 40%;"><span>FEB</span></div>
-                        <div class="bar" style="height: 30%;"><span>MAR</span></div>
-                        <div class="bar" style="height: 50%;"><span>APR</span></div>
-                        <div class="bar" style="height: 45%;"><span>MAY</span></div>
-                        <div class="bar" style="height: 65%;"><span>JUN</span></div>
-                        <div class="bar" style="height: 55%;"><span>JUL</span></div>
+                    <div class="chart-bars">
                     </div>
                 </div>
 
@@ -313,25 +318,34 @@
             renderBarChart(rows);
         }
 
-        function renderBarChart(rows) {
+        function renderBarChart(data = [], selectedMonthIndex = 'all') {
            const chartPlaceholder = document.getElementById('chart-placeholder');
             if (!chartPlaceholder) return;
 
-            // Cari nilai pendapatan tertinggi untuk skala
             const maxVal = Math.max(...data.map(d => d.count), 1);
 
             let html = '<div style="display:flex; align-items:flex-end; height:200px; gap:10px; border-bottom:1px solid #E5E7EB; padding-bottom:8px">';
 
             data.forEach(item => {
-                // Hitung tinggi berdasarkan persentase dari nilai tertinggi
                 const h = (item.count / maxVal) * 100;
+                // Cek apakah batang ini adalah bulan yang sedang dipilih
+                const isActive = selectedMonthIndex.toString() === item.index.toString();
+                const barColor = isActive ? '#1E3A8A' : '#2B4DBB'; // Biru lebih gelap jika aktif
 
                 html += `
-            <div style="flex:1; display:flex; flex-direction:column; align-items:center; height:100%; justify-content:flex-end">
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; height:100%; justify-content:flex-end; cursor:pointer;" 
+                 onclick="applyFilter('${item.index}')">
+                
                 <div title="${item.label}: ${rupiah(item.count)}" 
-                     style="width:100%; max-width:35px; background:#2B4DBB; height:${h}%; border-radius:4px 4px 0 0; transition: all 0.5s ease">
+                     style="width:100%; max-width:35px; background:${barColor}; height:${h}%; 
+                            border-radius:4px 4px 0 0; transition: all 0.3s ease;
+                            ${isActive ? 'box-shadow: 0 0 8px rgba(43, 77, 187, 0.5);' : ''}">
                 </div>
-                <span style="font-size:10px; color:#6B7280; margin-top:8px">${item.label}</span>
+                
+                <span style="font-size:10px; font-weight:${isActive ? 'bold' : 'normal'}; 
+                             color:${isActive ? '#1F2937' : '#6B7280'}; margin-top:8px">
+                    ${item.label}
+                </span>
             </div>`;
             });
 
