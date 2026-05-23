@@ -77,6 +77,24 @@ class PesananController {
         return in_array($metode, ['qris', 'ewallet', 'cod'], true) ? $metode : 'qris';
     }
 
+    private function shouldAutoConfirmPayment(string $status): bool {
+        return in_array($status, ['dibayar', 'diproses', 'dikirim', 'selesai'], true);
+    }
+
+    private function derivePaymentStatusFromOrder(array $order, string $status): ?string {
+        if (!$this->shouldAutoConfirmPayment($status)) {
+            return null;
+        }
+
+        $currentPaymentStatus = strtolower((string)($order['payment_status'] ?? ''));
+        if (!in_array($currentPaymentStatus, ['belum_dibayar', 'menunggu_konfirmasi'], true)) {
+            return null;
+        }
+
+        $metode = strtolower((string)($order['metode_pembayaran'] ?? 'qris'));
+        return $metode === 'cod' ? 'bayar_di_tempat' : 'dibayar';
+    }
+
     private function savePaymentFile(): string {
         $file = $_FILES['bukti_pembayaran'] ?? $_FILES['payment_proof'] ?? null;
         if (!$file || !is_uploaded_file($file['tmp_name'])) {
@@ -299,10 +317,18 @@ class PesananController {
             $this->respond(false, null, 'Status tidak valid', 422);
 
         $model = new PesananModel();
+        $currentOrder = $model->findByIdForAdmin((int)$id);
         $model->updateStatus((int)$id, $body['status_pesanan']);
+
         if (!empty($body['payment_status']) && in_array($body['payment_status'], ['belum_dibayar','menunggu_konfirmasi','dibayar','bayar_di_tempat'], true)) {
             $model->updatePaymentStatus((int)$id, $body['payment_status']);
+        } elseif ($currentOrder) {
+            $autoPaymentStatus = $this->derivePaymentStatusFromOrder($currentOrder, $body['status_pesanan']);
+            if ($autoPaymentStatus !== null) {
+                $model->updatePaymentStatus((int)$id, $autoPaymentStatus);
+            }
         }
+
         $this->respond(true, null, 'Status pesanan diupdate');
     }
 

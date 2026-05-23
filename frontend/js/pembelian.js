@@ -190,16 +190,31 @@ function normalizeProductImage(rawPath, fallbackImage = "../img/batik1.jpg") {
     return fallbackImage;
 }
 
+function normalizeCategoryValue(categoryName) {
+    const normalized = String(categoryName || '').trim().toLowerCase();
+    if (normalized === 'baju' || normalized === 'pakaian') {
+        return 'pakaian';
+    }
+    if (normalized === 'kain' || normalized === 'kain batik') {
+        return 'kain';
+    }
+    return normalized;
+}
+
 function renderCategoryFilters(categories) {
     const container = document.getElementById("categoryFilters");
     if (!container) return;
 
-    container.innerHTML = categories.map(cat => `
+    container.innerHTML = categories.map(cat => {
+        const value = normalizeCategoryValue(cat.nama_jenis);
+        const label = String(cat.nama_jenis || '').toLowerCase() === 'kain' ? 'Kain Batik' : 'Baju';
+        return `
         <label class="filter-option">
-            <input class="category-filter" type="checkbox" value="${cat.nama_jenis.toLowerCase()}" checked>
-            <span>${cat.nama_jenis === 'Kain' ? 'Kain Batik' : 'Baju'}</span>
+            <input class="category-filter" type="checkbox" value="${value}" checked>
+            <span>${label}</span>
         </label>
-    `).join('');
+    `;
+    }).join('');
 
     // Re-initialize categoryFilters after rendering
     categoryFilters = Array.from(document.querySelectorAll(".category-filter"));
@@ -250,7 +265,7 @@ function hideCartConfirmation() {
 function getSelectedCategories() {
     const checked = categoryFilters
         .filter((input) => input.checked)
-        .map((input) => input.value);
+        .map((input) => normalizeCategoryValue(input.value));
 
     if (checked.includes("semua") || checked.length === 0) {
         return ["kain", "pakaian"];
@@ -418,8 +433,9 @@ function applyFilters() {
     const selectedCategories = getSelectedCategories();
 
     filteredProducts = produkBatik.filter((produk) => {
+        const produkKategori = normalizeCategoryValue(produk.kategori);
         const sesuaiNama = produk.nama.toLowerCase().includes(keyword);
-        const sesuaiKategori = selectedCategories.includes(produk.kategori);
+        const sesuaiKategori = selectedCategories.includes(produkKategori);
         const sesuaiHarga = produk.harga <= maxHarga;
 
         return sesuaiNama && sesuaiKategori && sesuaiHarga;

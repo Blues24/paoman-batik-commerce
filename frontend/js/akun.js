@@ -132,7 +132,7 @@ function renderPaymentGuide(order, canUploadPayment) {
                 ${guide.rows.map((row) => `<span>${row}</span>`).join("")}
                 ${canUploadPayment ? `<em>Upload bukti setelah transfer supaya admin bisa konfirmasi.</em>` : ""}
             </div>
-            ${isQris ? `<div class="mini-qris" aria-label="Barcode QRIS simulasi"><span></span><span></span><span></span></div>` : ""}
+            ${isQris ? `<img class="qris-barcode" src="../img/qris-code.svg" alt="QRIS Batik Paoman">` : ""}
         </div>
     `;
 }
