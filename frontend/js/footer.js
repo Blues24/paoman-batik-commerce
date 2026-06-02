@@ -1,11 +1,24 @@
 // Fungsi untuk merender footer global
 function createGlobalFooter() {
+    const logoPath = (() => {
+        const script = document.currentScript;
+        if (script && script.src) {
+            try {
+                const scriptUrl = new URL(script.src, window.location.href);
+                return new URL('../img/logo.png', scriptUrl).href;
+            } catch (error) {
+                console.warn('Footer logo path build failed, falling back to relative path.', error);
+            }
+        }
+        return '../img/logo.png';
+    })();
+
     const footerTemplate = `
     <footer>
         <div class="footer-container">
             <div class="footer-column branding">
                 <div class="footer-logo">
-                    <img src="../img/logo-red.jpg" alt="Logo"> 
+                    <img class="footer-logo-img" src="${logoPath}" alt="Logo"> 
                     <span class="brand-name">Batik Paoman</span>
                 </div>
                 <p class="description">
