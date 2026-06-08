@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../models/KonsultasiModel.php';
+require_once __DIR__ . '/../models/AkunModel.php';
 
 class KonsultasiController {
     private function respond(bool $success, mixed $data, string $msg, int $code): void {
@@ -11,6 +12,21 @@ class KonsultasiController {
     private function body(): array {
         $raw = file_get_contents('php://input');
         return json_decode($raw, true) ?? $_POST ?? [];
+    }
+
+    private function validateAdmin(): int {
+        $body = $this->body();
+        $adminId = (int) ($body['admin_id'] ?? ($_GET['admin_id'] ?? 0));
+        if ($adminId <= 0) {
+            $this->respond(false, null, 'admin_id wajib diisi (admin only)', 422);
+        }
+
+        $akunModel = new AkunModel();
+        if (!$akunModel->isAdminId($adminId)) {
+            $this->respond(false, null, 'admin_id tidak valid', 403);
+        }
+
+        return $adminId;
     }
 
     // Public endpoint untuk menyimpan konsultasi
@@ -27,6 +43,7 @@ class KonsultasiController {
 
     // Admin endpoint untuk melihat semua konsultasi
     public function adminIndex(): void {
+        $this->validateAdmin();
         try {
             $model = new KonsultasiModel();
             $rows = $model->getAll();
@@ -37,6 +54,7 @@ class KonsultasiController {
     }
 
     public function updateStatus(string $id): void {
+        $this->validateAdmin();
         $body = $this->body();
         $statusInput = strtolower(trim((string)($body['status_konsultasi'] ?? '')));
         $statusMap = [

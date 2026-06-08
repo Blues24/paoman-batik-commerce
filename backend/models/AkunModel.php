@@ -216,6 +216,16 @@ class AkunModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function findAdminById(int $adminId): array|false {
+        $stmt = $this->db->prepare('SELECT admin_id, username, role FROM admin WHERE admin_id = ?');
+        $stmt->execute([$adminId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function isAdminId(int $adminId): bool {
+        return (bool) $this->findAdminById($adminId);
+    }
+
     public function updatePelangganByAdmin(int $akunId, string $email, string $status): bool {
     $this->db->beginTransaction();
     try {

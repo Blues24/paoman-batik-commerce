@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../models/ProdukModel.php';
+require_once __DIR__ . '/../models/AkunModel.php';
 
 /**
  * Controller untuk mengelola produk dan varian.
@@ -29,6 +30,11 @@ class ProdukController {
         
         if ($adminId <= 0) {
             $this->respond(false, null, 'admin_id wajib diisi (admin only)', 422);
+        }
+
+        $akunModel = new AkunModel();
+        if (!$akunModel->isAdminId($adminId)) {
+            $this->respond(false, null, 'admin_id tidak valid', 403);
         }
         
         return $adminId;

@@ -192,7 +192,12 @@
     <script>
     // Fetch dashboard statistics and sales report, then render on the page.
     (function () {
-        const adminId = 1; // TODO: replace with real admin/session value when available
+        const admin = window.UserSession?.getCurrentUser?.();
+        const adminId = admin?.admin_id || '';
+        if (!adminId) {
+            console.warn('Admin belum login, tidak bisa mengambil data dashboard.');
+            return;
+        }
 
         // Build backend base URL dynamically so it works in subfolder setups
         const parts = location.pathname.split('/');

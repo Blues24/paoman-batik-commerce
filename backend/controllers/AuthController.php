@@ -181,12 +181,32 @@ class AuthController {
     }
 
     /**
-     * Get current user (dummy, not needed for stateless).
+     * Get current user (stateless).
+     * Accept akun_id via query string or body to return profile data.
      */
     public function me(): void {
-        // For stateless API, this would require user to send akun_id
-        // For now, return 401
-        $this->respond(false, null, 'Unauthorized', 401);
+        $body = $this->body();
+        $akunId = (int) ($body['akun_id'] ?? $_GET['akun_id'] ?? 0);
+
+        if ($akunId <= 0) {
+            $this->respond(false, null, 'Unauthorized', 401);
+        }
+
+        $user = (new AkunModel())->findByAkunId($akunId);
+        if (!$user) {
+            $this->respond(false, null, 'Unauthorized', 401);
+        }
+
+        $this->respond(true, [
+            'akun_id'      => $user['akun_id'],
+            'pelanggan_id' => $user['pelanggan_id'] ?? null,
+            'nama'         => $user['nama'],
+            'username'     => $user['username'],
+            'email'        => $user['email'],
+            'noHp'         => $user['no_hp'],
+            'alamat'       => $user['alamat'],
+            'status_akun'  => $user['status_akun']
+        ], 'User loaded', 200);
     }
 
     /**

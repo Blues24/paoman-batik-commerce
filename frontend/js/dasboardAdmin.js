@@ -2,7 +2,11 @@ let rawSalesData = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     const API_URL = window.API_URL || 'http://localhost/paoman-batik/backend/public/api';
-    const admin = window.UserSession?.getCurrentUser?.() || { admin_id: 1 };
+    const admin = window.UserSession?.getCurrentUser?.() || null;
+    if (!admin || !admin.admin_id) {
+        console.warn('Admin belum login, dashboard tidak akan dimuat.');
+        return;
+    }
     let dashboardProducts = [];
     let salesRows = [];
     let stockMode = 'banyak';
@@ -37,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function renderStats() {
-        const stats = await apiGet(`/admin/statistik-dashboard?admin_id=${encodeURIComponent(admin.admin_id || 1)}`);
+        const stats = await apiGet(`/admin/statistik-dashboard?admin_id=${encodeURIComponent(admin.admin_id)}`);
         document.getElementById('stat-total-produk').textContent = stats.total_produk ?? 0;
         document.getElementById('stat-produk-aktif').textContent = stats.total_produk ?? 0;
         document.getElementById('stat-total-pesanan').textContent = stats.total_pesanan ?? 0;
@@ -47,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function renderHistory() {
-        const orders = await apiGet(`/admin/pesanan?admin_id=${encodeURIComponent(admin.admin_id || 1)}`);
+        const orders = await apiGet(`/admin/pesanan?admin_id=${encodeURIComponent(admin.admin_id)}`);
         const list = document.querySelector('.history-list');
         if (!list) return;
 
@@ -80,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function renderStock() {
         const [products, sales] = await Promise.all([
             apiGet('/admin/produk-terbaru?limit=5'),
-            apiGet(`/admin/laporan-penjualan?admin_id=${encodeURIComponent(admin.admin_id || 1)}`)
+            apiGet(`/admin/laporan-penjualan?admin_id=${encodeURIComponent(admin.admin_id)}`)
         ]);
         dashboardProducts = Array.isArray(products) ? products : [];
         salesRows = Array.isArray(sales) ? sales : [];

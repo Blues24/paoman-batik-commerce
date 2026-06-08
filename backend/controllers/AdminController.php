@@ -21,17 +21,35 @@ class AdminController {
         return json_decode($raw, true) ?? $_POST ?? [];
     }
 
+    private function validateAdmin(): int {
+        $body = $this->body();
+        $adminId = (int) ($body['admin_id'] ?? ($_GET['admin_id'] ?? 0));
+
+        if ($adminId <= 0) {
+            $this->respond(false, null, 'admin_id wajib diisi (admin only)', 422);
+        }
+
+        $akunModel = new AkunModel();
+        if (!$akunModel->isAdminId($adminId)) {
+            $this->respond(false, null, 'admin_id tidak valid', 403);
+        }
+
+        return $adminId;
+    }
+
     /**
      * LOGIKA BARU: createProduk dengan penanganan file yang lebih aman
      */
     public function createProduk(): void {
+        $adminId = $this->validateAdmin();
+
         // 1. Ambil data input dengan aman
         $namaProduk = $_POST['nama_produk'] ?? '';
         $harga      = $_POST['harga'] ?? 0;
         $stok       = $_POST['stok'] ?? 0;
         $jenisId    = $_POST['jenis_id'] ?? 1;
         $deskripsi  = $_POST['deskripsi'] ?? '';
-        $adminId    = $_POST['admin_id'] ?? null;
+        $adminId    = $adminId;
     
         // 2. Cek apakah ada file yang diunggah
         $fileGambar = $_FILES['gambar_produk'] ?? null;
@@ -94,6 +112,7 @@ class AdminController {
      * Ambil daftar pelanggan dengan paginasi
      */
     public function getPelanggan(): void {
+        $this->validateAdmin();
         $model = new AkunModel();
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $limit = 10;
@@ -118,6 +137,7 @@ class AdminController {
      * Memperbarui data profil pelanggan (Email & Status)
      */
     public function updatePelanggan(): void {
+        $this->validateAdmin();
         $body = $this->body();
         $akunId = (int)($body['akun_id'] ?? 0);
         $email = $body['email'] ?? '';
@@ -144,6 +164,7 @@ class AdminController {
      * Mengambil statistik ringkas untuk dashboard
      */
     public function getStats(): void {
+        $this->validateAdmin();
         $akunModel = new AkunModel();
         $pesananModel = new PesananModel();
         try {
@@ -171,6 +192,7 @@ class AdminController {
      * Query menerima optional query params: from, to (ISO date/datetime)
      */
     public function laporanPenjualan(): void {
+        $this->validateAdmin();
         $from = $_GET['from'] ?? null;
         $to = $_GET['to'] ?? null;
 
@@ -187,6 +209,7 @@ class AdminController {
      * Hapus Akun Pelanggan (Permanen)
      */
     public function deletePelanggan(): void {
+        $this->validateAdmin();
         $body = $this->body();
         $akunId = (int)($body['akun_id'] ?? 0);
 

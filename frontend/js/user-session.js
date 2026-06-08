@@ -165,7 +165,7 @@ async function logoutUser() {
     try {
         // Ambil data user yang sekarang untuk pengecekan role
         const userData = localStorage.getItem(CURRENT_USER_KEY);
-        const curentUser = userData ? JSON.parse(userData)  : null;
+        const currentUser = userData ? JSON.parse(userData)  : null;
 
         // Cek apakah user yang sekarang itu pelanggan atau admin
         const isPelanggan = currentUser && currentUser.role === 'pelanggan'; // jika nilai variabel ini false maka itu admin
